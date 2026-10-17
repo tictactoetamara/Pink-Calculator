@@ -15,26 +15,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: LCD screen and key trail on the left, heart keypad on the right; stacks in portrait. */
+/* Layout: wide screens put the LCD and key trail on the left and the keypad on the right.
+   Tall or narrow screens (portrait, split view, iPhone) stack them. The keypad is sized to the space it is given. */
 :root{
   --bg:#FCE4EE; --ink:#4A1236; --lcd-ink:#2A1020; --rose:#C2185B; --bezel:#E0457F;
   --gold-ink:#8A5A00; --panel:#FFF7FA; --panel-line:#F2B8CD; --muted:#8C3A63;
   --font-body:'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --font-display:'Fredoka', 'Atkinson Hyperlegible', system-ui, sans-serif;
   color-scheme: light;
+  --ar:0.6348; --hk-ar:100/92;
 }
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}
 .app{height:100%;box-sizing:border-box;display:flex;gap:28px;align-items:stretch;
-  padding-block:22px;padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
+  padding-top:max(22px, env(safe-area-inset-top, 0px));padding-bottom:max(22px, env(safe-area-inset-bottom, 0px));
+  padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
 .side{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column;gap:14px;overflow:auto}
 .top{display:flex;align-items:center;gap:12px;min-height:34px}
-.top h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--ink);text-wrap:balance}
+.top h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--ink);white-space:nowrap}
 .modetag{margin-left:auto;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel);border:2px solid var(--panel-line);border-radius:999px;padding:4px 12px;white-space:nowrap}
 
 /* ---------- LCD ---------- */
-.lcd{flex:0 0 auto;height:clamp(170px, 34dvh, 290px);box-sizing:border-box;container-type:inline-size;
+.lcd{flex:0 0 auto;height:clamp(120px, 34dvh, 290px);box-sizing:border-box;container-type:size;
   background:linear-gradient(180deg,#F7F4F5,#E9E4E7);border:10px solid var(--bezel);border-radius:24px;
   box-shadow:inset 0 4px 10px rgba(0,0,0,.22),0 4px 0 rgba(163,19,79,.35);padding:10px 20px 12px;
   display:flex;flex-direction:column;color:var(--lcd-ink);font-weight:700}
@@ -42,10 +45,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .ico{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:3px;background:#111;color:#fff;font-size:8px;font-weight:700;line-height:1}
 .fmt-tag{margin-left:auto;font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
 .screen{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:space-between}
-.expr{flex:1 1 auto;min-height:0;display:flex;align-items:center;overflow:hidden;font-size:clamp(22px,6.4cqw,42px)}
-.res{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;overflow:hidden;min-height:1.25em;font-size:clamp(28px,8.6cqw,56px);color:#1E0A16}
-.big .expr{font-size:clamp(28px,8.4cqw,58px)}
-.big .res{font-size:clamp(34px,11.5cqw,76px)}
+.expr{flex:1 1 auto;min-height:0;display:flex;align-items:center;overflow:hidden;font-size:clamp(14px,min(6.4cqw,12.5cqh),42px)}
+.res{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;overflow:hidden;min-height:1.25em;font-size:clamp(18px,min(8.6cqw,17.5cqh),56px);color:#1E0A16}
+.big .expr{font-size:clamp(14px,min(8.4cqw,12.5cqh),58px)}
+.big .res{font-size:clamp(18px,min(11.5cqw,17.5cqh),76px)}
 .line{flex:0 0 auto;white-space:nowrap;line-height:1.15;padding:.12em .05em}
 .op{margin:0 .14em}
 .fnm{margin-right:.04em}
@@ -90,7 +93,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .trail-empty{font-size:15px;color:var(--muted);font-weight:400}
 
 /* ---------- heart keypad ---------- */
-.pad{flex:0 0 auto;align-self:center;width:min(46vw, calc((100dvh - 60px) * 0.62));container-type:inline-size;
+.padwrap{flex:1 1 0;min-width:0;min-height:0;container-type:size;display:flex;align-items:center;justify-content:center}
+.pad{flex:0 0 auto;width:min(100cqw, 640px, calc(100cqh * var(--ar)));container-type:inline-size;
   display:grid;grid-template-columns:repeat(30,minmax(0,1fr));gap:1cqw 1.2cqw;align-content:start}
 .kc{display:flex;flex-direction:column;min-width:0}
 .sh{height:3.7cqw;font-size:2.86cqw;font-weight:700;line-height:3.7cqw;color:var(--gold-ink);text-align:center;white-space:nowrap}
@@ -100,7 +104,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .mbx{display:inline-block;width:1.43cqw;height:1.43cqw;border-radius:.4cqw;border:.31cqw solid var(--gold-ink);box-sizing:border-box;background:#fff}
 .mstack{display:inline-flex;flex-direction:column;align-items:center;gap:.2cqw}
 .mbar{width:1.84cqw;height:.31cqw;background:var(--gold-ink)}
-.hk{position:relative;display:block;width:100%;aspect-ratio:100/92;max-width:100%;border:0;background:none;padding:0;margin:0 auto;cursor:pointer;
+.hk{position:relative;display:block;width:100%;aspect-ratio:var(--hk-ar);max-width:100%;border:0;background:none;padding:0;margin:0 auto;cursor:pointer;
   font-family:var(--font-body);font-weight:700;color:var(--c);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .hk>svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 .8cqw 0 rgba(163,19,79,.28));transition:transform .05s}
 .hk .hp{fill:var(--fill);stroke:var(--stroke);stroke-width:3;stroke-linejoin:round}
@@ -157,12 +161,54 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .reset{display:block;margin:18px auto 0;border:0;background:none;font:700 15px var(--font-body);color:var(--rose);text-decoration:underline;cursor:pointer}
 .sheet button:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
 
-@media (orientation: portrait){
-  .app{flex-direction:column;gap:14px}
-  .side{flex:0 0 auto;overflow:visible}
-  .lcd{height:clamp(150px, 19dvh, 230px)}
-  .trail{flex:0 0 auto;min-height:0;max-height:118px;padding:10px 16px;gap:8px}
-  .pad{width:min(100%, 600px, calc((100dvh - 430px) * 0.62))}
+/* extra styling */
+.chip.tool{background:#E6C9F2;border-color:#B98AD6;color:#4A1236}
+.pis{font-style:normal}
+.done.light{background:#fff;color:var(--ink);border:2px solid var(--panel-line)}
+.viewrow{justify-content:space-between}
+.viewrow>span:first-child{flex:1}
+.foot{margin:14px 8px 0;font-size:14px;color:var(--muted);font-weight:400;line-height:1.35}
+
+/* The script sets data-layout on the app: "side" (screen left, keys right) or "stacked" (screen above keys),
+   and data-compact for small windows, where hearts are a little wider than tall, the screen is shorter,
+   the title is hidden and the key trail becomes one line you can scroll sideways. */
+.app[data-compact="1"]{--hk-ar:100/80;--ar:0.7102}
+.app[data-layout="stacked"]{flex-direction:column;gap:12px}
+.app[data-layout="stacked"] .side{flex:0 0 auto;overflow:visible;gap:12px}
+.app[data-layout="stacked"] .lcd{height:clamp(130px, 24dvh, 250px)}
+.app[data-layout="stacked"].big .lcd{height:clamp(180px, 34dvh, 360px)}
+.app[data-layout="stacked"] .trail{flex:0 0 auto;min-height:0;max-height:118px;padding:10px 16px;gap:8px}
+
+.app[data-layout="stacked"][data-compact="1"]{padding-top:max(10px, env(safe-area-inset-top, 0px));padding-bottom:max(10px, env(safe-area-inset-bottom, 0px));gap:8px}
+.app[data-layout="stacked"][data-compact="1"] .side{gap:8px}
+.app[data-layout="stacked"][data-compact="1"] .top{display:none}
+.app[data-layout="stacked"][data-compact="1"] .lcd{height:clamp(128px, 17dvh, 200px);border-width:7px;border-radius:20px;padding:6px 14px 8px}
+.app[data-layout="stacked"][data-compact="1"].big .lcd{height:clamp(170px, 26dvh, 280px)}
+.app[data-layout="stacked"][data-compact="1"] .trail{max-height:50px;padding:6px 10px;gap:0;border-radius:16px;flex-direction:row;align-items:center}
+.app[data-layout="stacked"][data-compact="1"] .trail-head{display:none}
+.app[data-layout="stacked"][data-compact="1"] .chips{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-items:center;width:100%;padding:2px 0;gap:6px}
+.app[data-layout="stacked"][data-compact="1"] .chip{flex:0 0 auto;font-size:14px;padding:3px 8px;border-radius:9px}
+.app[data-layout="stacked"][data-compact="1"] .arrow,.app[data-layout="stacked"][data-compact="1"] .trail-empty{flex:0 0 auto}
+.app[data-layout="stacked"][data-compact="1"] .trail-empty{font-size:13px}
+@media (max-height: 560px){ .app[data-layout="stacked"] .trail{display:none} }
+
+.big .lcd{height:clamp(170px, 46dvh, 400px)}
+/* wide but short screens: iPhone on its side */
+.app[data-layout="side"][data-compact="1"]{padding-top:max(8px, env(safe-area-inset-top, 0px));padding-bottom:max(8px, env(safe-area-inset-bottom, 0px));gap:16px}
+.app[data-layout="side"][data-compact="1"] .side{gap:8px}
+.app[data-layout="side"][data-compact="1"] .top{min-height:26px}
+.app[data-layout="side"][data-compact="1"] .top h1{font-size:20px}
+.app[data-layout="side"][data-compact="1"] .top svg{width:24px;height:22px}
+.app[data-layout="side"][data-compact="1"] .lcd{border-width:7px;border-radius:20px;padding:6px 14px 8px}
+.app[data-layout="side"][data-compact="1"] .trail{padding:8px 12px;gap:6px;border-radius:16px}
+.app[data-layout="side"][data-compact="1"] .trail-head{font-size:11px}
+.app[data-layout="side"][data-compact="1"] .chip{font-size:14px;padding:3px 8px;border-radius:9px}
+@media (max-height: 420px){ .modetag{display:none} }
+/* narrow widths */
+@media (max-width: 480px){
+  .app{padding-left:max(10px, env(safe-area-inset-left, 0px));padding-right:max(10px, env(safe-area-inset-right, 0px))}
+  .modetag{display:none}
+  .sheet{padding:0 14px 18px}
 }
 </style>
 </head>
@@ -190,7 +236,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
       <div class="chips" id="chips"></div>
     </section>
   </div>
-  <div class="pad" id="pad" role="group" aria-label="Calculator keys"></div>
+  <div class="padwrap"><div class="pad" id="pad" role="group" aria-label="Calculator keys"></div></div>
 </div>
 <div class="scrim" id="scrim" hidden>
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
@@ -200,10 +246,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 /* ==========================================================
    Pink Calculator engine
    - natural display editing (fractions, roots, powers) with a cursor
-   - exact answers: fractions and surds, like a real scientific calculator
+   - exact answers: fractions, surds and multiples of pi
+   - result views: Standard, Decimal, ENG, Sexagesimal (FORMAT and S<>D)
    - settings: input/output, Deg/Rad/Grad, Norm/Fix/Sci, fraction style,
      decimal mark, digit separator
    - tools: Undo, Remainder, Prime factorisation, Simplify, Ratio
+   - the key trail is worked out from what is on the screen, so mistakes
+     and deleted keys never appear in it
    ========================================================== */
 var CalcCore = (function () {
   'use strict';
@@ -241,7 +290,7 @@ var CalcCore = (function () {
     return { row: r, i: path.i };
   }
 
-  /* ---------- exact numbers: (n/d) * sqrt(r), r square-free; or a decimal ---------- */
+  /* ---------- exact numbers: (n/d) * sqrt(r) * pi^p ; or a decimal ---------- */
   var LIMIT = 1000000000000000000n;
   function bAbs(a) { return a < 0n ? -a : a; }
   function gcd(a, b) { a = bAbs(a); b = bAbs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
@@ -257,15 +306,20 @@ var CalcCore = (function () {
     if (!isFinite(x) || Math.abs(x) >= 1e100) throw new CalcError('Math');
     return { e: false, f: x };
   }
-  function toF(v) { return v.e ? ratioToNumber(v.n, v.d) * (v.r === 1n ? 1 : Math.sqrt(Number(v.r))) : v.f; }
-  function mk(n, d, r) {
-    r = r || 1n;
+  function toF(v) {
+    if (!v.e) return v.f;
+    return ratioToNumber(v.n, v.d) * (v.r === 1n ? 1 : Math.sqrt(Number(v.r))) * (v.p ? Math.pow(Math.PI, v.p) : 1);
+  }
+  function mk(n, d, r, p) {
+    r = r || 1n; p = p || 0;
     if (d === 0n) throw new CalcError('Math');
     if (d < 0n) { n = -n; d = -d; }
-    if (n === 0n) return { e: true, n: 0n, d: 1n, r: 1n };
+    if (n === 0n) return { e: true, n: 0n, d: 1n, r: 1n, p: 0 };
     var g = gcd(n, d); n /= g; d /= g;
-    if (bAbs(n) > LIMIT || d > LIMIT || r > LIMIT) return F(ratioToNumber(n, d) * Math.sqrt(Number(r)));
-    return { e: true, n: n, d: d, r: r };
+    if (bAbs(n) > LIMIT || d > LIMIT || r > LIMIT || Math.abs(p) > 8) {
+      return F(ratioToNumber(n, d) * Math.sqrt(Number(r)) * Math.pow(Math.PI, p));
+    }
+    return { e: true, n: n, d: d, r: r, p: p };
   }
   function splitSquare(r) {
     if (r > 10000000000n) return null;
@@ -279,25 +333,25 @@ var CalcCore = (function () {
     if (!s) return F(ratioToNumber(n, d) * Math.sqrt(Number(rRaw)));
     return mk(n * s[0], d, s[1]);
   }
-  var ZERO = mk(0n, 1n), ONE = mk(1n, 1n), TEN = mk(10n, 1n);
+  var ZERO = mk(0n, 1n), ONE = mk(1n, 1n), TEN = mk(10n, 1n), PI_V = mk(1n, 1n, 1n, 1);
   function isZero(v) { return v.e ? v.n === 0n : v.f === 0; }
-  function isInt(v) { return v.e && v.r === 1n && v.d === 1n; }
-  function neg(a) { return a.e ? { e: true, n: -a.n, d: a.d, r: a.r } : F(-a.f); }
+  function isInt(v) { return v.e && v.r === 1n && v.d === 1n && v.p === 0; }
+  function neg(a) { return a.e ? { e: true, n: -a.n, d: a.d, r: a.r, p: a.p } : F(-a.f); }
   function add(a, b) {
     if (a.e && b.e) {
       if (a.n === 0n) return b;
       if (b.n === 0n) return a;
-      if (a.r === b.r) return mk(a.n * b.d + b.n * a.d, a.d * b.d, a.r);
+      if (a.r === b.r && a.p === b.p) return mk(a.n * b.d + b.n * a.d, a.d * b.d, a.r, a.p);
     }
     return F(toF(a) + toF(b));
   }
   function sub(a, b) { return add(a, neg(b)); }
   function mul(a, b) {
-    if (a.e && b.e) { var g = gcd(a.r, b.r); return mk(a.n * b.n * g, a.d * b.d, (a.r / g) * (b.r / g)); }
+    if (a.e && b.e) { var g = gcd(a.r, b.r); return mk(a.n * b.n * g, a.d * b.d, (a.r / g) * (b.r / g), a.p + b.p); }
     return F(toF(a) * toF(b));
   }
   function inv(b) {
-    if (b.e) { if (b.n === 0n) throw new CalcError('Math'); return mk(b.d, b.n * b.r, b.r); }
+    if (b.e) { if (b.n === 0n) throw new CalcError('Math'); return mk(b.d, b.n * b.r, b.r, -b.p); }
     if (b.f === 0) throw new CalcError('Math');
     return F(1 / b.f);
   }
@@ -306,10 +360,10 @@ var CalcCore = (function () {
     if (k === 0n) { if (isZero(a)) throw new CalcError('Math'); return ONE; }
     if (k < 0n) return inv(ipow(a, -k));
     if (a.e) {
-      if (k > 400n) return F(Math.pow(toF(a), Number(k)));
+      if (k > 400n || Math.abs(a.p) * Number(k) > 8) return F(Math.pow(toF(a), Number(k)));
       var n = a.n ** k, d = a.d ** k;
       n *= a.r ** (k / 2n);
-      return mk(n, d, k % 2n === 1n ? a.r : 1n);
+      return mk(n, d, k % 2n === 1n ? a.r : 1n, a.p * Number(k));
     }
     return F(Math.pow(a.f, Number(k)));
   }
@@ -324,7 +378,10 @@ var CalcCore = (function () {
   function sqrtV(a) {
     if (a.e) {
       if (a.n < 0n) throw new CalcError('Math');
-      if (a.r === 1n) return surd(1n, a.d, a.n * a.d);
+      if (a.r === 1n && a.p % 2 === 0) {
+        var s = surd(1n, a.d, a.n * a.d);
+        return a.p === 0 ? s : mul(s, mk(1n, 1n, 1n, a.p / 2));
+      }
       return F(Math.sqrt(toF(a)));
     }
     if (a.f < 0) throw new CalcError('Math');
@@ -334,22 +391,22 @@ var CalcCore = (function () {
     if (!a.e) return null;
     if (q === 1n) return a;
     if (q === 2n) return sqrtV(a);
-    if (a.r !== 1n) return null;
+    if (a.r !== 1n || a.p % Number(q) !== 0) return null;
     var negv = a.n < 0n;
     if (negv && q % 2n === 0n) throw new CalcError('Math');
     var rn = iroot(bAbs(a.n), q), rd = iroot(a.d, q);
     if (rn === null || rd === null) return null;
-    return mk(negv ? -rn : rn, rd);
+    return mk(negv ? -rn : rn, rd, 1n, a.p / Number(q));
   }
   function pow(a, b) {
     if (isInt(b)) return ipow(a, b.n);
-    if (b.e && b.r === 1n && b.d <= 1000n) {
+    if (b.e && b.r === 1n && b.p === 0 && b.d <= 1000n) {
       var rt = nroot(a, b.d);
       if (rt) return ipow(rt, b.n);
     }
     var x = toF(a), y = toF(b);
     if (x < 0) {
-      if (b.e && b.r === 1n && b.d % 2n === 1n) { var m = Math.pow(-x, y); return F(b.n % 2n === 0n ? m : -m); }
+      if (b.e && b.r === 1n && b.p === 0 && b.d % 2n === 1n) { var m = Math.pow(-x, y); return F(b.n % 2n === 0n ? m : -m); }
       throw new CalcError('Math');
     }
     if (x === 0 && y <= 0) throw new CalcError('Math');
@@ -369,9 +426,15 @@ var CalcCore = (function () {
     return pow(x, inv(y));
   }
 
-  /* ---------- trigonometry (exact values in degrees, like the real thing) ---------- */
+  /* ---------- trigonometry (exact values, like the real thing) ---------- */
   var SIN_TAB = { 0: ZERO, 30: mk(1n, 2n), 45: mk(1n, 2n, 2n), 60: mk(1n, 2n, 3n), 90: ONE };
   function intDeg(v) { return isInt(v) ? Number(((v.n % 360n) + 360n) % 360n) : null; }
+  // the angle as a whole number of degrees, when that is what it is (also for multiples of pi in radians)
+  function degInt(v, angle) {
+    if (angle === 'D') return intDeg(v);
+    if (angle === 'R' && v.e && v.r === 1n && v.p === 1) { var q = mk(v.n * 180n, v.d); return intDeg(q); }
+    return null;
+  }
   function sinTab(A) {
     var s = 1;
     if (A >= 180) { A -= 180; s = -1; }
@@ -384,26 +447,26 @@ var CalcCore = (function () {
   function unrad(x, angle) { return angle === 'D' ? x * 180 / Math.PI : angle === 'G' ? x * 200 / Math.PI : x; }
   function clean(x) { return Math.abs(x) < 1e-12 ? 0 : x; }
   function sinV(v, angle) {
-    if (angle === 'D') { var A = intDeg(v); if (A !== null) { var r = sinTab(A); if (r) return r; } }
+    var A = degInt(v, angle);
+    if (A !== null) { var r = sinTab(A); if (r) return r; }
     return F(clean(Math.sin(rad(v, angle))));
   }
   function cosV(v, angle) {
-    if (angle === 'D') { var A = intDeg(v); if (A !== null) { var r = sinTab((A + 90) % 360); if (r) return r; } }
+    var A = degInt(v, angle);
+    if (A !== null) { var r = sinTab((A + 90) % 360); if (r) return r; }
     return F(clean(Math.cos(rad(v, angle))));
   }
   function tanV(v, angle) {
-    if (angle === 'D') {
-      var A = intDeg(v);
-      if (A !== null) {
-        var s = sinTab(A), c = sinTab((A + 90) % 360);
-        if (s && c) { if (isZero(c)) throw new CalcError('Math'); return div(s, c); }
-      }
+    var A = degInt(v, angle);
+    if (A !== null) {
+      var s = sinTab(A), c = sinTab((A + 90) % 360);
+      if (s && c) { if (isZero(c)) throw new CalcError('Math'); return div(s, c); }
     }
     var c2 = Math.cos(rad(v, angle));
     if (Math.abs(c2) < 1e-13) throw new CalcError('Math');
     return F(clean(Math.tan(rad(v, angle))));
   }
-  function eqV(a, b) { return a.e && b.e && a.n === b.n && a.d === b.d && a.r === b.r; }
+  function eqV(a, b) { return a.e && b.e && a.n === b.n && a.d === b.d && a.r === b.r && a.p === b.p; }
   var ASIN_TAB = [[ZERO, 0], [mk(1n, 2n), 30], [mk(1n, 2n, 2n), 45], [mk(1n, 2n, 3n), 60], [ONE, 90]];
   var ATAN_TAB = [[ZERO, 0], [mk(1n, 3n, 3n), 30], [ONE, 45], [mk(1n, 1n, 3n), 60]];
   function lookup(tab, v) {
@@ -412,20 +475,28 @@ var CalcCore = (function () {
     for (var i = 0; i < tab.length; i++) { if (eqV(tab[i][0], av)) return negv ? -tab[i][1] : tab[i][1]; }
     return null;
   }
+  function angleOut(A, angle) {
+    if (angle === 'D') return mk(BigInt(A), 1n);
+    if (angle === 'R') return mk(BigInt(A), 180n, 1n, 1);
+    return null;
+  }
   function asinV(v, angle) {
     var x = toF(v);
     if (Math.abs(x) > 1 + 1e-12) throw new CalcError('Math');
-    if (angle === 'D') { var A = lookup(ASIN_TAB, v); if (A !== null) return mk(BigInt(A), 1n); }
+    var A = lookup(ASIN_TAB, v), o = A !== null ? angleOut(A, angle) : null;
+    if (o) return o;
     return F(unrad(Math.asin(Math.max(-1, Math.min(1, x))), angle));
   }
   function acosV(v, angle) {
     var x = toF(v);
     if (Math.abs(x) > 1 + 1e-12) throw new CalcError('Math');
-    if (angle === 'D') { var A = lookup(ASIN_TAB, v); if (A !== null) return mk(BigInt(90 - A), 1n); }
+    var A = lookup(ASIN_TAB, v), o = A !== null ? angleOut(90 - A, angle) : null;
+    if (o) return o;
     return F(unrad(Math.acos(Math.max(-1, Math.min(1, x))), angle));
   }
   function atanV(v, angle) {
-    if (angle === 'D') { var A = lookup(ATAN_TAB, v); if (A !== null) return mk(BigInt(A), 1n); }
+    var A = lookup(ATAN_TAB, v), o = A !== null ? angleOut(A, angle) : null;
+    if (o) return o;
     return F(unrad(Math.atan(toF(v)), angle));
   }
   var FN_TOK = { 'sin(': 'sin', 'cos(': 'cos', 'tan(': 'tan', 'sin⁻¹(': 'asin', 'cos⁻¹(': 'acos', 'tan⁻¹(': 'atan' };
@@ -522,7 +593,7 @@ var CalcCore = (function () {
       if (!t) throw new CalcError('Syntax');
       switch (t.k) {
         case 'num': return parseNum(t.v);
-        case 'const': return t.v === 'Ans' ? ctx.ans : F(Math.PI);
+        case 'const': return t.v === 'Ans' ? ctx.ans : PI_V;
         case 'lp': return group();
         case 'fn': return FNS[t.v](group(), ctx.angle);
         case 'node': return evalNode(t.n, ctx);
@@ -553,16 +624,14 @@ var CalcCore = (function () {
     return o;
   }
   function nDigits(x) { return bAbs(x).toString().length; }
-  function formatsFor(v, s) {
-    if (!v.e) return ['dec'];
+  // the exact way of writing a value (fraction, surd, multiple of pi), or null when it can only be a decimal
+  function exactFormat(v, s) {
+    if (!v.e) return null;
     var total = nDigits(v.n) + (v.d > 1n ? nDigits(v.d) : 0) + (v.r > 1n ? nDigits(v.r) : 0);
-    if (total > 10) return ['dec'];
-    var E;
-    if (v.r > 1n) E = ['surd'];
-    else if (v.d === 1n) return ['int'];
-    else if (bAbs(v.n) > v.d) E = s.frac === 'mixed' ? ['mixed', 'frac'] : ['frac', 'mixed'];
-    else E = ['frac'];
-    return s.io === 'dec' ? ['dec'].concat(E) : E.concat(['dec']);
+    if (total > 10) return null;
+    if (v.r > 1n || v.p !== 0) return 'surd';
+    if (v.d === 1n) return 'int';
+    return (bAbs(v.n) > v.d && s.frac === 'mixed') ? 'mixed' : 'frac';
   }
   function numStr(str, s) {
     var negv = str.charAt(0) === '-';
@@ -576,6 +645,7 @@ var CalcCore = (function () {
     var f = mkNode('frac'); pushAll(f.num, numItems); pushAll(f.den, denItems); return f;
   }
   function strip(s) { return s.indexOf('.') >= 0 ? s.replace(/0+$/, '').replace(/\.$/, '') : s; }
+  function sciNode(e) { var sc = mkNode('sci'); pushAll(sc.exp, digitsRow(String(e))); return sc; }
   function decRow(x, s) {
     var ax = Math.abs(x), mant, e = null;
     if (s.norm === 'sci') {
@@ -596,11 +666,43 @@ var CalcCore = (function () {
       }
     }
     var r = numRow(mant, s);
-    if (e !== null) { var sc = mkNode('sci'); pushAll(sc.exp, digitsRow(String(e))); r.push(sc); }
+    if (e !== null) r.push(sciNode(e));
     return r;
   }
-  function resultRow(v, fmt, s) {
-    if (fmt === 'dec' || (fmt === 'int' && (s.norm === 'fix' || s.norm === 'sci'))) return decRow(toF(v), s);
+  // engineering notation: a x 10^n where n is a multiple of 3
+  function engRow(x, s) {
+    if (x === 0) return numRow('0', s);
+    var ps = Math.abs(x).toExponential(9).split('e');
+    var e = parseInt(ps[1], 10), digits = ps[0].replace('.', '');
+    var n = Math.floor(e / 3) * 3, shift = e - n;
+    var intPart = digits.slice(0, 1 + shift), fracPart = digits.slice(1 + shift);
+    var m = strip(intPart + (fracPart ? '.' + fracPart : ''));
+    var r = numRow((x < 0 ? '-' : '') + m, s);
+    if (n !== 0) r.push(sciNode(n));
+    return r;
+  }
+  // degrees, minutes, seconds
+  function sexRow(x, s) {
+    var ax = Math.abs(x);
+    if (ax >= 1e9) return decRow(x, s);
+    var d = Math.floor(ax), rem = (ax - d) * 60, m = Math.floor(rem + 1e-9);
+    var sec = Math.round(((rem - m) * 60) * 100) / 100;
+    if (sec < 0) sec = 0;
+    if (sec >= 60) { sec -= 60; m++; }
+    if (m >= 60) { m -= 60; d++; }
+    var r = [];
+    if (x < 0 && (d || m || sec)) r.push(ch('−'));
+    pushAll(r, numRow(String(d), s)); r.push(ch('°'));
+    pushAll(r, numRow(String(m), s)); r.push(ch('′'));
+    pushAll(r, numRow(strip(sec.toFixed(2)), s)); r.push(ch('″'));
+    return r;
+  }
+  function piItems(k) {
+    var items = [ch('π')];
+    if (k > 1) { var pw = mkNode('pow'); pw.fixed = true; pushAll(pw.exp, digitsRow(String(k))); items.push(pw); }
+    return items;
+  }
+  function exactRow(v, fmt, s) {
     var r = [], n = bAbs(v.n);
     if (v.n < 0n) r.push(ch('−'));
     if (fmt === 'int') { pushAll(r, numRow(n.toString(), s)); return r; }
@@ -612,12 +714,26 @@ var CalcCore = (function () {
       pushAll(m.den, numRow(v.d.toString(), s));
       r.push(m); return r;
     }
-    // surd, e.g. 2√3 or √2 over 2
-    var top = [];
-    if (n !== 1n) top = numRow(n.toString(), s);
-    var sq = mkNode('sqrt'); pushAll(sq.arg, digitsRow(v.r.toString())); top.push(sq);
-    if (v.d === 1n) pushAll(r, top); else r.push(fracOf(top, numRow(v.d.toString(), s)));
+    // surds and multiples of pi, for example 2√3, √2 over 2, 60π, π over 6
+    var sym = [];
+    if (v.r > 1n) { var sq = mkNode('sqrt'); pushAll(sq.arg, digitsRow(v.r.toString())); sym.push(sq); }
+    if (v.p > 0) sym = sym.concat(piItems(v.p));
+    var top = (n !== 1n || !sym.length) ? numRow(n.toString(), s).concat(sym) : sym;
+    var den = [];
+    if (v.d !== 1n) den = numRow(v.d.toString(), s);
+    if (v.p < 0) den = den.concat(piItems(-v.p));
+    if (den.length) r.push(fracOf(top, den)); else pushAll(r, top);
     return r;
+  }
+  // the answer as shown for a chosen view: std, dec, eng or sex
+  function viewRow(v, view, s) {
+    var x = toF(v);
+    if (view === 'eng') return engRow(x, s);
+    if (view === 'sex') return sexRow(x, s);
+    if (view === 'dec') return decRow(x, s);
+    var fmt = exactFormat(v, s);
+    if (!fmt || ((fmt === 'int') && (s.norm === 'fix' || s.norm === 'sci'))) return decRow(x, s);
+    return exactRow(v, fmt, s);
   }
   function primeFactors(N) {
     var out = [], n = N;
@@ -667,6 +783,7 @@ var CalcCore = (function () {
         if (FN_TOK[it.v] || it.v === 'Ans') return '<span class="fnm">' + esc(it.v) + '</span>';
         if (it.v === 'Q=' || it.v === 'R=') return '<span class="qr">' + it.v + '</span>';
         if (it.v === '.' && o && o.comma) return '<span>,</span>';
+        if (it.v === 'π') return '<span class="pis">π</span>';
         return '<span>' + esc(it.v) + '</span>';
       case 'frac': return '<span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span>';
       case 'mixed': return '<span class="mx"><span class="mw">' + R(it.whole) + '</span><span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span></span>';
@@ -678,22 +795,56 @@ var CalcCore = (function () {
     return '';
   }
 
+  /* ---------- the key trail: the keys that build what is on the screen ---------- */
+  function rowText(row) {
+    return row.map(function (it) { return it.t === 'c' ? it.v : '?'; }).join('');
+  }
+  function chipsOfRow(row, tail, out) {
+    for (var i = 0; i < row.length; i++) chipsOfItem(row[i], tail && i === row.length - 1, out);
+  }
+  function chipsOfItem(it, tail, out) {
+    function key(label, kind) { out.push({ label: label, kind: kind || '' }); }
+    function slots(node) {
+      var fs = SLOTS[node.t];
+      fs.forEach(function (f, i) {
+        var last = i === fs.length - 1;
+        chipsOfRow(node[f], last && tail, out);
+        if (!last || !tail) key('▶');
+      });
+    }
+    switch (it.t) {
+      case 'c':
+        if (it.v === 'π') { key('SHIFT', 'shift'); key('π', 'shift'); }
+        else if (it.v === '÷R') { key('TOOLS', 'tool'); key('÷R', 'tool'); }
+        else if (it.v === 'sin⁻¹(' || it.v === 'cos⁻¹(' || it.v === 'tan⁻¹(') { key('SHIFT', 'shift'); key(it.v.slice(0, -1), 'shift'); }
+        else if (FN_TOK[it.v]) key(FN_TOK[it.v]);
+        else key(it.v);
+        break;
+      case 'pow':
+        if (it.fixed) {
+          var t = rowText(it.exp);
+          if (t === '2') key('x²');
+          else if (t === '−1') { key('SHIFT', 'shift'); key('x⁻¹', 'shift'); }
+        } else { key('xⁿ'); slots(it); }
+        break;
+      case 'frac': key('a/b'); slots(it); break;
+      case 'mixed': key('SHIFT', 'shift'); key('a b/c', 'shift'); slots(it); break;
+      case 'sqrt': key('√'); slots(it); break;
+      case 'root': key('SHIFT', 'shift'); key('ʸ√x', 'shift'); slots(it); break;
+      case 'sci': key('×10ˣ'); slots(it); break;
+    }
+  }
+
   /* ---------- the calculator itself ---------- */
   var SHIFTMAP = { frac: 'mixed', sqrt: 'root', pow: 'inv', sin: 'asin', cos: 'acos', tan: 'atan', '7': 'pi' };
-  var LABELS = {
-    frac: 'a/b', mixed: 'a b/c', sqrt: '√', root: 'ʸ√x', pow: 'xⁿ', sq: 'x²', inv: 'x⁻¹',
-    asin: 'sin⁻¹', acos: 'cos⁻¹', atan: 'tan⁻¹', exp10: '×10ˣ', pi: 'π',
-    up: '▲', down: '▼', left: '◀', right: '▶'
-  };
   var TOOL_LABELS = { rem: 'Remainder ÷R', factor: 'Prime Factorisation', simplify: 'Simplify', ratio: 'Ratio', undo: 'Undo' };
   var ANS_FIRST = { '+': 1, '−': 1, '×': 1, '÷': 1, pow: 1, sq: 1, inv: 1, exp10: 1 };
-  var STAY = { FORMAT: 1, EXE: 1, DEL: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, AC: 1 };
+  var STAY = { EXE: 1, DEL: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, AC: 1 };
 
   function Calc(settings) {
     this.s = cleanSettings(settings);
     this.ans = ZERO;
     this.history = [];
-    this.trail = [];
     this.undoStack = [];
     this.shift = false;
     this.calcMode = 'calc';
@@ -707,6 +858,7 @@ var CalcCore = (function () {
     this.err = null;
     this.ratio = null;
     this.simp = null;
+    this.tool = null;
     this.mode = 'edit';
     this.histIdx = this.history.length;
   };
@@ -718,17 +870,17 @@ var CalcCore = (function () {
   C.resetSettings = function () { this.s = cleanSettings({}); };
   C.setMode = function (m) {
     this.shift = false;
-    if (m === 'mode2') { this.calcMode = 'mode2'; return; }
-    this.calcMode = 'calc';
+    this.calcMode = m === 'mode2' ? 'mode2' : 'calc';
   };
-  C.chip = function (label, kind) { this.trail.push({ label: label, kind: kind || '' }); if (this.trail.length > 60) this.trail.shift(); };
+  C.defView = function () { return this.s.io === 'dec' ? 'dec' : 'std'; };
+  C.newResult = function (value, qr) { return { value: value, view: this.defView(), qr: qr || null, factor: false }; };
   C.ctx = function () { return { ans: this.ans, angle: this.s.angle }; };
 
   C.snap = function () {
     if (!/^(edit|result|error)$/.test(this.mode)) return;
     this.undoStack.push({
       root: cloneRow(this.root), path: pathOf(this.cur), mode: this.mode,
-      result: this.result ? Object.assign({}, this.result) : null, err: this.err, ans: this.ans, trail: this.trail.slice()
+      result: this.result ? Object.assign({}, this.result) : null, err: this.err, ans: this.ans, toolName: this.tool
     });
     if (this.undoStack.length > 60) this.undoStack.shift();
   };
@@ -737,67 +889,59 @@ var CalcCore = (function () {
     if (!s) return false;
     this.root = s.root;
     this.cur = restorePath(s.root, s.path);
-    this.mode = s.mode; this.result = s.result; this.err = s.err; this.ans = s.ans;
-    this.trail = s.trail;
+    this.mode = s.mode; this.result = s.result; this.err = s.err; this.ans = s.ans; this.tool = s.toolName;
     this.ratio = null; this.simp = null;
     return true;
   };
 
+  // can the displayed answer be converted with FORMAT or S<>D?
+  C.canConvert = function () {
+    return (this.mode === 'result' || this.mode === 'ratioRes') && !!this.result && !this.result.qr && !this.result.factor;
+  };
+  C.setView = function (view) { if (this.canConvert()) this.result.view = view; };
+  C.toggleSD = function () {
+    if (!this.canConvert()) return;
+    this.result.view = this.result.view === 'dec' ? 'std' : 'dec';
+  };
+
   C.press = function (key) {
-    if (key === 'blank' || key === 'TOOLS' || key === 'SETTINGS') return;
+    if (key === 'blank' || key === 'TOOLS' || key === 'SETTINGS' || key === 'FORMAT') return;
     if (this.calcMode === 'mode2') return; // Mode 2 will handle its own keys here later
-    if (key === 'SHIFT') { this.shift = !this.shift; this.chip('SHIFT', 'shift'); return; }
+    if (key === 'SD') { this.shift = false; this.toggleSD(); return; }
+    if (key === 'SHIFT') { this.shift = !this.shift; return; }
     var sh = this.shift; this.shift = false;
     var act = (sh && SHIFTMAP[key]) || key;
-    if (sh && !SHIFTMAP[key] && this.trail.length && this.trail[this.trail.length - 1].label === 'SHIFT') this.trail.pop();
-    var label = LABELS[act] || act;
-    var kind = (sh && SHIFTMAP[key]) ? 'shift' : (act === 'EXE' ? 'exe' : '');
 
-    if (this.mode === 'ratioPick' || this.mode === 'ratio' || this.mode === 'ratioRes') {
-      if (act !== 'AC') this.chip(label, kind);
-      this.ratioKey(act); return;
-    }
+    if (this.mode === 'ratioPick' || this.mode === 'ratio' || this.mode === 'ratioRes') { this.ratioKey(act); return; }
     if (this.mode === 'simp') {
-      if (act === 'AC') { this.trail = []; this.clear(); return; }
-      this.chip(label, kind);
+      if (act === 'AC') { this.clear(); return; }
       if (act === 'EXE') { this.simpStep(); return; }
-      this.mode = 'result'; this.result = this.simp.prev; this.simp = null;
-      this.trail.pop();
+      this.mode = 'result'; this.result = this.simp.prev; this.simp = null; this.tool = null;
     }
 
     this.snap();
     if (this.mode === 'error') {
-      if (act === 'AC') { this.trail = []; this.clear(); }
-      else if (act === 'left' || act === 'right' || act === 'DEL') { this.chip(label); this.mode = 'edit'; this.err = null; this.cur = { row: this.root, i: this.root.length }; }
+      if (act === 'AC') this.clear();
+      else if (act === 'left' || act === 'right' || act === 'DEL') { this.mode = 'edit'; this.err = null; this.cur = { row: this.root, i: this.root.length }; }
       return;
     }
-    if (act === 'AC') { this.trail = []; this.clear(); return; }
+    if (act === 'AC') { this.clear(); return; }
 
     if (this.mode === 'result' && !STAY[act]) {
-      this.trail = sh && SHIFTMAP[key] ? [{ label: 'SHIFT', kind: 'shift' }] : [];
       var withAns = ANS_FIRST[act];
       this.clear();
       if (withAns) this.insChar('Ans');
     }
-    this.chip(label, kind);
-
     if (this.mode === 'result') { this.resultKey(act); return; }
     this.editKey(act);
   };
 
-  C.fmts = function () { return this.result ? formatsFor(this.result.value, this.s) : []; };
   C.resultKey = function (act) {
     var r = this.result;
     switch (act) {
-      case 'FORMAT':
-        if (r.factor) { r.factor = false; break; }
-        if (r.qr) break;
-        var n = this.fmts().length;
-        if (n > 1) r.fi = (r.fi + 1) % n;
-        break;
-      case 'EXE': this.exe(); break;
-      case 'DEL': case 'left': this.mode = 'edit'; this.result = null; this.cur = { row: this.root, i: this.root.length }; break;
-      case 'right': this.mode = 'edit'; this.result = null; this.cur = { row: this.root, i: 0 }; break;
+      case 'EXE': r.view = this.defView(); r.factor = false; this.tool = null; break; // EXE goes back to the original result
+      case 'DEL': case 'left': this.mode = 'edit'; this.result = null; this.tool = null; this.cur = { row: this.root, i: this.root.length }; break;
+      case 'right': this.mode = 'edit'; this.result = null; this.tool = null; this.cur = { row: this.root, i: 0 }; break;
       case 'up': this.histMove(-1); break;
       case 'down': this.histMove(1); break;
     }
@@ -809,7 +953,7 @@ var CalcCore = (function () {
     var h = this.history[j];
     this.root = cloneRow(h.expr);
     this.cur = { row: this.root, i: this.root.length };
-    this.result = { value: h.value, fi: 0, qr: h.qr || null };
+    this.result = this.newResult(h.value, h.qr);
     this.mode = 'result';
   };
 
@@ -855,10 +999,6 @@ var CalcCore = (function () {
       case 'up': this.upDown('up'); break;
       case 'down': this.upDown('down'); break;
       case 'EXE': this.exe(); break;
-      case 'FORMAT':
-        this.exe();
-        if (this.mode === 'result' && !this.result.qr) { var k = this.fmts().indexOf('dec'); if (k > 0) this.result.fi = k; }
-        break;
     }
   };
 
@@ -947,7 +1087,7 @@ var CalcCore = (function () {
       if (k >= 0) { qr = this.evalRemainder(k); v = mk(qr.q, 1n); }
       else v = checkSize(evaluate(this.root, this.ctx()));
       this.ans = v;
-      this.result = { value: v, fi: 0, qr: qr };
+      this.result = this.newResult(v, qr);
       this.mode = 'result';
       this.history.push({ expr: cloneRow(this.root), value: v, qr: qr });
       if (this.history.length > 30) this.history.shift();
@@ -959,7 +1099,7 @@ var CalcCore = (function () {
   };
 
   /* ---------- TOOLS ---------- */
-  C.tool = function (name) {
+  C.useTool = function (name) {
     if (this.calcMode === 'mode2') return;
     this.shift = false;
     if (name === 'undo') { this.undo(); return; }
@@ -967,27 +1107,25 @@ var CalcCore = (function () {
     if (/^ratio/.test(this.mode)) this.clear();
     if (name === 'ratio') {
       this.snap();
-      this.trail = [];
-      this.chip('TOOLS', 'tool'); this.chip(TOOL_LABELS.ratio, 'tool');
       this.clear();
+      this.tool = 'ratio';
       this.mode = 'ratioPick';
       return;
     }
     if (this.mode === 'error') return;
     this.snap();
     if (name === 'rem') {
-      if (this.mode === 'result') { this.trail = []; this.clear(); this.insChar('Ans'); }
-      this.chip('TOOLS', 'tool'); this.chip('÷R', 'tool');
+      if (this.mode === 'result') { this.clear(); this.insChar('Ans'); }
       this.insChar('÷R');
       return;
     }
-    this.chip('TOOLS', 'tool'); this.chip(TOOL_LABELS[name], 'tool');
     if (name === 'factor') {
       if (this.mode === 'edit') this.exe();
       if (this.mode !== 'result') return;
       var v = this.result.value;
       if (!isInt(v) || v.n < 1n || v.n >= 10000000000n) { this.err = 'Math'; this.mode = 'error'; return; }
       this.result.factor = true;
+      this.tool = 'factor';
       return;
     }
     if (name === 'simplify') this.startSimplify();
@@ -1009,18 +1147,19 @@ var CalcCore = (function () {
     if (this.mode !== 'result') return;
     var v = this.result.value;
     if (!src) {
-      if (this.result.qr || !(v.e && v.r === 1n)) { this.err = 'Math'; this.mode = 'error'; return; }
+      if (this.result.qr || !(v.e && v.r === 1n && v.p === 0)) { this.err = 'Math'; this.mode = 'error'; return; }
       src = { n: v.n, d: v.d };
     }
     var done = gcd(src.n, src.d) === 1n;
-    this.simp = { n: src.n, d: src.d, prev: this.result, done: done, note: done ? 'Already in its simplest form' : 'Press EXE to simplify' };
+    this.simp = { n: src.n, d: src.d, prev: this.result, done: done, steps: 0, note: done ? 'Already in its simplest form' : 'Press EXE to simplify' };
+    this.tool = 'simplify';
     this.mode = 'simp';
   };
   C.simpStep = function () {
     var s = this.simp;
-    if (s.done) { this.mode = 'result'; this.result = s.prev; this.simp = null; return; }
+    if (s.done) { this.mode = 'result'; this.result = s.prev; this.simp = null; this.tool = null; return; }
     var p = smallestPrime(gcd(s.n, s.d));
-    s.n /= p; s.d /= p;
+    s.n /= p; s.d /= p; s.steps++;
     s.done = gcd(s.n, s.d) === 1n;
     s.note = 'Divided top and bottom by ' + p + (s.done ? '. Simplest form.' : '. Press EXE again.');
   };
@@ -1032,7 +1171,7 @@ var CalcCore = (function () {
     this.cur = { row: this.root, i: this.root.length };
   };
   C.ratioKey = function (act) {
-    if (act === 'AC') { this.trail = []; this.clear(); return; }
+    if (act === 'AC') { this.clear(); return; }
     if (this.mode === 'ratioPick') {
       if (act === '1' || act === '2') {
         this.ratio = { form: +act, fields: [mkRow(), mkRow(), mkRow()], k: 0, err: null };
@@ -1043,20 +1182,19 @@ var CalcCore = (function () {
     }
     var R = this.ratio;
     if (this.mode === 'ratioRes') {
-      if (act === 'FORMAT') { var n = this.fmts().length; if (n > 1) this.result.fi = (this.result.fi + 1) % n; return; }
       this.mode = 'ratio'; this.result = null; this.setField(0);
       return;
     }
     R.err = null;
     if (act === 'EXE' || act === 'down') {
-      if (R.k < 2) { this.setField(R.k + 1); return; }
+      if (R.k < 2) { this.setField(R.k + 1); R.done = Math.max(R.done || 0, R.k); return; }
       if (act === 'down') return;
       try {
         var ctx = this.ctx();
         var a = evaluate(R.fields[0], ctx), b = evaluate(R.fields[1], ctx), c = evaluate(R.fields[2], ctx);
         var x = checkSize(R.form === 1 ? div(mul(a, c), b) : div(mul(b, c), a));
         this.ans = x;
-        this.result = { value: x, fi: 0 };
+        this.result = this.newResult(x);
         this.mode = 'ratioRes';
       } catch (e) {
         R.err = ((e instanceof CalcError) ? e.type : 'Math') + ' ERROR';
@@ -1064,15 +1202,41 @@ var CalcCore = (function () {
       return;
     }
     if (act === 'up') { if (R.k > 0) this.setField(R.k - 1); return; }
-    if (act === 'FORMAT' || act === 'OK') return;
+    if (act === 'OK') return;
     this.editKey(act);
+  };
+
+  C.trail = function () {
+    var out = [];
+    if (this.mode === 'ratioPick' || this.mode === 'ratio' || this.mode === 'ratioRes') {
+      out.push({ label: 'TOOLS', kind: 'tool' }, { label: 'Ratio', kind: 'tool' });
+      if (this.ratio) {
+        out.push({ label: String(this.ratio.form) });
+        var R = this.ratio, upto = this.mode === 'ratioRes' ? 2 : R.k;
+        for (var i = 0; i <= upto; i++) {
+          chipsOfRow(R.fields[i], true, out);
+          if (i < upto || this.mode === 'ratioRes') out.push({ label: 'EXE', kind: 'exe' });
+        }
+      }
+    } else {
+      chipsOfRow(this.root, true, out);
+      if (this.mode === 'simp') {
+        out.push({ label: 'TOOLS', kind: 'tool' }, { label: 'Simplify', kind: 'tool' });
+        for (var k = 0; k < this.simp.steps; k++) out.push({ label: 'EXE', kind: 'exe' });
+      } else {
+        if (this.mode === 'result' || this.mode === 'error') out.push({ label: 'EXE', kind: 'exe' });
+        if (this.result && this.result.factor) out.push({ label: 'TOOLS', kind: 'tool' }, { label: 'Prime Factorisation', kind: 'tool' });
+      }
+    }
+    if (this.shift) out.push({ label: 'SHIFT', kind: 'shift' });
+    return out;
   };
 
   C.view = function () {
     var s = this.s, o = { comma: s.comma };
     var v = {
       mode: this.mode, calcMode: this.calcMode, shift: this.shift, settings: this.settings(),
-      trail: this.trail.slice(), canUndo: this.undoStack.length > 0
+      canUndo: this.undoStack.length > 0, canConvert: this.canConvert(), trail: this.trail()
     };
     if (this.calcMode === 'mode2') return v;
     var r = this.result;
@@ -1081,18 +1245,17 @@ var CalcCore = (function () {
       v.err = this.err;
     }
     if (this.mode === 'result' || this.mode === 'ratioRes') {
-      var row, fmt = '';
+      var row;
+      v.view = r.view;
       if (r.qr) {
         row = [ch('Q=')].concat(numRow(r.qr.q.toString(), s), [ch(' '), ch('R=')], numRow(r.qr.r.toString(), s));
       } else if (r.factor) {
-        row = factorRow(Number(r.value.n), s); fmt = 'factor';
+        row = factorRow(Number(r.value.n), s); v.view = 'factor';
       } else {
-        var f = this.fmts(); r.fi = r.fi % f.length; fmt = f[r.fi];
-        row = resultRow(r.value, fmt, s);
-        v.canFormat = f.length > 1;
+        row = viewRow(r.value, r.view, s);
+        v.exact = !!exactFormat(r.value, s);
       }
       v.result = renderRow(row, null, o);
-      v.format = fmt;
     }
     if (this.mode === 'simp') {
       var sm = this.simp, sr = [];
@@ -1113,7 +1276,7 @@ var CalcCore = (function () {
     return v;
   };
 
-  return { Calc: Calc, evaluate: evaluate, resultRow: resultRow, formatsFor: formatsFor, renderRow: renderRow, toF: toF, cleanSettings: cleanSettings, factorRow: factorRow };
+  return { Calc: Calc, evaluate: evaluate, viewRow: viewRow, exactFormat: exactFormat, renderRow: renderRow, toF: toF, cleanSettings: cleanSettings, factorRow: factorRow };
 })();
 
 </script>
@@ -1159,7 +1322,7 @@ var CalcCore = (function () {
     { id: 'blank', p: 'BLANK', span: 5 },
     { id: 'blank', p: 'BLANK', span: 5 },
     { id: 'down', label: '▼', p: 'ARW', aria: 'Down', col: '16 / span 5', bw: '64%', as: 'start', mt: 1.2 },
-    { id: 'blank', p: 'BLANK', span: 5 },
+    { id: 'SD', label: 'S⇔D', p: 'FN', aria: 'S to D, switch between standard and decimal', span: 5, size: 3.06 },
     { id: 'TOOLS', label: 'TOOLS', p: 'TOOLS', span: 5 },
     { id: 'blank', p: 'BLANK', span: 5, strip: 1 },
     { id: 'frac', kind: 'frac', p: 'FN', aria: 'Fraction', span: 5, strip: 1, sh: 'mixed', shAria: 'mixed number' },
@@ -1206,7 +1369,7 @@ var CalcCore = (function () {
     var style = '--fill:' + p.fill + ';--stroke:' + p.stroke + ';--c:' + p.c + ';width:' + (k.bw || '100%');
     html += '<div class="kc" style="' + wrap + '">' + strip +
       '<button type="button" class="hk k-' + (/^[A-Za-z]+$/.test(k.id) ? k.id : 'x') + (blank ? ' blank' : '') + '" data-key="' + k.id + '" aria-label="' + aria + '" style="' + style + '"' + (blank ? ' tabindex="-1"' : '') + '>' +
-      '<svg viewBox="0 0 100 92" aria-hidden="true"><path class="hp" d="' + HEART + '"' + (p.dash ? ' style="stroke-dasharray:' + p.dash + '"' : '') + '></path><path class="hl" d="M14 27 C14 18 21 11 29 11" style="stroke-opacity:' + p.hl + '"></path></svg>' +
+      '<svg viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true"><path class="hp" d="' + HEART + '"' + (p.dash ? ' style="stroke-dasharray:' + p.dash + '"' : '') + '></path><path class="hl" d="M14 27 C14 18 21 11 29 11" style="stroke-opacity:' + p.hl + '"></path></svg>' +
       '<span class="l" style="font-size:' + (k.size || p.size) + 'cqw">' + label + '</span>' +
       (k.pi ? '<span class="pi shl" aria-hidden="true">π</span>' : '') +
       '</button></div>';
@@ -1220,6 +1383,18 @@ var CalcCore = (function () {
   function save() { try { localStorage.setItem(STORE, JSON.stringify(calc.settings())); } catch (e) { /* not available */ } }
 
   var app = document.getElementById('app');
+
+  // choose the layout from the size of the window: side by side, or stacked; and compact for small windows
+  function layout() {
+    var w = document.documentElement.clientWidth, h = document.documentElement.clientHeight, ratio = w / h;
+    var stacked = ratio <= 0.9 || (ratio <= 1.25 && w < 720);
+    var compact = stacked ? (w <= 700 || h <= 800) : h <= 560;
+    app.setAttribute('data-layout', stacked ? 'stacked' : 'side');
+    app.setAttribute('data-compact', compact ? '1' : '');
+  }
+  layout();
+  window.addEventListener('resize', layout);
+  window.addEventListener('orientationchange', layout);
   var screen = document.getElementById('screen');
   var chips = document.getElementById('chips');
   var angIco = document.getElementById('angIco');
@@ -1229,7 +1404,7 @@ var CalcCore = (function () {
   var modetag = document.getElementById('modetag');
   var scrim = document.getElementById('scrim');
   var sheet = document.getElementById('sheet');
-  var FORMAT_NAMES = { frac: 'Fraction', mixed: 'Mixed number', dec: 'Decimal', surd: 'Surd', int: '', factor: 'Prime factors' };
+  var VIEW_NAMES = { std: 'Standard', dec: 'Decimal', eng: 'ENG notation', sex: 'Sexagesimal', factor: 'Prime factors' };
   var ANGLE_NAMES = { D: 'Degrees', R: 'Radians', G: 'Gradians' };
 
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -1245,7 +1420,7 @@ var CalcCore = (function () {
     normIco.textContent = s.norm === 'fix' ? 'FIX' : 'SCI';
     var where = v.calcMode === 'mode2' ? 'Mode 2' : /^ratio/.test(v.mode) ? 'Ratio' : v.mode === 'simp' ? 'Simplify' : 'Calculate';
     modetag.textContent = where + ' · ' + ANGLE_NAMES[s.angle];
-    fmtTag.textContent = (v.mode === 'result' && (v.canFormat || v.format === 'factor')) ? FORMAT_NAMES[v.format] : '';
+    fmtTag.textContent = (v.result && (v.view !== 'std' || v.exact)) ? VIEW_NAMES[v.view] : '';
 
     var h = '';
     if (v.calcMode === 'mode2') {
@@ -1288,9 +1463,11 @@ var CalcCore = (function () {
         return (i ? '<span class="arrow" aria-hidden="true">›</span>' : '') + '<span class="chip' + (t.kind ? ' ' + t.kind : '') + '">' + esc(t.label) + '</span>';
       }).join('');
       chips.scrollTop = chips.scrollHeight;
+      chips.scrollLeft = chips.scrollWidth;
     }
     if (openSheet === 'settings') sheet.innerHTML = settingsHTML(v);
     if (openSheet === 'tools') sheet.innerHTML = toolsHTML(v);
+    if (openSheet === 'format') sheet.innerHTML = formatHTML(v);
     save();
   }
 
@@ -1355,6 +1532,18 @@ var CalcCore = (function () {
       toolRow('ratio', 'Ratio', 'Finds the missing number in A : B = C : D', off) +
       '</div>';
   }
+  function viewRowHTML(title, desc, view, cur) {
+    return '<button type="button" class="toolrow viewrow" data-view="' + view + '"><span>' + title + '<small>' + desc + '</small></span><span class="tick">' + (cur === view ? '✓' : '') + '</span></button>';
+  }
+  function formatHTML(v) {
+    return '<div class="sheet-head"><h2 id="sheetTitle">FORMAT</h2><button type="button" class="done light" data-close="1">Cancel</button></div>' +
+      '<div class="sec">Convert displayed result to</div><div class="group">' +
+      viewRowHTML('Standard', 'Fraction, √, π form when possible', 'std', v.view) +
+      viewRowHTML('Decimal', 'Plain decimal value', 'dec', v.view) +
+      viewRowHTML('ENG Notation', 'a × 10ⁿ where n is a multiple of 3', 'eng', v.view) +
+      viewRowHTML('Sexagesimal', 'Degree, minute, second', 'sex', v.view) +
+      '</div><p class="foot">EXE on the calculation screen reverts to the original result.</p>';
+  }
   function showSheet(name) {
     calc.shift = false;
     lastFocus = document.activeElement;
@@ -1380,12 +1569,18 @@ var CalcCore = (function () {
     if (b.dataset.step) { var sk = b.dataset.step; calc.set(sk, calc.settings()[sk] + (+b.dataset.d)); render(); return; }
     if (b.dataset.mode) { calc.setMode(b.dataset.mode); closeSheet(); return; }
     if (b.dataset.reset) { calc.resetSettings(); render(); return; }
-    if (b.dataset.tool) { calc.tool(b.dataset.tool); closeSheet(); return; }
+    if (b.dataset.tool) { calc.useTool(b.dataset.tool); closeSheet(); return; }
+    if (b.dataset.view) { calc.setView(b.dataset.view); closeSheet(); return; }
   });
 
   function press(key) {
     if (key === 'SETTINGS') { showSheet('settings'); return; }
     if (key === 'TOOLS') { showSheet('tools'); return; }
+    if (key === 'FORMAT') {
+      if (calc.calcMode === 'calc' && calc.mode === 'edit') { calc.press('EXE'); render(); }
+      if (calc.canConvert()) showSheet('format');
+      return;
+    }
     calc.press(key); render();
   }
 

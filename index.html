@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-512.png">
+<title>Pink Classroom Calculator</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pink Calc">
+<meta name="theme-color" content="#FCE4EE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: LCD screen and key trail on the left, heart keypad on the right; stacks in portrait. */
+:root{
+  --bg:#FCE4EE; --ink:#4A1236; --lcd-ink:#2A1020; --rose:#C2185B; --bezel:#E0457F;
+  --gold-ink:#8A5A00; --panel:#FFF7FA; --panel-line:#F2B8CD; --muted:#8C3A63;
+  --font-body:'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+  --font-display:'Fredoka', 'Atkinson Hyperlegible', system-ui, sans-serif;
+  color-scheme: light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}
+.app{height:100%;box-sizing:border-box;display:flex;gap:28px;align-items:stretch;
+  padding-block:22px;padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
+.side{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.top{display:flex;align-items:center;gap:12px;min-height:34px}
+.top h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--ink);text-wrap:balance}
+.modetag{margin-left:auto;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel);border:2px solid var(--panel-line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+
+/* ---------- LCD ---------- */
+.lcd{flex:0 0 auto;height:clamp(170px, 34dvh, 290px);box-sizing:border-box;container-type:inline-size;
+  background:linear-gradient(180deg,#F7F4F5,#E9E4E7);border:10px solid var(--bezel);border-radius:24px;
+  box-shadow:inset 0 4px 10px rgba(0,0,0,.22),0 4px 0 rgba(163,19,79,.35);padding:10px 20px 12px;
+  display:flex;flex-direction:column;color:var(--lcd-ink);font-weight:700}
+.status{display:flex;align-items:center;gap:4px;height:14px;flex:0 0 auto}
+.ico{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:3px;background:#111;color:#fff;font-size:8px;font-weight:700;line-height:1}
+.fmt-tag{margin-left:auto;font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.screen{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:space-between}
+.expr{flex:1 1 auto;min-height:0;display:flex;align-items:center;overflow:hidden;font-size:clamp(22px,6.4cqw,42px)}
+.res{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;overflow:hidden;min-height:1.25em;font-size:clamp(28px,8.6cqw,56px);color:#1E0A16}
+.big .expr{font-size:clamp(28px,8.4cqw,58px)}
+.big .res{font-size:clamp(34px,11.5cqw,76px)}
+.line{flex:0 0 auto;white-space:nowrap;line-height:1.15;padding:.12em .05em}
+.op{margin:0 .14em}
+.fnm{margin-right:.04em}
+.fr{display:inline-flex;flex-direction:column;align-items:stretch;vertical-align:middle;margin:0 .1em;text-align:center}
+.fr>.fn{border-bottom:.07em solid currentColor;padding:0 .12em .04em}
+.fr>.fd{padding:.04em .12em 0}
+.mx{display:inline-flex;align-items:center;vertical-align:middle}
+.mx>.mw{margin-right:.06em}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle;margin:0 .05em}
+.rs{width:.5em;flex:0 0 auto;overflow:visible}
+.rs path{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ra{border-top:.07em solid currentColor;padding:.06em .08em 0 .06em}
+.rt{display:inline-flex;align-items:flex-start;vertical-align:middle}
+.ri{font-size:.55em;margin-right:-.35em;margin-top:.1em;position:relative;z-index:1}
+.pw{display:inline-block;font-size:.6em;vertical-align:.9em}
+.ph{display:inline-block;min-width:.55em;height:.78em;border:.06em dashed rgba(42,16,32,.45);border-radius:.08em;vertical-align:middle;box-sizing:border-box;position:relative}
+.ph>.cur{position:absolute;left:.04em;top:.02em;height:.66em;margin:0}
+.cur{display:inline-block;width:.075em;height:1.05em;background:var(--rose);vertical-align:middle;margin:0 -.0375em;animation:blink 1.06s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.cur{animation:none}}
+.errbox{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.35em;font-size:clamp(15px,3.8cqw,24px)}
+.errbox b{font-size:1.5em}
+.msg{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.35em;font-size:clamp(15px,3.8cqw,24px)}
+.msg b{font-size:1.4em}
+.msg span{font-weight:400}
+.msg .hint{font-size:.8em;color:var(--muted);font-weight:700}
+.note{flex:0 0 auto;font-size:clamp(12px,2.6cqw,16px);color:var(--muted);text-align:right}
+.rbox{display:inline-block;min-width:1.1em;padding:0 .12em;border-bottom:.06em solid transparent;text-align:center}
+.rbox.on{border-bottom-color:var(--rose)}
+.qr{font-size:.7em;margin-right:.1em}
+.op small{font-size:.55em}
+.ico.wide{width:auto;padding:0 3px}
+
+/* ---------- key trail ---------- */
+.trail{flex:1 1 auto;min-height:90px;background:var(--panel);border:2px dashed #E994B5;border-radius:22px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+.trail-head{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;gap:8px;overflow-y:auto;min-height:0}
+.chip{font-size:17px;font-weight:700;color:var(--ink);background:#fff;border:2px solid var(--panel-line);border-radius:12px;padding:5px 11px;white-space:nowrap}
+.chip.shift{background:#FFE08A;border-color:#E9C44F;color:#5C3A00}
+.chip.exe{background:var(--rose);border-color:var(--rose);color:#fff}
+.arrow{color:#B5658C;font-size:16px}
+.trail-empty{font-size:15px;color:var(--muted);font-weight:400}
+
+/* ---------- heart keypad ---------- */
+.pad{flex:0 0 auto;align-self:center;width:min(46vw, calc((100dvh - 60px) * 0.62));container-type:inline-size;
+  display:grid;grid-template-columns:repeat(30,minmax(0,1fr));gap:1cqw 1.2cqw;align-content:start}
+.kc{display:flex;flex-direction:column;min-width:0}
+.sh{height:3.7cqw;font-size:2.86cqw;font-weight:700;line-height:3.7cqw;color:var(--gold-ink);text-align:center;white-space:nowrap}
+.shl{display:inline-block;transition:background .15s, box-shadow .15s}
+.shg{display:inline-flex;align-items:flex-start;gap:.3cqw;vertical-align:middle;line-height:0}
+.shift-on .shl{background:#FFE08A;color:#5C3A00;border-radius:1.84cqw;padding:0 1.43cqw;box-shadow:0 0 1.6cqw .4cqw rgba(255,201,51,.95),0 0 3.7cqw 1cqw rgba(255,179,0,.5)}
+.mbx{display:inline-block;width:1.43cqw;height:1.43cqw;border-radius:.4cqw;border:.31cqw solid var(--gold-ink);box-sizing:border-box;background:#fff}
+.mstack{display:inline-flex;flex-direction:column;align-items:center;gap:.2cqw}
+.mbar{width:1.84cqw;height:.31cqw;background:var(--gold-ink)}
+.hk{position:relative;display:block;width:100%;aspect-ratio:100/92;max-width:100%;border:0;background:none;padding:0;margin:0 auto;cursor:pointer;
+  font-family:var(--font-body);font-weight:700;color:var(--c);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.hk>svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 .8cqw 0 rgba(163,19,79,.28));transition:transform .05s}
+.hk .hp{fill:var(--fill);stroke:var(--stroke);stroke-width:3;stroke-linejoin:round}
+.hk .hl{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round}
+.hk .l{position:absolute;left:0;right:0;top:0;bottom:12%;display:flex;align-items:center;justify-content:center;line-height:1;pointer-events:none;transition:transform .05s}
+.hk:active>svg,.hk.pressed>svg{transform:translateY(.6cqw);filter:drop-shadow(0 .2cqw 0 rgba(163,19,79,.28))}
+.hk:active .l,.hk.pressed .l{transform:translateY(.6cqw)}
+.hk:focus-visible{outline:3px solid var(--rose);outline-offset:2px;border-radius:30%}
+.hk.blank{cursor:default}
+.k-SHIFT>svg{transition:filter .15s}
+.shift-on .k-SHIFT{--fill:#FFD54A !important;--stroke:#E08A00 !important}
+.shift-on .k-SHIFT>svg{filter:drop-shadow(0 0 1.2cqw #FFC933) drop-shadow(0 0 2.4cqw #FFB300)}
+.lw{display:inline-flex;align-items:flex-start;gap:.5cqw}
+.bxx{display:inline-block;width:3.67cqw;height:3.67cqw;border-radius:.61cqw;background:var(--ink)}
+.bxa{display:inline-block;width:3.06cqw;height:3.06cqw;border-radius:.61cqw;background:#fff;border:.41cqw solid var(--ink);box-sizing:border-box}
+.bxa.lil{background:#C79BE3}
+.gtxt{font-size:1.75cqw;letter-spacing:-.01em;white-space:nowrap}
+.fstack{display:inline-flex;flex-direction:column;align-items:center;gap:.61cqw;line-height:0}
+.fbar{width:4.9cqw;height:.61cqw;border-radius:.4cqw;background:var(--ink)}
+.fmtk{display:inline-flex;flex-direction:column;align-items:center;gap:.4cqw;line-height:1}
+.pi{position:absolute;top:-6%;left:50%;transform:translateX(-50%);font-size:3.6cqw;font-weight:700;line-height:1.1;color:var(--gold-ink);pointer-events:none}
+[hidden]{display:none !important}
+
+/* ---------- SETTINGS and TOOLS panels ---------- */
+.scrim{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(74,18,54,.3);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));box-sizing:border-box}
+.sheet{width:min(560px,100%);max-height:100%;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--panel);border:3px solid var(--panel-line);border-radius:28px;box-shadow:0 14px 40px rgba(74,18,54,.28);padding:0 20px 22px;box-sizing:border-box;color:var(--ink)}
+.sheet-head{position:sticky;top:0;z-index:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:var(--panel);padding:16px 0 10px}
+.sheet-head h2{grid-column:2;margin:0;font-family:var(--font-display);font-weight:600;font-size:23px}
+.done{grid-column:3;justify-self:end;font:700 17px var(--font-body);color:#fff;background:var(--rose);border:0;border-radius:999px;padding:9px 20px;cursor:pointer}
+.sec{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 8px 8px}
+.group{background:#fff;border:2px solid var(--panel-line);border-radius:20px;overflow:hidden}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1.5px solid #F7D3E1;font-size:17px;font-weight:700;width:100%;box-sizing:border-box;background:#fff;color:var(--ink);font-family:var(--font-body);text-align:left}
+.group>.srow:first-child,.group>.toolrow:first-child{border-top:0}
+.srow.stack{flex-direction:column;align-items:stretch;gap:8px}
+.srow small{font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
+.mrow{border-left:0;border-right:0;border-bottom:0;cursor:pointer}
+.tick{color:var(--rose);font-size:20px}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:9px 4px;font:700 15px var(--font-body);color:var(--ink);cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:#FF9EC4;box-shadow:0 2px 0 rgba(163,19,79,.25)}
+.tog{flex:0 0 auto;width:54px;height:32px;border-radius:999px;background:#E9C9D6;border:0;position:relative;cursor:pointer;transition:background .15s}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+.tog[aria-checked="true"]{background:var(--rose)}
+.tog[aria-checked="true"]::after{left:25px}
+.step{display:flex;align-items:center;gap:12px}
+.step b{min-width:1.5em;text-align:center;font-size:19px}
+.step button{width:38px;height:38px;border-radius:50%;border:2px solid var(--panel-line);background:#fff;font:700 20px var(--font-body);color:var(--ink);cursor:pointer}
+.step button:disabled{opacity:.35}
+.toolrow{width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border:0;border-top:1.5px solid #F7D3E1;background:#fff;text-align:left;font:700 18px var(--font-body);color:#A3134F;cursor:pointer}
+.toolrow small{display:block;font-weight:400;font-size:14px;color:var(--muted);margin-top:2px}
+.toolrow svg{width:26px;height:26px;flex:0 0 auto}
+.toolrow:disabled{opacity:.4;cursor:default}
+.reset{display:block;margin:18px auto 0;border:0;background:none;font:700 15px var(--font-body);color:var(--rose);text-decoration:underline;cursor:pointer}
+.sheet button:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+
+@media (orientation: portrait){
+  .app{flex-direction:column;gap:14px}
+  .side{flex:0 0 auto;overflow:visible}
+  .lcd{height:clamp(150px, 19dvh, 230px)}
+  .trail{flex:0 0 auto;min-height:0;max-height:118px;padding:10px 16px;gap:8px}
+  .pad{width:min(100%, 600px, calc((100dvh - 430px) * 0.62))}
+}
+</style>
+</head>
+<body>
+
+
+<div class="app" id="app">
+  <div class="side">
+    <header class="top">
+      <svg width="32" height="29" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88 C18 62 4 44 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 44 82 62 50 88 Z" fill="#C2185B"></path></svg>
+      <h1>Pink Calculator</h1>
+      <span class="modetag" id="modetag">Calculate</span>
+    </header>
+    <div class="lcd" role="status" aria-live="polite">
+      <div class="status">
+        <span class="ico" id="angIco" role="img" aria-label="Degrees">D</span>
+        <span class="ico" id="shIco" role="img" aria-label="Shift is on" hidden>S</span>
+        <span class="ico wide" id="normIco" hidden>FIX</span>
+        <span class="fmt-tag" id="fmtTag"></span>
+      </div>
+      <div class="screen" id="screen"></div>
+    </div>
+    <section class="trail" id="trailBox" aria-label="Key trail">
+      <div class="trail-head">KEY TRAIL: WHAT I PRESSED</div>
+      <div class="chips" id="chips"></div>
+    </section>
+  </div>
+  <div class="pad" id="pad" role="group" aria-label="Calculator keys"></div>
+</div>
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+</div>
+
+<script>
+/* ==========================================================
+   Pink Calculator engine
+   - natural display editing (fractions, roots, powers) with a cursor
+   - exact answers: fractions and surds, like a real scientific calculator
+   - settings: input/output, Deg/Rad/Grad, Norm/Fix/Sci, fraction style,
+     decimal mark, digit separator
+   - tools: Undo, Remainder, Prime factorisation, Simplify, Ratio
+   ========================================================== */
+var CalcCore = (function () {
+  'use strict';
+
+  function CalcError(type) { this.type = type; }
+
+  /* ---------- expression tree ---------- */
+  var SLOTS = { frac: ['num', 'den'], mixed: ['whole', 'num', 'den'], sqrt: ['arg'], root: ['idx', 'arg'], pow: ['exp'], sci: ['exp'] };
+  function mkRow(p, f) { var r = []; r.p = p || null; r.f = f || null; return r; }
+  function mkNode(t) { var n = { t: t }; SLOTS[t].forEach(function (f) { n[f] = mkRow(n, f); }); return n; }
+  function ch(v) { return { t: 'c', v: v }; }
+  function isStruct(it) { return !!SLOTS[it.t]; }
+  function enterable(it) { return isStruct(it) && !it.fixed; }
+  function cloneItem(it) {
+    if (!isStruct(it)) return ch(it.v);
+    var n = { t: it.t }; if (it.fixed) n.fixed = true;
+    SLOTS[it.t].forEach(function (f) { n[f] = cloneRow(it[f], n, f); });
+    return n;
+  }
+  function cloneRow(row, p, f) {
+    var r = mkRow(p, f);
+    row.forEach(function (it) { var c = cloneItem(it); c.pr = r; r.push(c); });
+    return r;
+  }
+  function pushAll(row, items) { items.forEach(function (it) { it.pr = row; row.push(it); }); }
+  function digitsRow(s) { return Array.from(String(s)).map(function (c) { return ch(c === '-' ? '−' : c); }); }
+  function pathOf(cur) {
+    var steps = [], r = cur.row;
+    while (r.p) { var n = r.p; steps.unshift({ k: n.pr.indexOf(n), f: r.f }); r = n.pr; }
+    return { steps: steps, i: cur.i };
+  }
+  function restorePath(root, path) {
+    var r = root;
+    path.steps.forEach(function (s) { r = r[s.k][s.f]; });
+    return { row: r, i: path.i };
+  }
+
+  /* ---------- exact numbers: (n/d) * sqrt(r), r square-free; or a decimal ---------- */
+  var LIMIT = 1000000000000000000n;
+  function bAbs(a) { return a < 0n ? -a : a; }
+  function gcd(a, b) { a = bAbs(a); b = bAbs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+  function ratioToNumber(n, d) {
+    var a = Number(n), b = Number(d);
+    if (isFinite(a) && isFinite(b)) return a / b;
+    var shift = BigInt(Math.max(bAbs(n).toString().length, d.toString().length) - 300);
+    if (shift < 0n) shift = 0n;
+    var p = 10n ** shift;
+    return Number(n / p) / Number(d / p);
+  }
+  function F(x) {
+    if (!isFinite(x) || Math.abs(x) >= 1e100) throw new CalcError('Math');
+    return { e: false, f: x };
+  }
+  function toF(v) { return v.e ? ratioToNumber(v.n, v.d) * (v.r === 1n ? 1 : Math.sqrt(Number(v.r))) : v.f; }
+  function mk(n, d, r) {
+    r = r || 1n;
+    if (d === 0n) throw new CalcError('Math');
+    if (d < 0n) { n = -n; d = -d; }
+    if (n === 0n) return { e: true, n: 0n, d: 1n, r: 1n };
+    var g = gcd(n, d); n /= g; d /= g;
+    if (bAbs(n) > LIMIT || d > LIMIT || r > LIMIT) return F(ratioToNumber(n, d) * Math.sqrt(Number(r)));
+    return { e: true, n: n, d: d, r: r };
+  }
+  function splitSquare(r) {
+    if (r > 10000000000n) return null;
+    var k = 1n, m = r;
+    for (var p = 2n; p * p <= m; p++) { var pp = p * p; while (m % pp === 0n) { m /= pp; k *= p; } }
+    return [k, m];
+  }
+  function surd(n, d, rRaw) {
+    if (rRaw === 0n) return mk(0n, 1n);
+    var s = splitSquare(rRaw);
+    if (!s) return F(ratioToNumber(n, d) * Math.sqrt(Number(rRaw)));
+    return mk(n * s[0], d, s[1]);
+  }
+  var ZERO = mk(0n, 1n), ONE = mk(1n, 1n), TEN = mk(10n, 1n);
+  function isZero(v) { return v.e ? v.n === 0n : v.f === 0; }
+  function isInt(v) { return v.e && v.r === 1n && v.d === 1n; }
+  function neg(a) { return a.e ? { e: true, n: -a.n, d: a.d, r: a.r } : F(-a.f); }
+  function add(a, b) {
+    if (a.e && b.e) {
+      if (a.n === 0n) return b;
+      if (b.n === 0n) return a;
+      if (a.r === b.r) return mk(a.n * b.d + b.n * a.d, a.d * b.d, a.r);
+    }
+    return F(toF(a) + toF(b));
+  }
+  function sub(a, b) { return add(a, neg(b)); }
+  function mul(a, b) {
+    if (a.e && b.e) { var g = gcd(a.r, b.r); return mk(a.n * b.n * g, a.d * b.d, (a.r / g) * (b.r / g)); }
+    return F(toF(a) * toF(b));
+  }
+  function inv(b) {
+    if (b.e) { if (b.n === 0n) throw new CalcError('Math'); return mk(b.d, b.n * b.r, b.r); }
+    if (b.f === 0) throw new CalcError('Math');
+    return F(1 / b.f);
+  }
+  function div(a, b) { return mul(a, inv(b)); }
+  function ipow(a, k) {
+    if (k === 0n) { if (isZero(a)) throw new CalcError('Math'); return ONE; }
+    if (k < 0n) return inv(ipow(a, -k));
+    if (a.e) {
+      if (k > 400n) return F(Math.pow(toF(a), Number(k)));
+      var n = a.n ** k, d = a.d ** k;
+      n *= a.r ** (k / 2n);
+      return mk(n, d, k % 2n === 1n ? a.r : 1n);
+    }
+    return F(Math.pow(a.f, Number(k)));
+  }
+  function iroot(N, q) {
+    if (N < 2n) return N;
+    var approx = Math.round(Math.pow(Number(N), 1 / Number(q)));
+    if (!isFinite(approx)) return null;
+    var c0 = BigInt(approx);
+    for (var c = c0 - 1n; c <= c0 + 1n; c++) { if (c >= 0n && c ** q === N) return c; }
+    return null;
+  }
+  function sqrtV(a) {
+    if (a.e) {
+      if (a.n < 0n) throw new CalcError('Math');
+      if (a.r === 1n) return surd(1n, a.d, a.n * a.d);
+      return F(Math.sqrt(toF(a)));
+    }
+    if (a.f < 0) throw new CalcError('Math');
+    return F(Math.sqrt(a.f));
+  }
+  function nroot(a, q) {
+    if (!a.e) return null;
+    if (q === 1n) return a;
+    if (q === 2n) return sqrtV(a);
+    if (a.r !== 1n) return null;
+    var negv = a.n < 0n;
+    if (negv && q % 2n === 0n) throw new CalcError('Math');
+    var rn = iroot(bAbs(a.n), q), rd = iroot(a.d, q);
+    if (rn === null || rd === null) return null;
+    return mk(negv ? -rn : rn, rd);
+  }
+  function pow(a, b) {
+    if (isInt(b)) return ipow(a, b.n);
+    if (b.e && b.r === 1n && b.d <= 1000n) {
+      var rt = nroot(a, b.d);
+      if (rt) return ipow(rt, b.n);
+    }
+    var x = toF(a), y = toF(b);
+    if (x < 0) {
+      if (b.e && b.r === 1n && b.d % 2n === 1n) { var m = Math.pow(-x, y); return F(b.n % 2n === 0n ? m : -m); }
+      throw new CalcError('Math');
+    }
+    if (x === 0 && y <= 0) throw new CalcError('Math');
+    return F(Math.pow(x, y));
+  }
+  function rootV(x, y) {
+    if (isZero(y)) throw new CalcError('Math');
+    if (isInt(y) && y.n > 0n) {
+      var q = y.n;
+      if (q === 2n) return sqrtV(x);
+      var exact = q <= 1000n ? nroot(x, q) : null;
+      if (exact) return exact;
+      var f = toF(x);
+      if (f < 0) { if (q % 2n === 0n) throw new CalcError('Math'); return F(-Math.pow(-f, 1 / Number(q))); }
+      return F(Math.pow(f, 1 / Number(q)));
+    }
+    return pow(x, inv(y));
+  }
+
+  /* ---------- trigonometry (exact values in degrees, like the real thing) ---------- */
+  var SIN_TAB = { 0: ZERO, 30: mk(1n, 2n), 45: mk(1n, 2n, 2n), 60: mk(1n, 2n, 3n), 90: ONE };
+  function intDeg(v) { return isInt(v) ? Number(((v.n % 360n) + 360n) % 360n) : null; }
+  function sinTab(A) {
+    var s = 1;
+    if (A >= 180) { A -= 180; s = -1; }
+    if (A > 90) A = 180 - A;
+    var t = SIN_TAB[A];
+    if (!t) return null;
+    return s < 0 ? neg(t) : t;
+  }
+  function rad(v, angle) { var x = toF(v); return angle === 'D' ? x * Math.PI / 180 : angle === 'G' ? x * Math.PI / 200 : x; }
+  function unrad(x, angle) { return angle === 'D' ? x * 180 / Math.PI : angle === 'G' ? x * 200 / Math.PI : x; }
+  function clean(x) { return Math.abs(x) < 1e-12 ? 0 : x; }
+  function sinV(v, angle) {
+    if (angle === 'D') { var A = intDeg(v); if (A !== null) { var r = sinTab(A); if (r) return r; } }
+    return F(clean(Math.sin(rad(v, angle))));
+  }
+  function cosV(v, angle) {
+    if (angle === 'D') { var A = intDeg(v); if (A !== null) { var r = sinTab((A + 90) % 360); if (r) return r; } }
+    return F(clean(Math.cos(rad(v, angle))));
+  }
+  function tanV(v, angle) {
+    if (angle === 'D') {
+      var A = intDeg(v);
+      if (A !== null) {
+        var s = sinTab(A), c = sinTab((A + 90) % 360);
+        if (s && c) { if (isZero(c)) throw new CalcError('Math'); return div(s, c); }
+      }
+    }
+    var c2 = Math.cos(rad(v, angle));
+    if (Math.abs(c2) < 1e-13) throw new CalcError('Math');
+    return F(clean(Math.tan(rad(v, angle))));
+  }
+  function eqV(a, b) { return a.e && b.e && a.n === b.n && a.d === b.d && a.r === b.r; }
+  var ASIN_TAB = [[ZERO, 0], [mk(1n, 2n), 30], [mk(1n, 2n, 2n), 45], [mk(1n, 2n, 3n), 60], [ONE, 90]];
+  var ATAN_TAB = [[ZERO, 0], [mk(1n, 3n, 3n), 30], [ONE, 45], [mk(1n, 1n, 3n), 60]];
+  function lookup(tab, v) {
+    if (!v.e) return null;
+    var negv = v.n < 0n, av = negv ? neg(v) : v;
+    for (var i = 0; i < tab.length; i++) { if (eqV(tab[i][0], av)) return negv ? -tab[i][1] : tab[i][1]; }
+    return null;
+  }
+  function asinV(v, angle) {
+    var x = toF(v);
+    if (Math.abs(x) > 1 + 1e-12) throw new CalcError('Math');
+    if (angle === 'D') { var A = lookup(ASIN_TAB, v); if (A !== null) return mk(BigInt(A), 1n); }
+    return F(unrad(Math.asin(Math.max(-1, Math.min(1, x))), angle));
+  }
+  function acosV(v, angle) {
+    var x = toF(v);
+    if (Math.abs(x) > 1 + 1e-12) throw new CalcError('Math');
+    if (angle === 'D') { var A = lookup(ASIN_TAB, v); if (A !== null) return mk(BigInt(90 - A), 1n); }
+    return F(unrad(Math.acos(Math.max(-1, Math.min(1, x))), angle));
+  }
+  function atanV(v, angle) {
+    if (angle === 'D') { var A = lookup(ATAN_TAB, v); if (A !== null) return mk(BigInt(A), 1n); }
+    return F(unrad(Math.atan(toF(v)), angle));
+  }
+  var FN_TOK = { 'sin(': 'sin', 'cos(': 'cos', 'tan(': 'tan', 'sin⁻¹(': 'asin', 'cos⁻¹(': 'acos', 'tan⁻¹(': 'atan' };
+  var FNS = { sin: sinV, cos: cosV, tan: tanV, asin: asinV, acos: acosV, atan: atanV };
+
+  /* ---------- reading the expression ---------- */
+  function tokenize(row) {
+    var out = [], i = 0;
+    while (i < row.length) {
+      var it = row[i];
+      if (it.t === 'c') {
+        var v = it.v;
+        if (/^[0-9.]$/.test(v)) {
+          var s = '';
+          while (i < row.length && row[i].t === 'c' && /^[0-9.]$/.test(row[i].v)) { s += row[i].v; i++; }
+          out.push({ k: 'num', v: s });
+          continue;
+        }
+        if ('+−×÷'.indexOf(v) >= 0 && v.length === 1) out.push({ k: 'op', v: v });
+        else if (v === '(') out.push({ k: 'lp' });
+        else if (v === ')') out.push({ k: 'rp' });
+        else if (FN_TOK[v]) out.push({ k: 'fn', v: FN_TOK[v] });
+        else if (v === 'Ans' || v === 'π') out.push({ k: 'const', v: v });
+        else throw new CalcError('Syntax');
+      } else if (it.t === 'pow') out.push({ k: 'post', n: it });
+      else if (it.t === 'sci') out.push({ k: 'sci', n: it });
+      else out.push({ k: 'node', n: it });
+      i++;
+    }
+    return out;
+  }
+  function parseNum(s) {
+    if ((s.match(/\./g) || []).length > 1) throw new CalcError('Syntax');
+    var parts = s.split('.'), a = parts[0] || '0', b = parts[1] || '';
+    return mk(BigInt(a + b), 10n ** BigInt(b.length));
+  }
+  function evalNode(n, ctx) {
+    switch (n.t) {
+      case 'frac': return div(evaluate(n.num, ctx), evaluate(n.den, ctx));
+      case 'mixed': {
+        var w = evaluate(n.whole, ctx), fr = div(evaluate(n.num, ctx), evaluate(n.den, ctx));
+        return toF(w) < 0 ? sub(w, fr) : add(w, fr);
+      }
+      case 'sqrt': return sqrtV(evaluate(n.arg, ctx));
+      case 'root': return rootV(evaluate(n.arg, ctx), evaluate(n.idx, ctx));
+    }
+    throw new CalcError('Syntax');
+  }
+  function evaluate(row, ctx) {
+    var toks = tokenize(row);
+    if (!toks.length) throw new CalcError('Syntax');
+    var p = 0;
+    function peek() { return toks[p]; }
+    function next() { return toks[p++]; }
+    function isOp(t, s) { return t && t.k === 'op' && s.indexOf(t.v) >= 0; }
+    function startsPrimary(t) { return t && (t.k === 'num' || t.k === 'const' || t.k === 'lp' || t.k === 'fn' || t.k === 'node'); }
+    function expr() {
+      var v = term();
+      while (isOp(peek(), '+−')) { var o = next().v, w = term(); v = o === '+' ? add(v, w) : sub(v, w); }
+      return v;
+    }
+    function term() {
+      var v = implicit();
+      while (isOp(peek(), '×÷')) { var o = next().v, w = implicit(); v = o === '×' ? mul(v, w) : div(v, w); }
+      return v;
+    }
+    // multiplication without a sign (2π, 3√2, 2(4+1)) binds tighter, as on the real calculator
+    function implicit() {
+      var v = unary();
+      while (startsPrimary(peek())) v = mul(v, postfix());
+      return v;
+    }
+    function unary() {
+      if (isOp(peek(), '−')) { next(); return neg(unary()); }
+      if (isOp(peek(), '+')) { next(); return unary(); }
+      return postfix();
+    }
+    function postfix() {
+      var v = primary();
+      while (peek() && (peek().k === 'post' || peek().k === 'sci')) {
+        var t = next(), e = evaluate(t.n.exp, ctx);
+        v = t.k === 'post' ? pow(v, e) : mul(v, pow(TEN, e));
+      }
+      return v;
+    }
+    function group() {
+      var v = expr();
+      if (peek() && peek().k === 'rp') next();
+      else if (peek()) throw new CalcError('Syntax');
+      return v;
+    }
+    function primary() {
+      var t = next();
+      if (!t) throw new CalcError('Syntax');
+      switch (t.k) {
+        case 'num': return parseNum(t.v);
+        case 'const': return t.v === 'Ans' ? ctx.ans : F(Math.PI);
+        case 'lp': return group();
+        case 'fn': return FNS[t.v](group(), ctx.angle);
+        case 'node': return evalNode(t.n, ctx);
+        case 'sci': p--; return ONE;
+      }
+      throw new CalcError('Syntax');
+    }
+    var v = expr();
+    if (p < toks.length) throw new CalcError('Syntax');
+    return v;
+  }
+
+  /* ---------- showing answers ---------- */
+  var DEFAULTS = { io: 'math', angle: 'D', norm: 'norm1', fix: 2, sci: 3, frac: 'improper', comma: false, sep: false, big: false, trailOn: true };
+  function cleanSettings(s) {
+    s = s || {};
+    var o = {};
+    o.io = s.io === 'dec' ? 'dec' : 'math';
+    o.angle = (s.angle === 'R' || s.angle === 'G') ? s.angle : 'D';
+    o.norm = ['norm1', 'norm2', 'fix', 'sci'].indexOf(s.norm) >= 0 ? s.norm : 'norm1';
+    o.fix = (s.fix >= 0 && s.fix <= 9) ? Math.round(s.fix) : 2;
+    o.sci = (s.sci >= 1 && s.sci <= 10) ? Math.round(s.sci) : 3;
+    o.frac = s.frac === 'mixed' ? 'mixed' : 'improper';
+    o.comma = !!s.comma;
+    o.sep = !!s.sep;
+    o.big = !!s.big;
+    o.trailOn = s.trailOn !== false;
+    return o;
+  }
+  function nDigits(x) { return bAbs(x).toString().length; }
+  function formatsFor(v, s) {
+    if (!v.e) return ['dec'];
+    var total = nDigits(v.n) + (v.d > 1n ? nDigits(v.d) : 0) + (v.r > 1n ? nDigits(v.r) : 0);
+    if (total > 10) return ['dec'];
+    var E;
+    if (v.r > 1n) E = ['surd'];
+    else if (v.d === 1n) return ['int'];
+    else if (bAbs(v.n) > v.d) E = s.frac === 'mixed' ? ['mixed', 'frac'] : ['frac', 'mixed'];
+    else E = ['frac'];
+    return s.io === 'dec' ? ['dec'].concat(E) : E.concat(['dec']);
+  }
+  function numStr(str, s) {
+    var negv = str.charAt(0) === '-';
+    if (negv) str = str.slice(1);
+    var parts = str.split('.'), a = parts[0];
+    if (s.sep) a = a.replace(/\B(?=(\d{3})+(?!\d))/g, s.comma ? ' ' : ',');
+    return (negv ? '-' : '') + a + (parts.length > 1 ? (s.comma ? ',' : '.') + parts[1] : '');
+  }
+  function numRow(str, s) { return digitsRow(numStr(str, s)); }
+  function fracOf(numItems, denItems) {
+    var f = mkNode('frac'); pushAll(f.num, numItems); pushAll(f.den, denItems); return f;
+  }
+  function strip(s) { return s.indexOf('.') >= 0 ? s.replace(/0+$/, '').replace(/\.$/, '') : s; }
+  function decRow(x, s) {
+    var ax = Math.abs(x), mant, e = null;
+    if (s.norm === 'sci') {
+      var p1 = x.toExponential(s.sci - 1).split('e'); mant = p1[0]; e = parseInt(p1[1], 10);
+    } else if (s.norm === 'fix' && ax < 1e10) {
+      mant = x.toFixed(s.fix);
+      if (/^-0(\.0*)?$/.test(mant)) mant = mant.slice(1);
+    } else if (x === 0) {
+      mant = '0';
+    } else {
+      var lo = s.norm === 'norm2' ? 1e-9 : 0.01;
+      if (ax >= 1e10 || ax < lo) {
+        var p2 = x.toExponential(9).split('e'); mant = strip(p2[0]); e = parseInt(p2[1], 10);
+      } else {
+        var dp = Math.max(0, Math.min(20, 9 - Math.floor(Math.log10(ax))));
+        mant = strip(x.toFixed(dp));
+        if (mant === '-0') mant = '0';
+      }
+    }
+    var r = numRow(mant, s);
+    if (e !== null) { var sc = mkNode('sci'); pushAll(sc.exp, digitsRow(String(e))); r.push(sc); }
+    return r;
+  }
+  function resultRow(v, fmt, s) {
+    if (fmt === 'dec' || (fmt === 'int' && (s.norm === 'fix' || s.norm === 'sci'))) return decRow(toF(v), s);
+    var r = [], n = bAbs(v.n);
+    if (v.n < 0n) r.push(ch('−'));
+    if (fmt === 'int') { pushAll(r, numRow(n.toString(), s)); return r; }
+    if (fmt === 'frac') { r.push(fracOf(numRow(n.toString(), s), numRow(v.d.toString(), s))); return r; }
+    if (fmt === 'mixed') {
+      var m = mkNode('mixed');
+      pushAll(m.whole, numRow((n / v.d).toString(), s));
+      pushAll(m.num, numRow((n % v.d).toString(), s));
+      pushAll(m.den, numRow(v.d.toString(), s));
+      r.push(m); return r;
+    }
+    // surd, e.g. 2√3 or √2 over 2
+    var top = [];
+    if (n !== 1n) top = numRow(n.toString(), s);
+    var sq = mkNode('sqrt'); pushAll(sq.arg, digitsRow(v.r.toString())); top.push(sq);
+    if (v.d === 1n) pushAll(r, top); else r.push(fracOf(top, numRow(v.d.toString(), s)));
+    return r;
+  }
+  function primeFactors(N) {
+    var out = [], n = N;
+    for (var p = 2; p * p <= n; p += (p === 2 ? 1 : 2)) {
+      var k = 0;
+      while (n % p === 0) { n /= p; k++; }
+      if (k) out.push([p, k]);
+    }
+    if (n > 1) out.push([n, 1]);
+    return out;
+  }
+  function factorRow(N, s) {
+    if (N === 1) return [ch('1')];
+    var r = [];
+    primeFactors(N).forEach(function (pk, i) {
+      if (i) r.push(ch('×'));
+      pushAll(r, numRow(String(pk[0]), s));
+      if (pk[1] > 1) { var pw = mkNode('pow'); pw.fixed = true; pushAll(pw.exp, digitsRow(String(pk[1]))); r.push(pw); }
+    });
+    return r;
+  }
+  function smallestPrime(g) {
+    if (g % 2n === 0n) return 2n;
+    for (var p = 3n; p * p <= g; p += 2n) { if (g % p === 0n) return p; }
+    return g;
+  }
+
+  /* ---------- drawing (HTML) ---------- */
+  var RAD = '<svg class="rs" viewBox="0 0 10 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 14 L3 12.6 L6 23 L9.7 0.8" vector-effect="non-scaling-stroke"></path></svg>';
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function renderRow(row, cur, o) {
+    var has = cur && cur.row === row;
+    if (!row.length) return '<span class="ph">' + (has ? '<span class="cur"></span>' : '') + '</span>';
+    var h = '';
+    for (var i = 0; i <= row.length; i++) {
+      if (has && cur.i === i) h += '<span class="cur"></span>';
+      if (i < row.length) h += renderItem(row[i], cur, o);
+    }
+    return h;
+  }
+  function renderItem(it, cur, o) {
+    function R(r) { return renderRow(r, cur, o); }
+    switch (it.t) {
+      case 'c':
+        if (it.v === '÷R') return '<span class="op">÷<small>R</small></span>';
+        if ('+−×÷'.indexOf(it.v) >= 0) return '<span class="op">' + it.v + '</span>';
+        if (FN_TOK[it.v] || it.v === 'Ans') return '<span class="fnm">' + esc(it.v) + '</span>';
+        if (it.v === 'Q=' || it.v === 'R=') return '<span class="qr">' + it.v + '</span>';
+        if (it.v === '.' && o && o.comma) return '<span>,</span>';
+        return '<span>' + esc(it.v) + '</span>';
+      case 'frac': return '<span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span>';
+      case 'mixed': return '<span class="mx"><span class="mw">' + R(it.whole) + '</span><span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span></span>';
+      case 'sqrt': return '<span class="sq">' + RAD + '<span class="ra">' + R(it.arg) + '</span></span>';
+      case 'root': return '<span class="rt"><span class="ri">' + R(it.idx) + '</span><span class="sq">' + RAD + '<span class="ra">' + R(it.arg) + '</span></span></span>';
+      case 'pow': return '<span class="pw">' + R(it.exp) + '</span>';
+      case 'sci': return '<span class="op">×</span><span>10</span><span class="pw">' + R(it.exp) + '</span>';
+    }
+    return '';
+  }
+
+  /* ---------- the calculator itself ---------- */
+  var SHIFTMAP = { frac: 'mixed', sqrt: 'root', pow: 'inv', sin: 'asin', cos: 'acos', tan: 'atan', '7': 'pi' };
+  var LABELS = {
+    frac: 'a/b', mixed: 'a b/c', sqrt: '√', root: 'ʸ√x', pow: 'xⁿ', sq: 'x²', inv: 'x⁻¹',
+    asin: 'sin⁻¹', acos: 'cos⁻¹', atan: 'tan⁻¹', exp10: '×10ˣ', pi: 'π',
+    up: '▲', down: '▼', left: '◀', right: '▶'
+  };
+  var TOOL_LABELS = { rem: 'Remainder ÷R', factor: 'Prime Factorisation', simplify: 'Simplify', ratio: 'Ratio', undo: 'Undo' };
+  var ANS_FIRST = { '+': 1, '−': 1, '×': 1, '÷': 1, pow: 1, sq: 1, inv: 1, exp10: 1 };
+  var STAY = { FORMAT: 1, EXE: 1, DEL: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, AC: 1 };
+
+  function Calc(settings) {
+    this.s = cleanSettings(settings);
+    this.ans = ZERO;
+    this.history = [];
+    this.trail = [];
+    this.undoStack = [];
+    this.shift = false;
+    this.calcMode = 'calc';
+    this.clear();
+  }
+  var C = Calc.prototype;
+  C.clear = function () {
+    this.root = mkRow();
+    this.cur = { row: this.root, i: 0 };
+    this.result = null;
+    this.err = null;
+    this.ratio = null;
+    this.simp = null;
+    this.mode = 'edit';
+    this.histIdx = this.history.length;
+  };
+  C.settings = function () { return Object.assign({}, this.s); };
+  C.set = function (key, val) {
+    var o = Object.assign({}, this.s); o[key] = val;
+    this.s = cleanSettings(o);
+  };
+  C.resetSettings = function () { this.s = cleanSettings({}); };
+  C.setMode = function (m) {
+    this.shift = false;
+    if (m === 'mode2') { this.calcMode = 'mode2'; return; }
+    this.calcMode = 'calc';
+  };
+  C.chip = function (label, kind) { this.trail.push({ label: label, kind: kind || '' }); if (this.trail.length > 60) this.trail.shift(); };
+  C.ctx = function () { return { ans: this.ans, angle: this.s.angle }; };
+
+  C.snap = function () {
+    if (!/^(edit|result|error)$/.test(this.mode)) return;
+    this.undoStack.push({
+      root: cloneRow(this.root), path: pathOf(this.cur), mode: this.mode,
+      result: this.result ? Object.assign({}, this.result) : null, err: this.err, ans: this.ans, trail: this.trail.slice()
+    });
+    if (this.undoStack.length > 60) this.undoStack.shift();
+  };
+  C.undo = function () {
+    var s = this.undoStack.pop();
+    if (!s) return false;
+    this.root = s.root;
+    this.cur = restorePath(s.root, s.path);
+    this.mode = s.mode; this.result = s.result; this.err = s.err; this.ans = s.ans;
+    this.trail = s.trail;
+    this.ratio = null; this.simp = null;
+    return true;
+  };
+
+  C.press = function (key) {
+    if (key === 'blank' || key === 'TOOLS' || key === 'SETTINGS') return;
+    if (this.calcMode === 'mode2') return; // Mode 2 will handle its own keys here later
+    if (key === 'SHIFT') { this.shift = !this.shift; this.chip('SHIFT', 'shift'); return; }
+    var sh = this.shift; this.shift = false;
+    var act = (sh && SHIFTMAP[key]) || key;
+    if (sh && !SHIFTMAP[key] && this.trail.length && this.trail[this.trail.length - 1].label === 'SHIFT') this.trail.pop();
+    var label = LABELS[act] || act;
+    var kind = (sh && SHIFTMAP[key]) ? 'shift' : (act === 'EXE' ? 'exe' : '');
+
+    if (this.mode === 'ratioPick' || this.mode === 'ratio' || this.mode === 'ratioRes') {
+      if (act !== 'AC') this.chip(label, kind);
+      this.ratioKey(act); return;
+    }
+    if (this.mode === 'simp') {
+      if (act === 'AC') { this.trail = []; this.clear(); return; }
+      this.chip(label, kind);
+      if (act === 'EXE') { this.simpStep(); return; }
+      this.mode = 'result'; this.result = this.simp.prev; this.simp = null;
+      this.trail.pop();
+    }
+
+    this.snap();
+    if (this.mode === 'error') {
+      if (act === 'AC') { this.trail = []; this.clear(); }
+      else if (act === 'left' || act === 'right' || act === 'DEL') { this.chip(label); this.mode = 'edit'; this.err = null; this.cur = { row: this.root, i: this.root.length }; }
+      return;
+    }
+    if (act === 'AC') { this.trail = []; this.clear(); return; }
+
+    if (this.mode === 'result' && !STAY[act]) {
+      this.trail = sh && SHIFTMAP[key] ? [{ label: 'SHIFT', kind: 'shift' }] : [];
+      var withAns = ANS_FIRST[act];
+      this.clear();
+      if (withAns) this.insChar('Ans');
+    }
+    this.chip(label, kind);
+
+    if (this.mode === 'result') { this.resultKey(act); return; }
+    this.editKey(act);
+  };
+
+  C.fmts = function () { return this.result ? formatsFor(this.result.value, this.s) : []; };
+  C.resultKey = function (act) {
+    var r = this.result;
+    switch (act) {
+      case 'FORMAT':
+        if (r.factor) { r.factor = false; break; }
+        if (r.qr) break;
+        var n = this.fmts().length;
+        if (n > 1) r.fi = (r.fi + 1) % n;
+        break;
+      case 'EXE': this.exe(); break;
+      case 'DEL': case 'left': this.mode = 'edit'; this.result = null; this.cur = { row: this.root, i: this.root.length }; break;
+      case 'right': this.mode = 'edit'; this.result = null; this.cur = { row: this.root, i: 0 }; break;
+      case 'up': this.histMove(-1); break;
+      case 'down': this.histMove(1); break;
+    }
+  };
+  C.histMove = function (d) {
+    var j = this.histIdx + d;
+    if (j < 0 || j >= this.history.length) return;
+    this.histIdx = j;
+    var h = this.history[j];
+    this.root = cloneRow(h.expr);
+    this.cur = { row: this.root, i: this.root.length };
+    this.result = { value: h.value, fi: 0, qr: h.qr || null };
+    this.mode = 'result';
+  };
+
+  C.insItem = function (it) { var c = this.cur; it.pr = c.row; c.row.splice(c.i, 0, it); c.i++; };
+  C.insChar = function (v) { this.insItem(ch(v)); };
+  C.insStruct = function (t, absorb, cursorIfAbsorbed, cursorElse) {
+    var n = mkNode(t), c = this.cur, taken = [];
+    if (absorb) {
+      var j = c.i;
+      while (j > 0 && c.row[j - 1].t === 'c' && /^[0-9.]$/.test(c.row[j - 1].v)) j--;
+      taken = c.row.splice(j, c.i - j);
+      c.i = j;
+      pushAll(n[absorb], taken);
+    }
+    this.insItem(n);
+    var f = taken.length ? cursorIfAbsorbed : cursorElse;
+    if (f) this.cur = { row: n[f], i: n[f].length };
+  };
+  C.insFixedPow = function (items) {
+    var n = mkNode('pow'); n.fixed = true; pushAll(n.exp, items.map(ch)); this.insItem(n);
+  };
+
+  C.editKey = function (act) {
+    if (/^[0-9.]$/.test(act) || '+−×÷()'.indexOf(act) >= 0) { this.insChar(act); return; }
+    switch (act) {
+      case 'Ans': this.insChar('Ans'); break;
+      case 'pi': this.insChar('π'); break;
+      case 'sin': case 'cos': case 'tan': this.insChar(act + '('); break;
+      case 'asin': this.insChar('sin⁻¹('); break;
+      case 'acos': this.insChar('cos⁻¹('); break;
+      case 'atan': this.insChar('tan⁻¹('); break;
+      case 'frac': this.insStruct('frac', 'num', 'den', 'num'); break;
+      case 'mixed': this.insStruct('mixed', 'whole', 'num', 'whole'); break;
+      case 'sqrt': this.insStruct('sqrt', null, null, 'arg'); break;
+      case 'root': this.insStruct('root', null, null, 'idx'); break;
+      case 'pow': this.insStruct('pow', null, null, 'exp'); break;
+      case 'exp10': this.insStruct('sci', null, null, 'exp'); break;
+      case 'sq': this.insFixedPow(['2']); break;
+      case 'inv': this.insFixedPow(['−', '1']); break;
+      case 'DEL': this.del(); break;
+      case 'left': this.left(); break;
+      case 'right': this.right(); break;
+      case 'up': this.upDown('up'); break;
+      case 'down': this.upDown('down'); break;
+      case 'EXE': this.exe(); break;
+      case 'FORMAT':
+        this.exe();
+        if (this.mode === 'result' && !this.result.qr) { var k = this.fmts().indexOf('dec'); if (k > 0) this.result.fi = k; }
+        break;
+    }
+  };
+
+  C.right = function () {
+    var c = this.cur, row = c.row;
+    if (c.i < row.length) {
+      var it = row[c.i];
+      if (enterable(it)) { var f = SLOTS[it.t][0]; this.cur = { row: it[f], i: 0 }; } else c.i++;
+      return;
+    }
+    if (row.p) {
+      var n = row.p, fs = SLOTS[n.t], k = fs.indexOf(row.f);
+      if (k < fs.length - 1) this.cur = { row: n[fs[k + 1]], i: 0 };
+      else this.cur = { row: n.pr, i: n.pr.indexOf(n) + 1 };
+      return;
+    }
+    this.cur = { row: this.root, i: 0 };
+  };
+  C.left = function () {
+    var c = this.cur, row = c.row;
+    if (c.i > 0) {
+      var it = row[c.i - 1];
+      if (enterable(it)) { var fs0 = SLOTS[it.t], last = it[fs0[fs0.length - 1]]; this.cur = { row: last, i: last.length }; } else c.i--;
+      return;
+    }
+    if (row.p) {
+      var n = row.p, fs = SLOTS[n.t], k = fs.indexOf(row.f);
+      if (k > 0) { var pr = n[fs[k - 1]]; this.cur = { row: pr, i: pr.length }; }
+      else this.cur = { row: n.pr, i: n.pr.indexOf(n) };
+      return;
+    }
+    this.cur = { row: this.root, i: this.root.length };
+  };
+  C.upDown = function (dir) {
+    var row = this.cur.row;
+    while (row.p) {
+      var n = row.p;
+      if (n.t === 'frac' || n.t === 'mixed') {
+        if (dir === 'up' && row.f === 'den') { this.cur = { row: n.num, i: n.num.length }; return; }
+        if (dir === 'down' && row.f === 'num') { this.cur = { row: n.den, i: n.den.length }; return; }
+      }
+      row = n.pr;
+    }
+    if (dir === 'up' && this.root.length === 0 && this.history.length && !this.ratio) { this.histIdx = this.history.length; this.histMove(-1); }
+  };
+  C.del = function () {
+    var c = this.cur, row = c.row;
+    if (c.i > 0) {
+      var it = row[c.i - 1];
+      if (enterable(it)) {
+        var fs = SLOTS[it.t], empty = fs.every(function (f) { return it[f].length === 0; });
+        if (empty) { row.splice(c.i - 1, 1); c.i--; }
+        else { var last = it[fs[fs.length - 1]]; this.cur = { row: last, i: last.length }; }
+      } else { row.splice(c.i - 1, 1); c.i--; }
+      return;
+    }
+    if (row.p) {
+      // at the start of a box: remove the template but keep what was typed inside it
+      var n = row.p, pr = n.pr, idx = pr.indexOf(n), items = [], pos = idx;
+      SLOTS[n.t].forEach(function (f) { if (f === row.f) pos = idx + items.length; items = items.concat(n[f]); });
+      items.forEach(function (x) { x.pr = pr; });
+      Array.prototype.splice.apply(pr, [idx, 1].concat(items));
+      this.cur = { row: pr, i: pos };
+    }
+  };
+
+  function checkSize(v) {
+    var fx = toF(v);
+    if (!isFinite(fx) || Math.abs(fx) >= 1e100) throw new CalcError('Math');
+    return v;
+  }
+  // Remainder: a ÷R b at the top level gives the quotient and remainder of whole numbers
+  C.evalRemainder = function (k) {
+    var row = this.root;
+    for (var j = k + 1; j < row.length; j++) if (row[j].t === 'c' && row[j].v === '÷R') throw new CalcError('Syntax');
+    var a = evaluate(row.slice(0, k), this.ctx()), b = evaluate(row.slice(k + 1), this.ctx());
+    if (!isInt(a) || !isInt(b) || a.n < 0n || b.n <= 0n) throw new CalcError('Math');
+    return { q: a.n / b.n, r: a.n % b.n };
+  };
+  C.exe = function () {
+    if (!this.root.length) return;
+    try {
+      var k = -1;
+      for (var j = 0; j < this.root.length; j++) if (this.root[j].t === 'c' && this.root[j].v === '÷R') { k = j; break; }
+      var v, qr = null;
+      if (k >= 0) { qr = this.evalRemainder(k); v = mk(qr.q, 1n); }
+      else v = checkSize(evaluate(this.root, this.ctx()));
+      this.ans = v;
+      this.result = { value: v, fi: 0, qr: qr };
+      this.mode = 'result';
+      this.history.push({ expr: cloneRow(this.root), value: v, qr: qr });
+      if (this.history.length > 30) this.history.shift();
+      this.histIdx = this.history.length - 1;
+    } catch (e) {
+      this.err = (e instanceof CalcError) ? e.type : 'Math';
+      this.mode = 'error';
+    }
+  };
+
+  /* ---------- TOOLS ---------- */
+  C.tool = function (name) {
+    if (this.calcMode === 'mode2') return;
+    this.shift = false;
+    if (name === 'undo') { this.undo(); return; }
+    if (this.mode === 'simp') { this.mode = 'result'; this.result = this.simp.prev; this.simp = null; }
+    if (/^ratio/.test(this.mode)) this.clear();
+    if (name === 'ratio') {
+      this.snap();
+      this.trail = [];
+      this.chip('TOOLS', 'tool'); this.chip(TOOL_LABELS.ratio, 'tool');
+      this.clear();
+      this.mode = 'ratioPick';
+      return;
+    }
+    if (this.mode === 'error') return;
+    this.snap();
+    if (name === 'rem') {
+      if (this.mode === 'result') { this.trail = []; this.clear(); this.insChar('Ans'); }
+      this.chip('TOOLS', 'tool'); this.chip('÷R', 'tool');
+      this.insChar('÷R');
+      return;
+    }
+    this.chip('TOOLS', 'tool'); this.chip(TOOL_LABELS[name], 'tool');
+    if (name === 'factor') {
+      if (this.mode === 'edit') this.exe();
+      if (this.mode !== 'result') return;
+      var v = this.result.value;
+      if (!isInt(v) || v.n < 1n || v.n >= 10000000000n) { this.err = 'Math'; this.mode = 'error'; return; }
+      this.result.factor = true;
+      return;
+    }
+    if (name === 'simplify') this.startSimplify();
+  };
+  function intOf(row) {
+    if (!row.length) return null;
+    var s = '';
+    for (var i = 0; i < row.length; i++) { if (row[i].t !== 'c' || !/^[0-9]$/.test(row[i].v)) return null; s += row[i].v; }
+    return BigInt(s);
+  }
+  C.startSimplify = function () {
+    var r = this.root, k = 0, negv = false, src = null;
+    if (r.length === 2 && r[0].t === 'c' && r[0].v === '−') { negv = true; k = 1; }
+    if (r.length === k + 1 && r[k].t === 'frac') {
+      var a = intOf(r[k].num), b = intOf(r[k].den);
+      if (a !== null && b !== null && b !== 0n) src = { n: negv ? -a : a, d: b };
+    }
+    if (this.mode === 'edit') this.exe();
+    if (this.mode !== 'result') return;
+    var v = this.result.value;
+    if (!src) {
+      if (this.result.qr || !(v.e && v.r === 1n)) { this.err = 'Math'; this.mode = 'error'; return; }
+      src = { n: v.n, d: v.d };
+    }
+    var done = gcd(src.n, src.d) === 1n;
+    this.simp = { n: src.n, d: src.d, prev: this.result, done: done, note: done ? 'Already in its simplest form' : 'Press EXE to simplify' };
+    this.mode = 'simp';
+  };
+  C.simpStep = function () {
+    var s = this.simp;
+    if (s.done) { this.mode = 'result'; this.result = s.prev; this.simp = null; return; }
+    var p = smallestPrime(gcd(s.n, s.d));
+    s.n /= p; s.d /= p;
+    s.done = gcd(s.n, s.d) === 1n;
+    s.note = 'Divided top and bottom by ' + p + (s.done ? '. Simplest form.' : '. Press EXE again.');
+  };
+
+  /* Ratio: A:B = X:D (form 1) or A:B = C:X (form 2) */
+  C.setField = function (k) {
+    this.ratio.k = k;
+    this.root = this.ratio.fields[k];
+    this.cur = { row: this.root, i: this.root.length };
+  };
+  C.ratioKey = function (act) {
+    if (act === 'AC') { this.trail = []; this.clear(); return; }
+    if (this.mode === 'ratioPick') {
+      if (act === '1' || act === '2') {
+        this.ratio = { form: +act, fields: [mkRow(), mkRow(), mkRow()], k: 0, err: null };
+        this.mode = 'ratio';
+        this.setField(0);
+      }
+      return;
+    }
+    var R = this.ratio;
+    if (this.mode === 'ratioRes') {
+      if (act === 'FORMAT') { var n = this.fmts().length; if (n > 1) this.result.fi = (this.result.fi + 1) % n; return; }
+      this.mode = 'ratio'; this.result = null; this.setField(0);
+      return;
+    }
+    R.err = null;
+    if (act === 'EXE' || act === 'down') {
+      if (R.k < 2) { this.setField(R.k + 1); return; }
+      if (act === 'down') return;
+      try {
+        var ctx = this.ctx();
+        var a = evaluate(R.fields[0], ctx), b = evaluate(R.fields[1], ctx), c = evaluate(R.fields[2], ctx);
+        var x = checkSize(R.form === 1 ? div(mul(a, c), b) : div(mul(b, c), a));
+        this.ans = x;
+        this.result = { value: x, fi: 0 };
+        this.mode = 'ratioRes';
+      } catch (e) {
+        R.err = ((e instanceof CalcError) ? e.type : 'Math') + ' ERROR';
+      }
+      return;
+    }
+    if (act === 'up') { if (R.k > 0) this.setField(R.k - 1); return; }
+    if (act === 'FORMAT' || act === 'OK') return;
+    this.editKey(act);
+  };
+
+  C.view = function () {
+    var s = this.s, o = { comma: s.comma };
+    var v = {
+      mode: this.mode, calcMode: this.calcMode, shift: this.shift, settings: this.settings(),
+      trail: this.trail.slice(), canUndo: this.undoStack.length > 0
+    };
+    if (this.calcMode === 'mode2') return v;
+    var r = this.result;
+    if (this.mode === 'edit' || this.mode === 'result' || this.mode === 'error' || this.mode === 'simp') {
+      v.expr = renderRow(this.root, this.mode === 'edit' ? this.cur : null, o);
+      v.err = this.err;
+    }
+    if (this.mode === 'result' || this.mode === 'ratioRes') {
+      var row, fmt = '';
+      if (r.qr) {
+        row = [ch('Q=')].concat(numRow(r.qr.q.toString(), s), [ch(' '), ch('R=')], numRow(r.qr.r.toString(), s));
+      } else if (r.factor) {
+        row = factorRow(Number(r.value.n), s); fmt = 'factor';
+      } else {
+        var f = this.fmts(); r.fi = r.fi % f.length; fmt = f[r.fi];
+        row = resultRow(r.value, fmt, s);
+        v.canFormat = f.length > 1;
+      }
+      v.result = renderRow(row, null, o);
+      v.format = fmt;
+    }
+    if (this.mode === 'simp') {
+      var sm = this.simp, sr = [];
+      if (sm.n < 0n) sr.push(ch('−'));
+      var an = bAbs(sm.n);
+      if (sm.d === 1n) pushAll(sr, numRow(an.toString(), s));
+      else sr.push(fracOf(numRow(an.toString(), s), numRow(sm.d.toString(), s)));
+      v.result = renderRow(sr, null, o);
+      v.note = sm.note;
+    }
+    if (this.mode === 'ratio' || this.mode === 'ratioRes') {
+      var R = this.ratio, self = this;
+      var cells = R.fields.map(function (f, i) {
+        return { html: renderRow(f, (self.mode === 'ratio' && R.k === i) ? self.cur : null, o), on: self.mode === 'ratio' && R.k === i };
+      });
+      v.ratio = { form: R.form, cells: cells, err: R.err };
+    }
+    return v;
+  };
+
+  return { Calc: Calc, evaluate: evaluate, resultRow: resultRow, formatsFor: formatsFor, renderRow: renderRow, toF: toF, cleanSettings: cleanSettings, factorRow: factorRow };
+})();
+
+</script>
+<script>
+(function () {
+  'use strict';
+  var HEART = 'M50 88 C18 62 4 44 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 44 82 62 50 88 Z';
+  // key colours; sizes are in cqw (a percentage of the keypad width)
+  var P = {
+    NUM: { fill: '#FFD9E8', stroke: '#F29BBF', c: '#4A1236', size: 7.35, hl: .55 },
+    FN: { fill: '#FF9EC4', stroke: '#EE6FA3', c: '#4A1236', size: 5.31, hl: .55 },
+    OP: { fill: '#FF6FA3', stroke: '#E0457F', c: '#4A1236', size: 7.76, hl: .55 },
+    EXE: { fill: '#C2185B', stroke: '#8E0F41', c: '#FFFFFF', size: 6.12, hl: .55 },
+    DEL: { fill: '#D6336C', stroke: '#9E1C4A', c: '#FFFFFF', size: 4.9, hl: .55 },
+    AC: { fill: '#A3134F', stroke: '#6E0C35', c: '#FFFFFF', size: 5.71, hl: .55 },
+    BLANK: { fill: '#FFF0F6', stroke: '#E994B5', c: '#8C3A63', size: 4, hl: 0, dash: '7 6' },
+    ARW: { fill: '#F1E4F8', stroke: '#CFA9E6', c: '#6A3F86', size: 3.67, hl: .3 },
+    OKK: { fill: '#E3CCF2', stroke: '#B98AD6', c: '#5B2F78', size: 4.49, hl: .3 },
+    SHIFT: { fill: '#FFE08A', stroke: '#E9C44F', c: '#4A1236', size: 3.06, hl: .55 },
+    TOOLS: { fill: '#E6C9F2', stroke: '#B98AD6', c: '#4A1236', size: 3.06, hl: .55 }
+  };
+  var LABEL_HTML = {
+    sq: '<span class="lw"><span class="bxa lil" style="width:3.67cqw;height:3.67cqw;margin-top:1.84cqw"></span><span style="font-size:3.47cqw;line-height:1">2</span></span>',
+    pow: '<span class="lw" style="gap:.61cqw"><span class="bxa lil" style="width:3.67cqw;height:3.67cqw;margin-top:1.84cqw"></span><span class="bxa" style="width:2.45cqw;height:2.45cqw"></span></span>',
+    root: '<svg style="width:8.98cqw;height:6.53cqw" viewBox="0 0 44 32" aria-hidden="true"><path d="M2 19 L7 16 L14 28 L23 3 L42 3" style="fill:none;stroke:#4A1236;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"></path><rect x="25" y="9" width="13" height="13" rx="3" style="fill:#C79BE3;stroke:#4A1236;stroke-width:2"></rect></svg>',
+    fmt: '<span class="fmtk"><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M5 9 Q22 -2 39 9" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round"></path><path d="M36.7 3.5 L39 9 L33 9.2" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg><span>FORMAT</span><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M39 2 Q22 13 5 2" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round"></path><path d="M7.3 7.5 L5 2 L11 1.8" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg></span>',
+    exp: '<span class="lw" style="gap:.41cqw"><span style="font-size:4.49cqw;line-height:1">×10</span><span class="bxa" style="width:2.45cqw;height:2.45cqw;border-radius:.41cqw"></span></span>',
+    frac: '<span class="fstack"><span class="bxa"></span><span class="fbar"></span><span class="bxa lil"></span></span>',
+    gear: '<span class="fmtk" style="gap:.4cqw"><svg style="width:4.3cqw;height:4.3cqw" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" style="fill:none;stroke:#4A1236;stroke-width:3.6;stroke-dasharray:3.38 3.38"></circle><circle cx="12" cy="12" r="6.4" style="fill:none;stroke:#4A1236;stroke-width:2.6"></circle><circle cx="12" cy="12" r="2.2" style="fill:#4A1236"></circle></svg><span class="gtxt">SETTINGS</span></span>'
+  };
+  var SHIFT_HTML = {
+    mixed: '<span class="shl shg" style="align-items:center"><span class="mbx" style="width:2.04cqw;height:2.04cqw"></span><span class="mstack"><span class="mbx"></span><span class="mbar"></span><span class="mbx"></span></span></span>',
+    root: '<span class="shl shg"><span class="mbx" style="width:1.22cqw;height:1.22cqw;margin-top:.2cqw"></span><svg style="width:4.49cqw;height:2.65cqw" viewBox="0 0 30 18" aria-hidden="true"><path d="M1 11 L4 9.5 L8 16 L13 2 L29 2" style="fill:none;stroke:#8A5A00;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"></path><rect x="15" y="5" width="9" height="9" rx="2" style="fill:#8A5A00"></rect></svg></span>',
+    inv: '<span class="shl shg"><span class="mbx" style="width:2.04cqw;height:2.04cqw;margin-top:1.43cqw;background:#8A5A00"></span><span style="font-size:2.45cqw;line-height:1;margin-top:-.2cqw">−1</span></span>'
+  };
+  var KEYS = [
+    { id: 'up', label: '▲', p: 'ARW', aria: 'Up', col: '16 / span 5', bw: '64%', mb: 1.2 },
+    { id: 'SETTINGS', kind: 'gear', p: 'TOOLS', aria: 'Settings', col: '1 / span 5' },
+    { id: 'left', label: '◀︎', p: 'ARW', aria: 'Left', col: '11 / span 5', bw: '64%', as: 'center', tx: 3.5 },
+    { id: 'OK', label: 'OK', p: 'OKK', col: '16 / span 5', bw: '92%', as: 'center' },
+    { id: 'right', label: '▶︎', p: 'ARW', aria: 'Right', col: '21 / span 5', bw: '64%', as: 'center', tx: -3.5 },
+    { id: 'SHIFT', label: 'SHIFT', p: 'SHIFT', col: '1 / span 5' },
+    { id: 'blank', p: 'BLANK', span: 5 },
+    { id: 'blank', p: 'BLANK', span: 5 },
+    { id: 'down', label: '▼', p: 'ARW', aria: 'Down', col: '16 / span 5', bw: '64%', as: 'start', mt: 1.2 },
+    { id: 'blank', p: 'BLANK', span: 5 },
+    { id: 'TOOLS', label: 'TOOLS', p: 'TOOLS', span: 5 },
+    { id: 'blank', p: 'BLANK', span: 5, strip: 1 },
+    { id: 'frac', kind: 'frac', p: 'FN', aria: 'Fraction', span: 5, strip: 1, sh: 'mixed', shAria: 'mixed number' },
+    { id: 'sqrt', kind: 'root', p: 'FN', aria: 'Square root', span: 5, strip: 1, sh: 'root', shAria: 'y root x' },
+    { id: 'pow', kind: 'pow', p: 'FN', aria: 'Power', span: 5, strip: 1, sh: 'inv', shAria: 'x to the minus 1' },
+    { id: 'sq', kind: 'sq', p: 'FN', aria: 'Square', span: 5, strip: 1 },
+    { id: 'blank', p: 'BLANK', span: 5, strip: 1 },
+    { id: 'Ans', label: 'Ans', p: 'FN', size: 4.49, span: 5, strip: 1 },
+    { id: 'sin', label: 'sin', p: 'FN', span: 5, strip: 1, shText: 'sin⁻¹' },
+    { id: 'cos', label: 'cos', p: 'FN', span: 5, strip: 1, shText: 'cos⁻¹' },
+    { id: 'tan', label: 'tan', p: 'FN', span: 5, strip: 1, shText: 'tan⁻¹' },
+    { id: '(', label: '(', p: 'OP', aria: 'Open bracket', span: 5, strip: 1 },
+    { id: ')', label: ')', p: 'OP', aria: 'Close bracket', span: 5, strip: 1 },
+    { id: '7', label: '7', p: 'NUM', strip: 1, shText: 'π' }, { id: '8', label: '8', p: 'NUM', strip: 1 }, { id: '9', label: '9', p: 'NUM', strip: 1 },
+    { id: 'DEL', label: 'DEL', p: 'DEL', aria: 'Delete', strip: 1 }, { id: 'AC', label: 'AC', p: 'AC', aria: 'All clear', strip: 1 },
+    { id: '4', label: '4', p: 'NUM' }, { id: '5', label: '5', p: 'NUM' }, { id: '6', label: '6', p: 'NUM' },
+    { id: '×', label: '×', p: 'OP', aria: 'Times' }, { id: '÷', label: '÷', p: 'OP', aria: 'Divide' },
+    { id: '1', label: '1', p: 'NUM' }, { id: '2', label: '2', p: 'NUM' }, { id: '3', label: '3', p: 'NUM' },
+    { id: '+', label: '+', p: 'OP', aria: 'Plus' }, { id: '−', label: '−', p: 'OP', aria: 'Subtract' },
+    { id: '0', label: '0', p: 'NUM' }, { id: '.', label: '.', p: 'NUM', aria: 'Decimal point', size: 8.98 },
+    { id: 'exp10', kind: 'exp', p: 'FN', aria: 'Times ten to the power' },
+    { id: 'FORMAT', kind: 'fmt', p: 'FN', aria: 'Format', size: 2.86 },
+    { id: 'EXE', label: 'EXE', p: 'EXE', aria: 'EXE, work it out' }
+  ];
+
+  var pad = document.getElementById('pad');
+  var html = '';
+  KEYS.forEach(function (k) {
+    var p = P[k.p], blank = k.id === 'blank';
+    var col = k.col || ('span ' + (k.span || 6));
+    var wrap = 'grid-column:' + col + ';align-self:' + (k.as || 'stretch') + ';margin-top:' + (k.mt || 0) + 'cqw;margin-bottom:' + (k.mb || 0) + 'cqw;transform:translateX(' + (k.tx || 0) + 'cqw)';
+    var strip = '';
+    if (k.strip) {
+      var inner = '';
+      if (k.sh) inner = SHIFT_HTML[k.sh];
+      else if (k.shText) inner = '<span class="shl">' + k.shText + '</span>';
+      strip = '<div class="sh" aria-hidden="true">' + inner + '</div>';
+    }
+    var label = k.kind ? LABEL_HTML[k.kind] : '<span>' + (k.label || '') + '</span>';
+    var aria = blank ? 'Blank key' : (k.aria || k.label);
+    if (k.shText) aria += ', shift: ' + k.shText;
+    if (k.shAria) aria += ', shift: ' + k.shAria;
+    if (k.pi) aria += ', shift: pi';
+    var style = '--fill:' + p.fill + ';--stroke:' + p.stroke + ';--c:' + p.c + ';width:' + (k.bw || '100%');
+    html += '<div class="kc" style="' + wrap + '">' + strip +
+      '<button type="button" class="hk k-' + (/^[A-Za-z]+$/.test(k.id) ? k.id : 'x') + (blank ? ' blank' : '') + '" data-key="' + k.id + '" aria-label="' + aria + '" style="' + style + '"' + (blank ? ' tabindex="-1"' : '') + '>' +
+      '<svg viewBox="0 0 100 92" aria-hidden="true"><path class="hp" d="' + HEART + '"' + (p.dash ? ' style="stroke-dasharray:' + p.dash + '"' : '') + '></path><path class="hl" d="M14 27 C14 18 21 11 29 11" style="stroke-opacity:' + p.hl + '"></path></svg>' +
+      '<span class="l" style="font-size:' + (k.size || p.size) + 'cqw">' + label + '</span>' +
+      (k.pi ? '<span class="pi shl" aria-hidden="true">π</span>' : '') +
+      '</button></div>';
+  });
+  pad.innerHTML = html;
+
+  /* ---------- settings kept on this device ---------- */
+  var STORE = 'pinkcalc.settings.v2', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { saved = {}; }
+  var calc = new CalcCore.Calc(saved);
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(calc.settings())); } catch (e) { /* not available */ } }
+
+  var app = document.getElementById('app');
+  var screen = document.getElementById('screen');
+  var chips = document.getElementById('chips');
+  var angIco = document.getElementById('angIco');
+  var shIco = document.getElementById('shIco');
+  var normIco = document.getElementById('normIco');
+  var fmtTag = document.getElementById('fmtTag');
+  var modetag = document.getElementById('modetag');
+  var scrim = document.getElementById('scrim');
+  var sheet = document.getElementById('sheet');
+  var FORMAT_NAMES = { frac: 'Fraction', mixed: 'Mixed number', dec: 'Decimal', surd: 'Surd', int: '', factor: 'Prime factors' };
+  var ANGLE_NAMES = { D: 'Degrees', R: 'Radians', G: 'Gradians' };
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  function render() {
+    var v = calc.view(), s = v.settings;
+    app.classList.toggle('shift-on', v.shift);
+    app.classList.toggle('big', s.big);
+    angIco.textContent = s.angle;
+    angIco.setAttribute('aria-label', ANGLE_NAMES[s.angle]);
+    shIco.hidden = !v.shift;
+    normIco.hidden = !(s.norm === 'fix' || s.norm === 'sci');
+    normIco.textContent = s.norm === 'fix' ? 'FIX' : 'SCI';
+    var where = v.calcMode === 'mode2' ? 'Mode 2' : /^ratio/.test(v.mode) ? 'Ratio' : v.mode === 'simp' ? 'Simplify' : 'Calculate';
+    modetag.textContent = where + ' · ' + ANGLE_NAMES[s.angle];
+    fmtTag.textContent = (v.mode === 'result' && (v.canFormat || v.format === 'factor')) ? FORMAT_NAMES[v.format] : '';
+
+    var h = '';
+    if (v.calcMode === 'mode2') {
+      // Mode 2 screen: a placeholder until the second mode is built
+      h = '<div class="msg"><b>Mode 2</b><span>This space is ready for your next mode.</span><span>Go back with SETTINGS, then Modes, then Calculate.</span></div>';
+    } else if (v.mode === 'ratioPick') {
+      h = '<div class="msg"><b>Ratio</b><span>1: A : B = X : D</span><span>2: A : B = C : X</span><span class="hint">Press 1 or 2</span></div>';
+    } else if (v.ratio) {
+      var c = v.ratio.cells;
+      function box(i) { return '<span class="rbox' + (c[i].on ? ' on' : '') + '">' + c[i].html + '</span>'; }
+      var line = v.ratio.form === 1
+        ? box(0) + '<span class="op">:</span>' + box(1) + '<span class="op">=</span><span>X</span><span class="op">:</span>' + box(2)
+        : box(0) + '<span class="op">:</span>' + box(1) + '<span class="op">=</span>' + box(2) + '<span class="op">:</span><span>X</span>';
+      var under = v.mode === 'ratioRes'
+        ? '<div class="res"><div class="line"><span>X</span><span class="op">=</span>' + v.result + '</div></div>'
+        : '<div class="note">' + (v.ratio.err ? esc(v.ratio.err) : 'Type a number, then EXE for the next box') + '</div>';
+      h = '<div class="expr" id="expr"><div class="line">' + line + '</div></div>' + under;
+    } else if (v.mode === 'error') {
+      h = '<div class="errbox"><b>' + v.err + ' ERROR</b><div>[AC] : Cancel</div><div>[◀] [▶] : Go back and fix it</div></div>';
+    } else {
+      h = '<div class="expr" id="expr"><div class="line">' + v.expr + '</div></div>' +
+        (v.note ? '<div class="note">' + esc(v.note) + '</div>' : '') +
+        '<div class="res">' + (v.result ? '<div class="line">' + v.result + '</div>' : '') + '</div>';
+    }
+    screen.innerHTML = h;
+
+    var ex = document.getElementById('expr'), cur = ex && ex.querySelector('.cur');
+    if (cur) {
+      var er = ex.getBoundingClientRect(), cr = cur.getBoundingClientRect();
+      var over = cr.right - er.right + 28;
+      if (over > 0) ex.scrollLeft = over;
+    }
+
+    if (!s.trailOn) {
+      chips.innerHTML = '<span class="trail-empty">The key trail is off. Turn it on in SETTINGS.</span>';
+    } else if (!v.trail.length) {
+      chips.innerHTML = '<span class="trail-empty">Press some keys and they will show up here.</span>';
+    } else {
+      chips.innerHTML = v.trail.map(function (t, i) {
+        return (i ? '<span class="arrow" aria-hidden="true">›</span>' : '') + '<span class="chip' + (t.kind ? ' ' + t.kind : '') + '">' + esc(t.label) + '</span>';
+      }).join('');
+      chips.scrollTop = chips.scrollHeight;
+    }
+    if (openSheet === 'settings') sheet.innerHTML = settingsHTML(v);
+    if (openSheet === 'tools') sheet.innerHTML = toolsHTML(v);
+    save();
+  }
+
+  /* ---------- SETTINGS and TOOLS panels ---------- */
+  var openSheet = null, lastFocus = null;
+  function seg(key, cur, opts) {
+    return '<div class="seg" role="group">' + opts.map(function (o) {
+      var on = JSON.stringify(o[0]) === JSON.stringify(cur);
+      return '<button type="button" data-set="' + key + '" data-val=\'' + JSON.stringify(o[0]) + '\' aria-pressed="' + on + '">' + o[1] + '</button>';
+    }).join('') + '</div>';
+  }
+  function tog(key, on, label) {
+    return '<div class="srow"><span>' + label + '</span><button type="button" class="tog" role="switch" data-toggle="' + key + '" aria-checked="' + on + '" aria-label="' + label + '"></button></div>';
+  }
+  function stepper(key, val, min, max, label) {
+    return '<div class="srow"><span>' + label + '</span><span class="step"><button type="button" data-step="' + key + '" data-d="-1" aria-label="Fewer"' + (val <= min ? ' disabled' : '') + '>−</button><b>' + val + '</b><button type="button" data-step="' + key + '" data-d="1" aria-label="More"' + (val >= max ? ' disabled' : '') + '>+</button></span></div>';
+  }
+  function head(title) {
+    return '<div class="sheet-head"><h2 id="sheetTitle">' + title + '</h2><button type="button" class="done" data-close="1">Done</button></div>';
+  }
+  function settingsHTML(v) {
+    var s = v.settings;
+    return head('Settings') +
+      '<div class="sec">Calc settings</div><div class="group">' +
+      '<div class="srow stack"><span>Input/Output</span>' + seg('io', s.io, [['math', 'MathI/MathO'], ['dec', 'MathI/DecimalO']]) + '</div>' +
+      '<div class="srow stack"><span>Angle unit</span>' + seg('angle', s.angle, [['D', 'Deg'], ['R', 'Rad'], ['G', 'Grad']]) + '</div>' +
+      '<div class="srow stack"><span>Number format</span>' + seg('norm', s.norm, [['norm1', 'Norm 1'], ['norm2', 'Norm 2'], ['fix', 'Fix'], ['sci', 'Sci']]) + '</div>' +
+      (s.norm === 'fix' ? stepper('fix', s.fix, 0, 9, 'Decimal places') : '') +
+      (s.norm === 'sci' ? stepper('sci', s.sci, 1, 10, 'Significant figures') : '') +
+      '<div class="srow stack"><span>Fraction answers</span>' + seg('frac', s.frac, [['mixed', 'Mixed'], ['improper', 'Improper']]) + '</div>' +
+      '<div class="srow stack"><span>Decimal mark</span>' + seg('comma', s.comma, [[false, 'Dot'], [true, 'Comma']]) + '</div>' +
+      tog('sep', s.sep, 'Digit separator') +
+      '</div>' +
+      '<div class="sec">Classroom</div><div class="group">' +
+      tog('big', s.big, 'Big text') +
+      tog('trailOn', s.trailOn, 'Key trail') +
+      '</div>' +
+      '<div class="sec">Modes</div><div class="group">' +
+      '<button type="button" class="srow mrow" data-mode="calc"><span>Calculate</span><span class="tick">' + (v.calcMode === 'calc' ? '✓' : '') + '</span></button>' +
+      '<button type="button" class="srow mrow" data-mode="mode2"><span>Mode 2 <small>coming soon</small></span><span class="tick">' + (v.calcMode === 'mode2' ? '✓' : '') + '</span></button>' +
+      '</div>' +
+      '<button type="button" class="reset" data-reset="1">Reset settings</button>';
+  }
+  var ICONS = {
+    undo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6 L4 10.5 L9 15" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path><path d="M4.5 10.5 H14 a5.5 5.5 0 0 1 0 11 H11" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round"></path></svg>',
+    rem: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5.5" r="2" style="fill:currentColor"></circle><path d="M4 12 H20" style="stroke:currentColor;stroke-width:2.2;stroke-linecap:round"></path><circle cx="12" cy="18.5" r="2" style="fill:currentColor"></circle></svg>',
+    factor: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 L7 21 M17 3 L15 21 M3.5 8.5 H21 M3 15.5 H20.5" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round"></path></svg>',
+    simplify: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9 A7.5 7.5 0 0 0 5.5 7.5 M5 15 A7.5 7.5 0 0 0 18.5 16.5" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round"></path><path d="M19.5 4 V9.2 H14.5 M4.5 20 V14.8 H9.5" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg>',
+    ratio: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 V7 M5 20 H19 L17 9 H7 Z" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round"></path><circle cx="12" cy="4" r="1.6" style="fill:currentColor"></circle></svg>'
+  };
+  function toolRow(name, title, desc, disabled) {
+    return '<button type="button" class="toolrow" data-tool="' + name + '"' + (disabled ? ' disabled' : '') + '>' + ICONS[name] + '<span>' + title + '<small>' + desc + '</small></span></button>';
+  }
+  function toolsHTML(v) {
+    var off = v.calcMode === 'mode2';
+    return head('TOOLS') +
+      '<div class="group">' + toolRow('undo', 'Undo', 'Takes back the last key you pressed', !v.canUndo || off) + '</div>' +
+      '<div class="sec">Calculate tools</div><div class="group">' +
+      toolRow('rem', 'Remainder ÷R', 'Divides and shows the remainder, for example 13 ÷R 4', off) +
+      toolRow('factor', 'Prime Factorisation', 'Writes the answer as a product of prime factors', off) +
+      toolRow('simplify', 'Simplify', 'Simplifies a fraction one step at a time', off) +
+      toolRow('ratio', 'Ratio', 'Finds the missing number in A : B = C : D', off) +
+      '</div>';
+  }
+  function showSheet(name) {
+    calc.shift = false;
+    lastFocus = document.activeElement;
+    openSheet = name;
+    scrim.hidden = false;
+    render();
+    var d = sheet.querySelector('.done'); if (d) d.focus();
+  }
+  function closeSheet() {
+    openSheet = null;
+    scrim.hidden = true;
+    sheet.innerHTML = '';
+    render();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  scrim.addEventListener('click', function (e) {
+    if (e.target === scrim) { closeSheet(); return; }
+    var b = e.target.closest('button');
+    if (!b || b.disabled) return;
+    if (b.dataset.close) { closeSheet(); return; }
+    if (b.dataset.set) { calc.set(b.dataset.set, JSON.parse(b.dataset.val)); render(); return; }
+    if (b.dataset.toggle) { var k = b.dataset.toggle; calc.set(k, !calc.settings()[k]); render(); return; }
+    if (b.dataset.step) { var sk = b.dataset.step; calc.set(sk, calc.settings()[sk] + (+b.dataset.d)); render(); return; }
+    if (b.dataset.mode) { calc.setMode(b.dataset.mode); closeSheet(); return; }
+    if (b.dataset.reset) { calc.resetSettings(); render(); return; }
+    if (b.dataset.tool) { calc.tool(b.dataset.tool); closeSheet(); return; }
+  });
+
+  function press(key) {
+    if (key === 'SETTINGS') { showSheet('settings'); return; }
+    if (key === 'TOOLS') { showSheet('tools'); return; }
+    calc.press(key); render();
+  }
+
+  pad.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-key]');
+    if (b) press(b.dataset.key);
+  });
+  // lets the press-down animation show on iPad
+  document.addEventListener('touchstart', function () {}, { passive: true });
+
+  /* ---------- keyboard, for a laptop on the board ---------- */
+  var KB = {
+    Enter: 'EXE', '=': 'EXE', Backspace: 'DEL', Delete: 'DEL', Escape: 'AC',
+    ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down',
+    '+': '+', '-': '−', '*': '×', x: '×', '/': '÷', '(': '(', ')': ')', '^': 'pow', '.': '.',
+    s: 'sin', c: 'cos', t: 'tan', r: 'sqrt', f: 'frac', a: 'Ans', q: 'sq'
+  };
+  document.addEventListener('keydown', function (e) {
+    if (openSheet) { if (e.key === 'Escape') { e.preventDefault(); closeSheet(); } return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var key = /^[0-9]$/.test(e.key) ? e.key : KB[e.key];
+    if (!key) return;
+    e.preventDefault();
+    var b = pad.querySelector('button[data-key="' + key + '"]');
+    if (b) { b.classList.add('pressed'); setTimeout(function () { b.classList.remove('pressed'); }, 140); }
+    press(key);
+  });
+
+  render();
+})();
+
+</script>
+
+</body>
+</html>

@@ -6,10 +6,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-512.png">
-<title>Pink Classroom Calculator</title>
+<title>Wiz Calculator</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Pink Calc">
+<meta name="apple-mobile-web-app-title" content="Wiz Calc">
 <meta name="theme-color" content="#FCE4EE">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,27 +19,60 @@
    Tall or narrow screens (portrait, split view, iPhone) stack them. The keypad is sized to the space it is given. */
 :root{
   --bg:#FCE4EE; --ink:#4A1236; --lcd-ink:#2A1020; --rose:#C2185B; --bezel:#E0457F;
-  --gold-ink:#8A5A00; --panel:#FFF7FA; --panel-line:#F2B8CD; --muted:#8C3A63;
+  --gold-ink:#7042B0; --ks-f:#9468D2; --ks-s:#6A3FA8; --ks-c:#fff; --sc-f:#EFE3FA; --sc-s:#B98AD6; --sc-c:#5B2F78; --panel:#FFF7FA; --panel-line:#F2B8CD; --muted:#8C3A63;
+  --soft:#F7D3E1; --track:#E9C9D6; --deep:#A3134F; --arrow:#C98AAB; --dash:#E994B5; --box:#C79BE3;
+  --shadow:rgba(163,19,79,.28); --shadow-strong:rgba(163,19,79,.35);
+  --kn-f:#FFD9E8; --kn-s:#F29BBF; --kf-f:#FF9EC4; --kf-s:#EE6FA3; --ko-f:#FF6FA3; --ko-s:#E0457F;
+  --ke-f:#C2185B; --ke-s:#8E0F41; --kd-f:#D6336C; --kd-s:#9E1C4A; --ka-f:#A3134F; --ka-s:#6E0C35;
+  --kb-f:#FFF0F6; --kb-s:#E994B5;
+  --kx-f:#F1E4F8; --kx-s:#CFA9E6; --kx-c:#6A3F86; --kk-f:#E3CCF2; --kk-s:#B98AD6; --kk-c:#5B2F78; --kt-f:#E6C9F2; --kt-s:#B98AD6;
   --font-body:'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --font-display:'Fredoka', 'Atkinson Hyperlegible', system-ui, sans-serif;
   color-scheme: light;
-  --ar:0.6348; --hk-ar:100/92;
+  --ar:0.581; --hk-ar:100/92; --hk-h:.92;
 }
+/* The four calculators each have their own colour: pink, lilac, mint and powder blue. The script sets data-mode on the page. */
+html[data-mode="gtx"],html[data-mode="gt85"],html[data-mode="m4"]{--gold-ink:#8A5A00; --alp:#D6336C; --ks-f:#FFE08A; --ks-s:#E9C44F; --ks-c:#4A1236; --sc-f:#FFF3C7; --sc-s:#E9C44F; --sc-c:#7A4D00}
+html[data-mode="gtx"]{
+  --bg:#F1E8FB; --ink:#33174F; --rose:#7B3FB8; --bezel:#A67ADB; --panel:#FAF6FE; --panel-line:#D9C7F0; --muted:#6B3F94;
+  --soft:#E8DCF6; --track:#DCCDF0; --deep:#5B2A91; --arrow:#A98ACF; --dash:#B596DC; --box:#F4B6D4;
+  --shadow:rgba(91,42,145,.26); --shadow-strong:rgba(91,42,145,.35);
+  --kn-f:#EBDDFA; --kn-s:#C9AEEB; --kf-f:#CDA8F0; --kf-s:#B085DD; --ko-f:#B58BE6; --ko-s:#9663D0;
+  --ke-f:#7B3FB8; --ke-s:#552A85; --kd-f:#9358CF; --kd-s:#6C3AA3; --ka-f:#6A32A5; --ka-s:#47207A;
+  --kb-f:#F8F3FD; --kb-s:#BBA0E0;
+  --kx-f:#FFE3EE; --kx-s:#F2A9C8; --kx-c:#A0305F; --kk-f:#FFD0E3; --kk-s:#EC8FB9; --kk-c:#8C2552; --kt-f:#FFCDE0; --kt-s:#EC8FB9}
+html[data-mode="gt85"]{
+  --bg:#E3F6EC; --ink:#0F3D2E; --rose:#167A50; --bezel:#4DB88A; --panel:#F5FCF8; --panel-line:#A9DDBF; --muted:#2F6B52;
+  --soft:#D3EEDF; --track:#C6E5D3; --deep:#0E5638; --arrow:#78B99A; --dash:#7FCBA4; --box:#D5C0F2;
+  --shadow:rgba(14,86,56,.24); --shadow-strong:rgba(14,86,56,.33);
+  --kn-f:#DDF5E8; --kn-s:#A5DDBE; --kf-f:#A8E6C4; --kf-s:#74CE9C; --ko-f:#7BD6A6; --ko-s:#4DB87F;
+  --ke-f:#167A50; --ke-s:#0E5638; --kd-f:#279467; --kd-s:#17704C; --ka-f:#0F5E40; --ka-s:#093F2B;
+  --kb-f:#F2FBF6; --kb-s:#8FD1AE;
+  --kx-f:#E9DDF8; --kx-s:#BBA0E0; --kx-c:#5B3A8A; --kk-f:#DCCBF3; --kk-s:#A98BD6; --kk-c:#4A2A78; --kt-f:#E2D2F6; --kt-s:#A98BD6}
+html[data-mode="m4"]{
+  --bg:#E6F1FB; --ink:#0F2F4D; --rose:#1F64B5; --bezel:#5C9BD6; --panel:#F6FAFE; --panel-line:#B3D3F0; --muted:#2F5E8C;
+  --soft:#D9E8F7; --track:#C9DDF1; --deep:#124586; --arrow:#7FAAD6; --dash:#8FBBE6; --box:#F8BCD4;
+  --shadow:rgba(18,69,134,.24); --shadow-strong:rgba(18,69,134,.33);
+  --kn-f:#DDEEFB; --kn-s:#A8CCEC; --kf-f:#34506E; --kf-s:#1E3550; --kf-c:#FFFFFF; --ko-f:#7DB9EE; --ko-s:#4E96D8;
+  --ke-f:#1F64B5; --ke-s:#124586; --kd-f:#3578C7; --kd-s:#215A9E; --ka-f:#164C8F; --ka-s:#0C3463;
+  --kb-f:#F3F9FE; --kb-s:#9DC4E8;
+  --kx-f:#DCE4EC; --kx-s:#A3B2C3; --kx-c:#3E5068; --kk-f:#DCE4EC; --kk-s:#A3B2C3; --kk-c:#3E5068; --kt-f:#D4DDE7; --kt-s:#9BAABB}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}
 .app{height:100%;box-sizing:border-box;display:flex;gap:28px;align-items:stretch;
   padding-top:max(22px, env(safe-area-inset-top, 0px));padding-bottom:max(22px, env(safe-area-inset-bottom, 0px));
   padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
-.side{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.side{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column;gap:14px;overflow:auto;container:side / inline-size}
 .top{display:flex;align-items:center;gap:12px;min-height:34px}
-.top h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--ink);white-space:nowrap}
-.modetag{margin-left:auto;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel);border:2px solid var(--panel-line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.top h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--ink);white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.top svg{flex:0 0 auto}
+.modetag{margin-left:auto;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel);border:2px solid var(--panel-line);border-radius:999px;padding:4px 12px;white-space:nowrap}
 
 /* ---------- LCD ---------- */
 .lcd{flex:0 0 auto;height:clamp(120px, 34dvh, 290px);box-sizing:border-box;container-type:size;
   background:linear-gradient(180deg,#F7F4F5,#E9E4E7);border:10px solid var(--bezel);border-radius:24px;
-  box-shadow:inset 0 4px 10px rgba(0,0,0,.22),0 4px 0 rgba(163,19,79,.35);padding:10px 20px 12px;
+  box-shadow:inset 0 4px 10px rgba(0,0,0,.22),0 4px 0 var(--shadow-strong);padding:10px 20px 12px;
   display:flex;flex-direction:column;color:var(--lcd-ink);font-weight:700}
 .status{display:flex;align-items:center;gap:4px;height:14px;flex:0 0 auto}
 .ico{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:3px;background:#111;color:#fff;font-size:8px;font-weight:700;line-height:1}
@@ -68,6 +101,25 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .ph>.cur{position:absolute;left:.04em;top:.02em;height:.66em;margin:0}
 .cur{display:inline-block;width:.075em;height:1.05em;background:var(--rose);vertical-align:middle;margin:0 -.0375em;animation:blink 1.06s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
+.flags{display:inline-flex;gap:4px;align-items:center}
+.ico.al{background:var(--alp, #C0267A)}
+.ico.wide{width:auto;padding:0 4px}
+.ico.hy{background:#444}
+.expr{cursor:text;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.dt{position:relative}
+.dt::after{content:'';position:absolute;left:50%;top:-.02em;width:.11em;height:.11em;border-radius:50%;background:currentColor;transform:translateX(-50%)}
+.sc,.tx,.lg{white-space:nowrap}
+.sb{font-size:.6em;vertical-align:-.35em;margin:0 .05em}
+.cur.ow{width:.55em;height:.12em;margin:0 -.55em 0 0;vertical-align:-.5em;background:var(--rose)}
+.offmsg{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(12px,3cqw,18px);color:rgba(0,0,0,.35);font-weight:600}
+.app.lcd-off .lcd{background:linear-gradient(180deg,#9C9598,#8A8286)}
+.app.lcd-off .lcd .offmsg{color:rgba(255,255,255,.55)}
+.chip.alphac{color:var(--alp, #C0267A);border-color:var(--alp, #C0267A)}
+.chip .alpl{font-style:italic;font-family:Georgia,serif}
+.chip.tapc{padding:4px 8px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;padding:10px;background:transparent;border:0}
+.catgrid button{font:inherit;font-weight:700;font-size:17px;min-height:46px;border-radius:12px;border:2px solid var(--panel-line);background:#fff;color:var(--ink);cursor:pointer}
+.catgrid button:active{transform:translateY(1px);background:var(--panel)}
 @media (prefers-reduced-motion: reduce){.cur{animation:none}}
 .errbox{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.35em;font-size:clamp(15px,3.8cqw,24px)}
 .errbox b{font-size:1.5em}
@@ -83,21 +135,21 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .ico.wide{width:auto;padding:0 3px}
 
 /* ---------- key trail ---------- */
-.trail{flex:1 1 auto;min-height:90px;background:var(--panel);border:2px dashed #E994B5;border-radius:22px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+.trail{flex:1 1 auto;min-height:90px;background:var(--panel);border:2px dashed var(--dash);border-radius:22px;padding:14px 18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
 .trail-head{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
 .chips{--cq:3px;display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;gap:8px 5px;overflow-y:auto;min-height:0;padding:2px}
 .chip{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:.25em;min-height:36px;box-sizing:border-box;font-size:17px;font-weight:700;line-height:1;color:var(--ink);background:#fff;border:2px solid var(--panel-line);border-radius:12px;padding:4px 11px;white-space:nowrap}
 .chip .lw{margin-top:-.2em}
-.chip.shift{background:#FFE08A;border-color:#E9C44F;color:#5C3A00;font-size:14px}
-.chip.shifted{background:#FFF3C7;border-color:#E9C44F;color:#7A4D00}
+.chip.shift{background:var(--ks-f);border-color:var(--ks-s);color:var(--ks-c);font-size:14px}
+.chip.shifted{background:var(--sc-f);border-color:var(--sc-s);color:var(--sc-c)}
 .chip.exe{background:var(--rose);border-color:var(--rose);color:#fff}
-.chip.tools,.chip.tool,.chip.nav{background:#E6C9F2;border-color:#B98AD6;color:#4A1236}
-.chip.nav{background:#F1E4F8;border-color:#CFA9E6;color:#6A3F86;padding:4px 9px}
+.chip.tools,.chip.tool,.chip.nav{background:var(--kt-f);border-color:var(--kt-s);color:var(--ink)}
+.chip.nav{background:var(--kx-f);border-color:var(--kx-s);color:var(--kx-c);padding:4px 9px}
 .chip.tools{font-size:14px}
 .chip.auto{opacity:.6;border-style:dashed}
 .chip.pending{box-shadow:0 0 8px 2px rgba(255,201,51,.9)}
 .chip .icon{display:inline-flex;zoom:1.5}
-.arrow{flex:0 0 auto;color:#C98AAB;font-size:15px;line-height:1;margin:0 1px}
+.arrow{flex:0 0 auto;color:var(--arrow);font-size:15px;line-height:1;margin:0 1px}
 .trail-empty{font-size:15px;color:var(--muted);font-weight:400}
 
 /* ---------- heart keypad ---------- */
@@ -114,27 +166,55 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .mbar{width:calc(1.84 * var(--cq));height:calc(.31 * var(--cq));background:var(--gold-ink)}
 .hk{position:relative;display:block;width:100%;aspect-ratio:var(--hk-ar);max-width:100%;border:0;background:none;padding:0;margin:0 auto;cursor:pointer;
   font-family:var(--font-body);font-weight:700;color:var(--c);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.hk>svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 calc(.8 * var(--cq)) 0 rgba(163,19,79,.28));transition:transform .05s}
+.hk>svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 calc(.8 * var(--cq)) 0 var(--shadow));transition:transform .05s}
 .hk .hp{fill:var(--fill);stroke:var(--stroke);stroke-width:3;stroke-linejoin:round}
 .hk .hl{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round}
 .hk .l{position:absolute;left:0;right:0;top:0;bottom:12%;display:flex;align-items:center;justify-content:center;line-height:1;pointer-events:none;transition:transform .05s}
-.hk:active>svg,.hk.pressed>svg{transform:translateY(calc(.6 * var(--cq)));filter:drop-shadow(0 calc(.2 * var(--cq)) 0 rgba(163,19,79,.28))}
+.hk:active>svg,.hk.pressed>svg{transform:translateY(calc(.6 * var(--cq)));filter:drop-shadow(0 calc(.2 * var(--cq)) 0 var(--shadow))}
 .hk:active .l,.hk.pressed .l{transform:translateY(calc(.6 * var(--cq)))}
 .hk:focus-visible{outline:3px solid var(--rose);outline-offset:2px;border-radius:30%}
 .hk.blank{cursor:default}
 .k-SHIFT>svg{transition:filter .15s}
-.shift-on .k-SHIFT{--fill:#FFD54A !important;--stroke:#E08A00 !important}
+.shift-on .k-SHIFT{--fill:#FFD54A !important;--stroke:#E08A00 !important;--c:#4A1236 !important}
 .shift-on .k-SHIFT>svg{filter:drop-shadow(0 0 calc(1.2 * var(--cq)) #FFC933) drop-shadow(0 0 calc(2.4 * var(--cq)) #FFB300)}
 .lw{display:inline-flex;align-items:flex-start;gap:calc(.5 * var(--cq))}
 .bxx{display:inline-block;width:calc(3.67 * var(--cq));height:calc(3.67 * var(--cq));border-radius:calc(.61 * var(--cq));background:var(--ink)}
 .bxa{display:inline-block;width:calc(3.06 * var(--cq));height:calc(3.06 * var(--cq));border-radius:calc(.61 * var(--cq));background:#fff;border:calc(.41 * var(--cq)) solid var(--ink);box-sizing:border-box}
-.bxa.lil{background:#C79BE3}
+.bxa.lil{background:var(--box)}
 .gtxt{font-size:calc(1.75 * var(--cq));letter-spacing:-.01em;white-space:nowrap}
 .fstack{display:inline-flex;flex-direction:column;align-items:center;gap:calc(.61 * var(--cq));line-height:0}
 .fbar{width:calc(4.9 * var(--cq));height:calc(.61 * var(--cq));border-radius:calc(.4 * var(--cq));background:var(--ink)}
 .fmtk{display:inline-flex;flex-direction:column;align-items:center;gap:calc(.4 * var(--cq));line-height:1}
 .pi{position:absolute;top:-6%;left:50%;transform:translateX(-50%);font-size:calc(3.6 * var(--cq));font-weight:700;line-height:1.1;color:var(--gold-ink);pointer-events:none}
 [hidden]{display:none !important}
+
+/* ---------- the four calculators: tabs above the screen ---------- */
+.tabs{flex:0 0 auto;display:flex;gap:6px;align-items:center}
+.tab{--t:#FFB0CF;--tl:#FFE3EE;--tb:#E0457F;--ti:#4A1236;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font:700 14px var(--font-body);line-height:1.1;color:var(--ti);background:var(--tl);border:2px solid var(--t);border-radius:14px;padding:6px 8px;cursor:pointer;white-space:nowrap}
+.tab small{font-size:.74em;font-weight:400;opacity:.85}
+.tab .short{display:none}
+.tab .tn{overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@container side (max-width:500px){.tab .full{display:none}.tab .short{display:inline}.tab{font-size:13px;padding:6px 4px}.tab small{display:none}.gearbtn{width:34px;height:34px}}
+.tab[data-m="gtx"]{--t:#D3B6F3;--tl:#F4ECFC;--tb:#8B55C9;--ti:#33174F}
+.tab[data-m="gt85"]{--t:#A9E6C5;--tl:#E8F8EF;--tb:#3FAE7B;--ti:#0F3D2E}
+.tab[data-m="m4"]{--t:#AFD3F4;--tl:#EAF3FC;--tb:#4C8FD1;--ti:#0F2F4D}
+.tab[aria-pressed="true"]{background:var(--t);border-color:var(--tb);box-shadow:0 3px 0 var(--tb)}
+.tab:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.gearbtn{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:2px solid var(--panel-line);background:#fff;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.gearbtn svg{width:22px;height:22px}
+.alp{display:inline-block;margin-left:calc(.9 * var(--cq));color:var(--alp,var(--gold-ink));font-weight:700}
+.alp.it,.shl.it{font-style:italic}
+.alp:first-child{margin-left:0}
+.sh .nm{color:var(--ink);font-size:calc(2.3 * var(--cq));letter-spacing:.03em}
+.sh .nm.nms{color:var(--gold-ink)}
+.shl.badge{background:var(--gold-ink);color:#fff;border-radius:calc(1.2 * var(--cq));padding:0 calc(1.3 * var(--cq));font-size:.86em;letter-spacing:.02em}
+.shift-on .shl.badge{color:#5C3A00}
+.shl.sm{font-size:.74em}
+.sh .shl:empty{display:none}
+.shph{display:inline-block;width:calc(4.2 * var(--cq));height:calc(2.8 * var(--cq));border:calc(.35 * var(--cq)) dashed var(--gold-ink);border-radius:calc(.8 * var(--cq));opacity:.8;vertical-align:middle;box-sizing:border-box}
+.hk.ph{min-height:calc(15.67 * var(--cq) * var(--hk-h))}
+.hk.ph .l{color:var(--muted);opacity:.7;font-weight:700}
 
 /* ---------- SETTINGS and TOOLS panels ---------- */
 .scrim{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(74,18,54,.3);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
@@ -145,7 +225,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .done{grid-column:3;justify-self:end;font:700 17px var(--font-body);color:#fff;background:var(--rose);border:0;border-radius:999px;padding:9px 20px;cursor:pointer}
 .sec{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 8px 8px}
 .group{background:#fff;border:2px solid var(--panel-line);border-radius:20px;overflow:hidden}
-.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1.5px solid #F7D3E1;font-size:17px;font-weight:700;width:100%;box-sizing:border-box;background:#fff;color:var(--ink);font-family:var(--font-body);text-align:left}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1.5px solid var(--soft);font-size:17px;font-weight:700;width:100%;box-sizing:border-box;background:#fff;color:var(--ink);font-family:var(--font-body);text-align:left}
 .group>.srow:first-child,.group>.toolrow:first-child{border-top:0}
 .srow.stack{flex-direction:column;align-items:stretch;gap:8px}
 .srow small{font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
@@ -153,8 +233,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .tick{color:var(--rose);font-size:20px}
 .seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
 .seg button{flex:1;border:0;background:none;border-radius:9px;padding:9px 4px;font:700 15px var(--font-body);color:var(--ink);cursor:pointer;white-space:nowrap}
-.seg button[aria-pressed="true"]{background:#FF9EC4;box-shadow:0 2px 0 rgba(163,19,79,.25)}
-.tog{flex:0 0 auto;width:54px;height:32px;border-radius:999px;background:#E9C9D6;border:0;position:relative;cursor:pointer;transition:background .15s}
+.seg button[aria-pressed="true"]{background:var(--kf-f);box-shadow:0 2px 0 var(--shadow)}
+.tog{flex:0 0 auto;width:54px;height:32px;border-radius:999px;background:var(--track);border:0;position:relative;cursor:pointer;transition:background .15s}
 .tog::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
 .tog[aria-checked="true"]{background:var(--rose)}
 .tog[aria-checked="true"]::after{left:25px}
@@ -162,7 +242,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 .step b{min-width:1.5em;text-align:center;font-size:19px}
 .step button{width:38px;height:38px;border-radius:50%;border:2px solid var(--panel-line);background:#fff;font:700 20px var(--font-body);color:var(--ink);cursor:pointer}
 .step button:disabled{opacity:.35}
-.toolrow{width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border:0;border-top:1.5px solid #F7D3E1;background:#fff;text-align:left;font:700 18px var(--font-body);color:#A3134F;cursor:pointer}
+.toolrow{width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border:0;border-top:1.5px solid var(--soft);background:#fff;text-align:left;font:700 18px var(--font-body);color:var(--deep);cursor:pointer}
 .toolrow small{display:block;font-weight:400;font-size:14px;color:var(--muted);margin-top:2px}
 .toolrow svg{width:26px;height:26px;flex:0 0 auto}
 .toolrow:disabled{opacity:.4;cursor:default}
@@ -179,7 +259,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 /* The script sets data-layout on the app: "side" (screen left, keys right) or "stacked" (screen above keys),
    and data-compact for small windows, where hearts are a little wider than tall, the screen is shorter,
    the title is hidden and the key trail becomes one line you can scroll sideways. */
-.app[data-compact="1"]{--hk-ar:100/80;--ar:0.7102}
+.app[data-compact="1"]{--hk-ar:100/80;--hk-h:.8;--ar:0.6436}
+.app[data-pad="short"]{--ar:0.683}
+.app[data-compact="1"][data-pad="short"]{--ar:0.7667}
+.app[data-pad="fx"]{--ar:0.545}
+.app[data-compact="1"][data-pad="fx"]{--ar:0.606}
 .app[data-layout="stacked"]{flex-direction:column;gap:12px}
 .app[data-layout="stacked"] .side{flex:0 0 auto;overflow:visible;gap:12px}
 .app[data-layout="stacked"] .lcd{height:clamp(130px, 24dvh, 250px)}
@@ -226,9 +310,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 
 <div class="app" id="app">
   <div class="side">
+    <nav class="tabs" id="tabs" aria-label="Calculator model"></nav>
     <header class="top">
-      <svg width="32" height="29" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88 C18 62 4 44 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 44 82 62 50 88 Z" fill="#C2185B"></path></svg>
-      <h1>Pink Calculator</h1>
+      <svg width="32" height="29" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88 C18 62 4 44 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 44 82 62 50 88 Z" style="fill:var(--rose)"></path></svg>
+      <h1>Wiz Calculator</h1>
       <span class="modetag" id="modetag">Calculate</span>
     </header>
     <div class="lcd" role="status" aria-live="polite">
@@ -236,6 +321,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
         <span class="ico" id="angIco" role="img" aria-label="Degrees">D</span>
         <span class="ico" id="shIco" role="img" aria-label="Shift is on" hidden>S</span>
         <span class="ico wide" id="normIco" hidden>FIX</span>
+        <span id="flags" class="flags"></span>
         <span class="fmt-tag" id="fmtTag"></span>
       </div>
       <div class="screen" id="screen"></div>
@@ -253,7 +339,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)
 
 <script>
 /* ==========================================================
-   Pink Calculator engine
+   Wiz Calculator engine
    - natural display editing (fractions, roots, powers) with a cursor
    - exact answers: fractions, surds and multiples of pi
    - result views: Standard, Decimal, ENG, Sexagesimal (FORMAT and S<>D)
@@ -270,15 +356,15 @@ var CalcCore = (function () {
   function CalcError(type) { this.type = type; }
 
   /* ---------- expression tree ---------- */
-  var SLOTS = { frac: ['num', 'den'], mixed: ['whole', 'num', 'den'], sqrt: ['arg'], root: ['idx', 'arg'], pow: ['exp'], sci: ['exp'] };
+  var SLOTS = { frac: ['num', 'den'], mixed: ['whole', 'num', 'den'], sqrt: ['arg'], root: ['idx', 'arg'], pow: ['exp'], sci: ['exp'], tenx: ['exp'], ex: ['exp'], logb: ['base', 'arg'] };
   function mkRow(p, f) { var r = []; r.p = p || null; r.f = f || null; return r; }
   function mkNode(t) { var n = { t: t }; SLOTS[t].forEach(function (f) { n[f] = mkRow(n, f); }); return n; }
   function ch(v) { return { t: 'c', v: v }; }
   function isStruct(it) { return !!SLOTS[it.t]; }
   function enterable(it) { return isStruct(it) && !it.fixed; }
   function cloneItem(it) {
-    if (!isStruct(it)) { var c0 = ch(it.v); if (it.lid) c0.lid = it.lid; return c0; }
-    var n = { t: it.t }; if (it.fixed) n.fixed = true; if (it.lid) n.lid = it.lid;
+    if (!isStruct(it)) { var c0 = ch(it.v); if (it.lid) c0.lid = it.lid; if (it.dot) c0.dot = true; return c0; }
+    var n = { t: it.t }; if (it.fixed) n.fixed = true; if (it.abc) n.abc = true; if (it.lid) n.lid = it.lid;
     SLOTS[it.t].forEach(function (f) { n[f] = cloneRow(it[f], n, f); });
     return n;
   }
@@ -509,8 +595,93 @@ var CalcCore = (function () {
     if (o) return o;
     return F(unrad(Math.atan(toF(v)), angle));
   }
-  var FN_TOK = { 'sin(': 'sin', 'cos(': 'cos', 'tan(': 'tan', 'sin⁻¹(': 'asin', 'cos⁻¹(': 'acos', 'tan⁻¹(': 'atan' };
-  var FNS = { sin: sinV, cos: cosV, tan: tanV, asin: asinV, acos: acosV, atan: atanV };
+  /* ---------- logs, powers of e and 10, factorials, hyperbolics and the rest ---------- */
+  var E_V = F(Math.E);
+  function isOne(v) { return v.e && v.n === 1n && v.d === 1n && v.r === 1n && v.p === 0; }
+  function lnV(v) {
+    var x = toF(v);
+    if (!(x > 0)) throw new CalcError('Math');
+    return isOne(v) ? ZERO : F(Math.log(x));
+  }
+  function log10V(v) {
+    var x = toF(v);
+    if (!(x > 0)) throw new CalcError('Math');
+    if (v.e && v.r === 1n && v.p === 0) {
+      if (v.d === 1n && /^10*$/.test(v.n.toString())) return mk(BigInt(v.n.toString().length - 1), 1n);
+      if (v.n === 1n && /^10*$/.test(v.d.toString())) return mk(-BigInt(v.d.toString().length - 1), 1n);
+    }
+    return F(Math.log10(x));
+  }
+  function logbV(b, a) {
+    var xb = toF(b), xa = toF(a);
+    if (!(xb > 0) || xb === 1 || !(xa > 0)) throw new CalcError('Math');
+    if (isOne(a)) return ZERO;
+    if (isInt(b) && isInt(a)) {
+      var k = Math.round(Math.log(xa) / Math.log(xb));
+      if (k >= 0 && k < 400 && b.n ** BigInt(k) === a.n) return mk(BigInt(k), 1n);
+    }
+    return F(Math.log(xa) / Math.log(xb));
+  }
+  function expV(v) { return isZero(v) ? ONE : F(Math.exp(toF(v))); }
+  function factV(v) {
+    if (!isInt(v) || v.n < 0n || v.n > 69n) throw new CalcError('Math');
+    var r = 1n; for (var i = 2n; i <= v.n; i++) r *= i;
+    return mk(r, 1n);
+  }
+  function nPrV(n, r) {
+    if (!isInt(n) || !isInt(r) || r.n < 0n || n.n < r.n || n.n > 1000000n) throw new CalcError('Math');
+    var res = 1n; for (var i = 0n; i < r.n; i++) res *= (n.n - i);
+    return mk(res, 1n);
+  }
+  function nCrV(n, r) {
+    if (!isInt(n) || !isInt(r) || r.n < 0n || n.n < r.n || n.n > 1000000n) throw new CalcError('Math');
+    var k = r.n > n.n - r.n ? n.n - r.n : r.n, res = 1n;
+    for (var i = 0n; i < k; i++) res = res * (n.n - i) / (i + 1n);
+    return mk(res, 1n);
+  }
+  function pctV(v) { return div(v, mk(100n, 1n)); }
+  function absV(v) { return v.e ? { e: true, n: bAbs(v.n), d: v.d, r: v.r, p: v.p } : F(Math.abs(v.f)); }
+  function sinhV(v) { return isZero(v) ? ZERO : F(Math.sinh(toF(v))); }
+  function coshV(v) { return isZero(v) ? ONE : F(Math.cosh(toF(v))); }
+  function tanhV(v) { return isZero(v) ? ZERO : F(Math.tanh(toF(v))); }
+  function asinhV(v) { return isZero(v) ? ZERO : F(Math.asinh(toF(v))); }
+  function acoshV(v) { var x = toF(v); if (x < 1) throw new CalcError('Math'); return x === 1 ? ZERO : F(Math.acosh(x)); }
+  function atanhV(v) { var x = toF(v); if (Math.abs(x) >= 1) throw new CalcError('Math'); return x === 0 ? ZERO : F(Math.atanh(x)); }
+  // Rnd( rounds the value the way the answer would be shown
+  function rndV(v, angle, ctx) {
+    var x = toF(v), s = (ctx && ctx.s) || {};
+    if (s.norm === 'fix') x = Number(x.toFixed(s.fix));
+    else if (s.norm === 'sci') x = Number(x.toExponential(s.sci - 1));
+    else x = Number(x.toPrecision(10));
+    return F(x);
+  }
+  function rand01(ctx) { return ctx && ctx.rand ? ctx.rand() : Math.random(); }
+  // Pol( gives r (and keeps the angle in Y); Rec( gives x (and keeps y in Y)
+  function polV(x, y, ctx) {
+    var r = sqrtV(add(mul(x, x), mul(y, y)));
+    var th = (isZero(x) && isZero(y)) ? ZERO : F(clean(unrad(Math.atan2(toF(y), toF(x)), ctx.angle)));
+    if (ctx.mem) { ctx.mem.X = r; ctx.mem.Y = th; }
+    ctx.aux = { name: 'θ', value: th };
+    return r;
+  }
+  function recV(r, th, ctx) {
+    var x = mul(r, cosV(th, ctx.angle)), y = mul(r, sinV(th, ctx.angle));
+    if (ctx.mem) { ctx.mem.X = x; ctx.mem.Y = y; }
+    ctx.aux = { name: 'y', value: y };
+    return x;
+  }
+  function ranintV(a, b, ctx) {
+    if (!isInt(a) || !isInt(b) || a.n > b.n) throw new CalcError('Math');
+    var span = b.n - a.n + 1n;
+    return mk(a.n + BigInt(Math.floor(rand01(ctx) * Number(span))), 1n);
+  }
+  var FN_TOK = { 'sin(': 'sin', 'cos(': 'cos', 'tan(': 'tan', 'sin⁻¹(': 'asin', 'cos⁻¹(': 'acos', 'tan⁻¹(': 'atan',
+    'ln(': 'ln', 'log(': 'log', 'sinh(': 'sinh', 'cosh(': 'cosh', 'tanh(': 'tanh', 'sinh⁻¹(': 'asinh', 'cosh⁻¹(': 'acosh', 'tanh⁻¹(': 'atanh',
+    'Abs(': 'abs', 'Rnd(': 'rnd', 'Pol(': 'pol', 'Rec(': 'rec', 'RanInt(': 'ranint' };
+  var FNS = { sin: sinV, cos: cosV, tan: tanV, asin: asinV, acos: acosV, atan: atanV, ln: lnV, log: log10V,
+    sinh: sinhV, cosh: coshV, tanh: tanhV, asinh: asinhV, acosh: acoshV, atanh: atanhV, abs: absV, rnd: rndV };
+  var FN2 = { pol: polV, rec: recV, ranint: ranintV };
+  var VARS = { A: 1, B: 1, C: 1, D: 1, E: 1, F: 1, X: 1, Y: 1, M: 1 };
 
   /* ---------- reading the expression ---------- */
   function tokenize(row) {
@@ -520,16 +691,20 @@ var CalcCore = (function () {
       if (it.t === 'c') {
         var v = it.v;
         if (/^[0-9.]$/.test(v)) {
-          var s = '';
-          while (i < row.length && row[i].t === 'c' && /^[0-9.]$/.test(row[i].v)) { s += row[i].v; i++; }
-          out.push({ k: 'num', v: s });
+          var s = '', dots = [];
+          while (i < row.length && row[i].t === 'c' && /^[0-9.]$/.test(row[i].v)) { if (row[i].dot) dots.push(s.length); s += row[i].v; i++; }
+          out.push({ k: 'num', v: s, dots: dots });
           continue;
         }
         if ('+−×÷'.indexOf(v) >= 0 && v.length === 1) out.push({ k: 'op', v: v });
         else if (v === '(') out.push({ k: 'lp' });
         else if (v === ')') out.push({ k: 'rp' });
         else if (FN_TOK[v]) out.push({ k: 'fn', v: FN_TOK[v] });
-        else if (v === 'Ans' || v === 'π') out.push({ k: 'const', v: v });
+        else if (v === 'Ans' || v === 'π' || v === 'e' || v === 'Ran#' || VARS[v]) out.push({ k: 'const', v: v });
+        else if (v === ',') out.push({ k: 'comma' });
+        else if (v === '!') out.push({ k: 'fact' });
+        else if (v === '%') out.push({ k: 'pct' });
+        else if (v === 'nPr' || v === 'nCr') out.push({ k: 'perm', v: v });
         else throw new CalcError('Syntax');
       } else if (it.t === 'pow') out.push({ k: 'post', n: it });
       else if (it.t === 'sci') out.push({ k: 'sci', n: it });
@@ -538,9 +713,18 @@ var CalcCore = (function () {
     }
     return out;
   }
-  function parseNum(s) {
+  function parseNum(s, dots) {
     if ((s.match(/\./g) || []).length > 1) throw new CalcError('Syntax');
     var parts = s.split('.'), a = parts[0] || '0', b = parts[1] || '';
+    if (dots && dots.length) {   // a recurring decimal such as 0.3 with a dot over the 3
+      var at = s.indexOf('.');
+      if (at < 0 || dots[0] <= at) throw new CalcError('Syntax');
+      var from = dots[0] - at - 1, to = dots[dots.length - 1] - at - 1;
+      if (to !== b.length - 1) throw new CalcError('Syntax');
+      var pre = b.slice(0, from), rp = b.slice(from), k = BigInt(rp.length);
+      var P = BigInt(a + pre), RP = BigInt(rp), nine = 10n ** k - 1n;
+      return mk(P * nine + RP, (10n ** BigInt(pre.length)) * nine);
+    }
     return mk(BigInt(a + b), 10n ** BigInt(b.length));
   }
   function evalNode(n, ctx) {
@@ -550,12 +734,16 @@ var CalcCore = (function () {
         var w = evaluate(n.whole, ctx), fr = div(evaluate(n.num, ctx), evaluate(n.den, ctx));
         return toF(w) < 0 ? sub(w, fr) : add(w, fr);
       }
+      case 'tenx': return pow(TEN, evaluate(n.exp, ctx));
+      case 'ex': return expV(evaluate(n.exp, ctx));
+      case 'logb': return logbV(evaluate(n.base, ctx), evaluate(n.arg, ctx));
       case 'sqrt': return sqrtV(evaluate(n.arg, ctx));
       case 'root': return rootV(evaluate(n.arg, ctx), evaluate(n.idx, ctx));
     }
     throw new CalcError('Syntax');
   }
   function evaluate(row, ctx) {
+    ctx = ctx || {};
     var toks = tokenize(row);
     if (!toks.length) throw new CalcError('Syntax');
     var p = 0;
@@ -584,12 +772,21 @@ var CalcCore = (function () {
       if (isOp(peek(), '+')) { next(); return unary(); }
       return postfix();
     }
-    function postfix() {
+    function post0() {
       var v = primary();
-      while (peek() && (peek().k === 'post' || peek().k === 'sci')) {
-        var t = next(), e = evaluate(t.n.exp, ctx);
+      while (peek() && (peek().k === 'post' || peek().k === 'sci' || peek().k === 'fact' || peek().k === 'pct')) {
+        var t = next();
+        if (t.k === 'fact') { v = factV(v); continue; }
+        if (t.k === 'pct') { v = pctV(v); continue; }
+        var e = evaluate(t.n.exp, ctx);
         v = t.k === 'post' ? pow(v, e) : mul(v, pow(TEN, e));
       }
+      return v;
+    }
+    // nPr and nCr bind tighter than multiplication
+    function postfix() {
+      var v = post0();
+      while (peek() && peek().k === 'perm') { var o = next().v, w = post0(); v = o === 'nPr' ? nPrV(v, w) : nCrV(v, w); }
       return v;
     }
     function group() {
@@ -602,10 +799,24 @@ var CalcCore = (function () {
       var t = next();
       if (!t) throw new CalcError('Syntax');
       switch (t.k) {
-        case 'num': return parseNum(t.v);
-        case 'const': return t.v === 'Ans' ? ctx.ans : PI_V;
+        case 'num': return parseNum(t.v, t.dots);
+        case 'const':
+          if (t.v === 'Ans') return ctx.ans || ZERO;
+          if (t.v === 'e') return E_V;
+          if (t.v === 'Ran#') return mk(BigInt(Math.floor(rand01(ctx) * 1000)), 1000n);
+          if (VARS[t.v]) return (ctx.mem && ctx.mem[t.v]) || ZERO;
+          return PI_V;
         case 'lp': return group();
-        case 'fn': return FNS[t.v](group(), ctx.angle);
+        case 'fn':
+          if (FN2[t.v]) {
+            var a1 = expr();
+            if (!(peek() && peek().k === 'comma')) throw new CalcError('Syntax');
+            next();
+            var a2 = expr();
+            if (peek() && peek().k === 'rp') next(); else if (peek()) throw new CalcError('Syntax');
+            return FN2[t.v](a1, a2, ctx);
+          }
+          return FNS[t.v](group(), ctx.angle, ctx);
         case 'node': return evalNode(t.n, ctx);
         case 'sci': p--; return ONE;
       }
@@ -680,13 +891,19 @@ var CalcCore = (function () {
     return r;
   }
   // engineering notation: a x 10^n where n is a multiple of 3
-  function engRow(x, s) {
+  function engRow(x, s, off) {
     if (x === 0) return numRow('0', s);
     var ps = Math.abs(x).toExponential(9).split('e');
     var e = parseInt(ps[1], 10), digits = ps[0].replace('.', '');
-    var n = Math.floor(e / 3) * 3, shift = e - n;
-    var intPart = digits.slice(0, 1 + shift), fracPart = digits.slice(1 + shift);
-    var m = strip(intPart + (fracPart ? '.' + fracPart : ''));
+    var n = Math.floor(e / 3) * 3 + 3 * (off || 0), shift = e - n, m;
+    if (shift >= 0) {
+      var intPart = digits.slice(0, 1 + shift);
+      while (intPart.length < 1 + shift) intPart += '0';
+      var fracPart = digits.slice(1 + shift);
+      m = strip(intPart + (fracPart ? '.' + fracPart : ''));
+    } else {
+      m = strip('0.' + new Array(-shift).join('0') + digits);
+    }
     var r = numRow((x < 0 ? '-' : '') + m, s);
     if (n !== 0) r.push(sciNode(n));
     return r;
@@ -736,11 +953,12 @@ var CalcCore = (function () {
     return r;
   }
   // the answer as shown for a chosen view: std, dec, eng or sex
-  function viewRow(v, view, s) {
+  function viewRow(v, view, s, opt) {
     var x = toF(v);
-    if (view === 'eng') return engRow(x, s);
+    if (view === 'eng') return engRow(x, s, opt && opt.engOff);
     if (view === 'sex') return sexRow(x, s);
     if (view === 'dec') return decRow(x, s);
+    if (opt && opt.mixed) s = Object.assign({}, s, { frac: s.frac === 'mixed' ? 'improper' : 'mixed' });
     var fmt = exactFormat(v, s);
     if (!fmt || ((fmt === 'int') && (s.norm === 'fix' || s.norm === 'sci'))) return decRow(x, s);
     return exactRow(v, fmt, s);
@@ -773,14 +991,30 @@ var CalcCore = (function () {
 
   /* ---------- drawing (HTML) ---------- */
   var RAD = '<svg class="rs" viewBox="0 0 10 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 14 L3 12.6 L6 23 L9.7 0.8" vector-effect="non-scaling-stroke"></path></svg>';
+  function rowText(row) {
+    return row.map(function (it) { return it.t === 'c' ? it.v : it.t === 'sci' ? '×10^' + rowText(it.exp) : ''; }).join('');
+  }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  // when o.reg is given, every row and item gets an id so that a tap on the screen can find its place
+  function rowId(row, o) {
+    if (!o || !o.reg) return -1;
+    var k = o.reg.indexOf(row);
+    if (k < 0) { k = o.reg.length; o.reg.push(row); }
+    return k;
+  }
+  function RA(row, o) { var k = rowId(row, o); return k < 0 ? '' : ' data-row="' + k + '"'; }
+  function mark(h, row, i, o) {
+    var k = rowId(row, o);
+    return k < 0 ? h : h.replace('<span', '<span data-r="' + k + '" data-i="' + i + '"');
+  }
+  function curSpan(o) { return '<span class="cur' + (o && o.ow ? ' ow' : '') + '"></span>'; }
   function renderRow(row, cur, o) {
     var has = cur && cur.row === row;
-    if (!row.length) return '<span class="ph">' + (has ? '<span class="cur"></span>' : '') + '</span>';
+    if (!row.length) return '<span class="ph">' + (has ? curSpan(o) : '') + '</span>';
     var h = '';
     for (var i = 0; i <= row.length; i++) {
-      if (has && cur.i === i) h += '<span class="cur"></span>';
-      if (i < row.length) h += renderItem(row[i], cur, o);
+      if (has && cur.i === i) h += curSpan(o);
+      if (i < row.length) h += mark(renderItem(row[i], cur, o), row, i, o);
     }
     return h;
   }
@@ -788,34 +1022,67 @@ var CalcCore = (function () {
     function R(r) { return renderRow(r, cur, o); }
     switch (it.t) {
       case 'c':
+        if (it.dot) return '<span class="dt">' + esc(it.v) + '</span>';
         if (it.v === '÷R') return '<span class="op">÷<small>R</small></span>';
-        if ('+−×÷'.indexOf(it.v) >= 0) return '<span class="op">' + it.v + '</span>';
-        if (FN_TOK[it.v] || it.v === 'Ans') return '<span class="fnm">' + esc(it.v) + '</span>';
+        if ('+−×÷'.indexOf(it.v) >= 0 || it.v === 'nPr' || it.v === 'nCr' || it.v === ':' || it.v === ';') return '<span class="op">' + it.v + '</span>';
+        if (FN_TOK[it.v] || it.v === 'Ans' || it.v === 'Ran#') return '<span class="fnm">' + esc(it.v) + '</span>';
         if (it.v === 'Q=' || it.v === 'R=') return '<span class="qr">' + it.v + '</span>';
         if (it.v === '.' && o && o.comma) return '<span>,</span>';
         if (it.v === 'π') return '<span class="pis">π</span>';
+        if (it.v === 'e') return '<span class="pis">e</span>';
         return '<span>' + esc(it.v) + '</span>';
-      case 'frac': return '<span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span>';
-      case 'mixed': return '<span class="mx"><span class="mw">' + R(it.whole) + '</span><span class="fr"><span class="fn">' + R(it.num) + '</span><span class="fd">' + R(it.den) + '</span></span></span>';
-      case 'sqrt': return '<span class="sq">' + RAD + '<span class="ra">' + R(it.arg) + '</span></span>';
-      case 'root': return '<span class="rt"><span class="ri">' + R(it.idx) + '</span><span class="sq">' + RAD + '<span class="ra">' + R(it.arg) + '</span></span></span>';
-      case 'pow': return '<span class="pw">' + R(it.exp) + '</span>';
-      case 'sci': return '<span class="op">×</span><span>10</span><span class="pw">' + R(it.exp) + '</span>';
+      case 'frac': return '<span class="fr"><span class="fn"' + RA(it.num, o) + '>' + R(it.num) + '</span><span class="fd"' + RA(it.den, o) + '>' + R(it.den) + '</span></span>';
+      case 'mixed': return '<span class="mx"><span class="mw"' + RA(it.whole, o) + '>' + R(it.whole) + '</span><span class="fr"><span class="fn"' + RA(it.num, o) + '>' + R(it.num) + '</span><span class="fd"' + RA(it.den, o) + '>' + R(it.den) + '</span></span></span>';
+      case 'sqrt': return '<span class="sq">' + RAD + '<span class="ra"' + RA(it.arg, o) + '>' + R(it.arg) + '</span></span>';
+      case 'root': return '<span class="rt"><span class="ri"' + RA(it.idx, o) + '>' + R(it.idx) + '</span><span class="sq">' + RAD + '<span class="ra"' + RA(it.arg, o) + '>' + R(it.arg) + '</span></span></span>';
+      case 'pow': return '<span class="pw"' + RA(it.exp, o) + '>' + R(it.exp) + '</span>';
+      case 'sci': return '<span class="sc"><span class="op">×</span><span>10</span><span class="pw"' + RA(it.exp, o) + '>' + R(it.exp) + '</span></span>';
+      case 'tenx': return '<span class="tx"><span>10</span><span class="pw"' + RA(it.exp, o) + '>' + R(it.exp) + '</span></span>';
+      case 'ex': return '<span class="tx"><span class="pis">e</span><span class="pw"' + RA(it.exp, o) + '>' + R(it.exp) + '</span></span>';
+      case 'logb': return '<span class="lg"><span class="fnm">log</span><span class="sb"' + RA(it.base, o) + '>' + R(it.base) + '</span><span class="fnm">(</span><span class="la"' + RA(it.arg, o) + '>' + R(it.arg) + '</span><span class="fnm">)</span></span>';
     }
     return '';
   }
 
   /* ---------- the key trail: the keys pressed, in order ---------- */
-  var KEY_LABEL = { frac: 'a/b', sqrt: '√', pow: 'xⁿ', sq: 'x²', exp10: '×10ˣ', up: '▲', down: '▼', left: '◀', right: '▶' };
-  var SHIFT_LABEL = { frac: 'a b/c', sqrt: 'ʸ√x', pow: 'x⁻¹', sin: 'sin⁻¹', cos: 'cos⁻¹', tan: 'tan⁻¹', '7': 'π' };
+  var KEY_LABEL = { asinh: 'sinh⁻¹', acosh: 'cosh⁻¹', atanh: 'tanh⁻¹', fact: 'x!', ranint: 'RanInt(', Ran: 'Ran#', Pol: 'Pol(', Rec: 'Rec(', Rnd: 'Rnd(', tap: 'tap', Mplus: 'M+', comma: ',', logb: 'log', abs: 'Abs', frac: 'a/b', sqrt: '√', pow: 'xⁿ', sq: 'x²', cube: 'x³', inv: 'x⁻¹', neg: '(−)', exp10: '×10ˣ', DMS: '°′″', up: '▲', down: '▼', left: '◀', right: '▶' };
+  var SHIFT_LABELS = {
+    gtcw: { frac: 'a b/c', sqrt: 'ʸ√x', pow: 'x⁻¹', sin: 'sin⁻¹', cos: 'cos⁻¹', tan: 'tan⁻¹', '7': 'π', '+': '°′″', '−': '(−)', EXE: '≈' },
+    fx: { frac: 'a b/c', sqrt: '³√', pow: 'ʸ√x', sin: 'sin⁻¹', cos: 'cos⁻¹', tan: 'tan⁻¹', exp10: 'π' },
+    ms: { frac: 'd/c', cube: '³√', pow: 'ˣ√', sin: 'sin⁻¹', cos: 'cos⁻¹', tan: 'tan⁻¹', exp10: 'π' }
+  };
+  var MS_LABEL = { frac: 'ab/c', pow: '^', exp10: 'EXP' };
   var TOOL_NAME = { rem: '÷R', factor: 'Prime Factorisation', simplify: 'Simplify', ratio: 'Ratio' };
   var OPPOSITE = { left: 'right', right: 'left', up: 'down', down: 'up' };
 
   /* ---------- the calculator itself ---------- */
-  var SHIFTMAP = { frac: 'mixed', sqrt: 'root', pow: 'inv', sin: 'asin', cos: 'acos', tan: 'atan', '7': 'pi' };
+  // what SHIFT does to each key, for each calculator
+  var TRIG = { sin: 'asin', cos: 'acos', tan: 'atan' };
+  var SHIFTMAP = Object.assign({ frac: 'mixed', sqrt: 'root', pow: 'inv', '7': 'pi', '8': 'econst', '+': 'DMS', '−': 'neg', EXE: 'approx',
+    xvar: 'rem', logb: 'ln', sq: 'rec', ')': 'comma', DEL: 'INS', AC: 'OFF' }, TRIG);
+  var SM_FX = Object.assign({ frac: 'mixed', sqrt: 'cbrt', pow: 'root', exp10: 'pi', log: 'tenx', ln: 'ex', sq: 'rec', MODE: 'SETUP', cube: 'colon',
+    DMS: 'factorTool', ')': 'comma', SD: 'mixedToggle', Mplus: 'Mminus', '9': 'CLR', DEL: 'INS', AC: 'OFF', '×': 'nPr', '÷': 'nCr', '+': 'Pol',
+    '−': 'Rec', '0': 'Rnd', '.': 'Ran', ENG: 'ENGback', inv: 'fact' }, TRIG);
+  var SHIFTMAP_GTX = Object.assign({}, SM_FX, { STO: 'RCL', Ans: 'pct', EXE: 'approx' });
+  var SHIFTMAP_GT85 = Object.assign({}, SM_FX, { RCL: 'STO', '(': 'pct', Ans: 'DRG', '1': 'noop', '2': 'noop' });
+  // the fourth calculator (fx-82MS layout): ab/c enters a mixed number, SHIFT then ab/c (d/c) swaps an answer between mixed and improper
+  var SHIFTMAP_MS = Object.assign({ frac: 'dc', cube: 'cbrt', pow: 'root', exp10: 'pi', MODE: 'CLR', inv: 'fact', nCr: 'nPr', Pol: 'Rec', log: 'tenx',
+    ln: 'ex', DMS: 'DMSback', RCL: 'STO', ENG: 'ENGback', comma: 'semi', Mplus: 'Mminus', '0': 'Rnd', '.': 'Ran', Ans: 'DRG', EXE: 'pct',
+    DEL: 'INS', AC: 'OFF', '1': 'noop', '2': 'noop' }, TRIG);
+  var HYP = { sin: ['sinh', 'asinh'], cos: ['cosh', 'acosh'], tan: ['tanh', 'atanh'] };
+  // the keys that do something; any other key (VARIABLE, OPTN, STAT and so on) is drawn but does nothing yet
+  var KNOWN = { '.': 1, '+': 1, '−': 1, '×': 1, '÷': 1, '(': 1, ')': 1, Ans: 1, sin: 1, cos: 1, tan: 1, frac: 1, sqrt: 1, pow: 1, sq: 1, cube: 1, inv: 1, neg: 1, exp10: 1,
+    DEL: 1, AC: 1, EXE: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, SD: 1, ENG: 1, DMS: 1,
+    log: 1, ln: 1, logb: 1, abs: 1, hyp: 1, Mplus: 1, RCL: 1, STO: 1, Pol: 1, nCr: 1, comma: 1, MODE: 1,
+    econst: 1, ex: 1, tenx: 1, rec: 1, rem: 1, factorTool: 1, colon: 1, semi: 1, pct: 1, fact: 1, nPr: 1, Rec: 1, Rnd: 1, Ran: 1, ranint: 1,
+    INS: 1, OFF: 1, CLR: 1, SETUP: 1, DRG: 1, Mminus: 1, mixedToggle: 1, dc: 1, ENGback: 1, DMSback: 1,
+    sinh: 1, cosh: 1, tanh: 1, asinh: 1, acosh: 1, atanh: 1 };
+  for (var d = 0; d <= 9; d++) KNOWN[String(d)] = 1;
+  var MODES = { gtcw: 1, gtx: 1, gt85: 1, m4: 1 };   // fx-83GTCW, fx-83GTX, fx-85GT PLUS and the fx-82MS layout (m4)
   var TOOL_LABELS = { rem: 'Remainder ÷R', factor: 'Prime Factorisation', simplify: 'Simplify', ratio: 'Ratio', undo: 'Undo' };
-  var ANS_FIRST = { '+': 1, '−': 1, '×': 1, '÷': 1, pow: 1, sq: 1, inv: 1, exp10: 1 };
-  var STAY = { EXE: 1, DEL: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, AC: 1 };
+  var ANS_FIRST = { '+': 1, '−': 1, '×': 1, '÷': 1, pow: 1, sq: 1, cube: 1, inv: 1, exp10: 1, pct: 1, fact: 1, nPr: 1, nCr: 1 };
+  var SHIFT_ACTS = { abc: 1, mixed: 1, root: 1, cbrt: 1, pi: 1, asin: 1, acos: 1, atan: 1, approx: 1 };
+  var STAY = { ENGback: 1, DMSback: 1, mixedToggle: 1, dc: 1, rem: 1, factorTool: 1, EXE: 1, approx: 1, DEL: 1, left: 1, right: 1, up: 1, down: 1, OK: 1, AC: 1, ENG: 1, DMS: 1 };
 
   function Calc(settings) {
     this.s = cleanSettings(settings);
@@ -826,7 +1093,13 @@ var CalcCore = (function () {
     this.log = [];
     this.nid = 0;
     this.pk = { key: '?', shift: false };
-    this.calcMode = 'calc';
+    this.calcMode = 'gtcw';
+    this.mem = {};
+    this.alphaMap = {};
+    this.req = null;
+    this.overwrite = false;
+    this.off = false;
+    this.clearMemory();
     this.clear();
   }
   var C = Calc.prototype;
@@ -840,8 +1113,14 @@ var CalcCore = (function () {
     this.tool = null;
     this.mode = 'edit';
     this.log = [];
+    this.alpha = false; this.hypOn = false; this.memOp = null; this.recPend = false;
     this.histIdx = this.history.length;
   };
+  // the memory (A to F, X, Y and M), the screen being off, and requests for the screen to open a panel
+  C.clearMemory = function () { for (var k in VARS) this.mem[k] = ZERO; };
+  C.resetAll = function () { this.clearMemory(); this.resetSettings(); this.history = []; this.overwrite = false; this.clear(); };
+  C.setAlphaMap = function (m) { this.alphaMap = m || {}; };
+  C.takeReq = function () { var r = this.req; this.req = null; return r; };
   // the log of keys pressed (what the key trail shows)
   C.note = function (key, extra) {
     var e = { id: ++this.nid, key: key, shift: false };
@@ -863,13 +1142,15 @@ var CalcCore = (function () {
     this.s = cleanSettings(o);
   };
   C.resetSettings = function () { this.s = cleanSettings({}); };
+  // the four calculators: fx-83GTCW (gtcw), fx-83GTX (gtx), fx-85GT PLUS (gt85) and a fourth to come (m4)
   C.setMode = function (m) {
-    this.shift = false;
-    this.calcMode = m === 'mode2' ? 'mode2' : 'calc';
+    m = MODES[m] ? m : 'gtcw';
+    this.shift = false; this.off = false;
+    if (m !== this.calcMode) { this.calcMode = m; this.clear(); }
   };
   C.defView = function () { return this.s.io === 'dec' ? 'dec' : 'std'; };
   C.newResult = function (value, qr) { return { value: value, view: this.defView(), qr: qr || null, factor: false }; };
-  C.ctx = function () { return { ans: this.ans, angle: this.s.angle }; };
+  C.ctx = function () { return { ans: this.ans, angle: this.s.angle, mem: this.mem, s: this.s, aux: null }; };
 
   C.snap = function () {
     if (!/^(edit|result|error)$/.test(this.mode)) return;
@@ -897,7 +1178,7 @@ var CalcCore = (function () {
   };
   // FORMAT and the tools work out a sum that is still being typed; that is not an EXE key press
   C.autoEval = function () {
-    if (this.calcMode !== 'calc' || this.mode !== 'edit') return;
+    if (this.mode !== 'edit') return;
     this.shift = false;
     this.snap();
     this.exe(true);
@@ -909,13 +1190,59 @@ var CalcCore = (function () {
   };
 
   C.press = function (key) {
-    if (key === 'blank' || key === 'TOOLS' || key === 'SETTINGS' || key === 'FORMAT') return;
-    if (this.calcMode === 'mode2') return; // Mode 2 will handle its own keys here later
-    if (key === 'SD') { this.shift = false; this.toggleSD(); return; }
+    if (key === 'blank' || key === 'TOOLS' || key === 'SETTINGS' || /^ph\d/.test(key)) return;
+    if (this.off) { if (key === 'AC' || key === 'ON') { this.off = false; this.shift = false; this.clear(); } return; }
+    if (key === 'ON') { this.shift = false; return; }
+    if (key === 'FORMAT') {                          // SHIFT then FORMAT swaps the answer between fraction and decimal
+      if (!this.shift) return;
+      this.shift = false;
+      if (this.mode === 'edit') this.autoEval();
+      this.toggleSD();
+      return;
+    }
+    if (key === 'SD' && !this.shift) { this.toggleSD(); return; }
     if (key === 'SHIFT') { this.shift = !this.shift; return; }
+    if (key === 'ALPHA') {
+      this.alpha = !this.alpha; this.shift = false;
+      var lastN = this.log[this.log.length - 1];
+      if (this.alpha) this.note('ALPHA'); else if (lastN && lastN.key === 'ALPHA') this.log.pop();
+      return;
+    }
     var sh = this.shift; this.shift = false;
-    var act = (sh && SHIFTMAP[key]) || key;
-    this.pk = { key: key, shift: !!(sh && SHIFTMAP[key]) };
+    var ms = this.calcMode === 'm4';
+    // STO and RCL wait for the key of a variable
+    if (this.memOp) {
+      var op = this.memOp; this.memOp = null;
+      var L = this.alphaMap[key];
+      if (VARS[L]) this.memKey(op, L, key);
+      return;
+    }
+    var smap = this.calcMode === 'gtcw' ? SHIFTMAP : ms ? SHIFTMAP_MS : this.calcMode === 'gt85' ? SHIFTMAP_GT85 : SHIFTMAP_GTX;
+    var act, shifted = false, alphaTok = null;
+    if (key.indexOf('cat:') === 0) {                 // a function picked from the CATALOG or OPTN list
+      act = key.slice(4); key = act; this.alpha = false; this.hypOn = false;
+    } else if (this.alpha) {                         // ALPHA then a key: the letter written on it
+      this.alpha = false;
+      alphaTok = this.alphaMap[key];
+      if (!alphaTok) return;
+      if (alphaTok === 'UNDO') { this.pk = { key: key, shift: false, alpha: alphaTok }; this.useTool('undo'); return; }
+      act = alphaTok === 'e' ? 'econst' : alphaTok === 'RanInt' ? 'ranint' : 'var:' + alphaTok;
+    } else if (this.hypOn && HYP[key]) {              // hyp then sin, cos or tan (SHIFT for the inverse)
+      this.hypOn = false;
+      act = HYP[key][sh ? 1 : 0]; shifted = sh;
+    } else {
+      this.hypOn = false;
+      if (ms && key === 'frac' && !sh && this.mode === 'result') {   // ab/c on an answer: fraction <-> decimal
+        if (this.canConvert()) { this.snap(); this.toggleSD(); this.note('frac'); }
+        return;
+      }
+      act = (sh && smap[key]) || key;
+      shifted = !!(sh && smap[key]);
+      if (ms && key === 'frac' && !sh) act = 'abc';
+    }
+    if (act.indexOf('var:') !== 0 && !KNOWN[act] && !SHIFT_ACTS[act]) return;      // a key that is only drawn so far
+    this.pk = { key: key, shift: shifted, alpha: alphaTok };
+    if (this.stateAct(act, key, shifted)) return;
 
     if (this.mode === 'ratioPick' || this.mode === 'ratio' || this.mode === 'ratioRes') { this.ratioKey(act); return; }
     if (this.mode === 'simp') {
@@ -941,6 +1268,41 @@ var CalcCore = (function () {
     if (this.mode === 'result') { this.resultKey(act); return; }
     this.editKey(act);
   };
+  // keys that change the calculator itself rather than the sum
+  C.stateAct = function (act, key, shifted) {
+    switch (act) {
+      case 'OFF': this.off = true; return true;
+      case 'INS': this.overwrite = !this.overwrite; this.note(key, { shift: shifted }); return true;
+      case 'CLR': this.req = 'clr'; return true;
+      case 'SETUP': case 'MODE': this.req = 'settings'; return true;
+      case 'DRG': this.set('angle', { D: 'R', R: 'G', G: 'D' }[this.s.angle]); this.note(key, { shift: shifted }); return true;
+      case 'hyp': this.hypOn = true; this.note(key); return true;
+      case 'STO': case 'RCL': this.memOp = act; this.note(key, { shift: shifted }); return true;
+      case 'Mplus': case 'Mminus': this.memAdd(act === 'Mplus' ? 1 : -1); return true;
+    }
+    return false;
+  };
+  // M+ and M-: add the answer to the memory M (a sum still being typed is worked out first)
+  C.memAdd = function (sign) {
+    if (this.mode === 'edit') { this.snap(); this.exe(true); }
+    if (this.mode !== 'result' || !this.result) return;
+    this.mem.M = sign > 0 ? add(this.mem.M, this.result.value) : sub(this.mem.M, this.result.value);
+    this.note(this.pk.key, { shift: this.pk.shift });
+  };
+  // STO then a variable stores the answer; RCL then a variable puts it in the sum
+  C.memKey = function (op, L, key) {
+    if (op === 'STO') {
+      if (this.mode === 'edit') { this.snap(); this.exe(true); }
+      if (this.mode !== 'result' || !this.result) return;
+      this.mem[L] = this.result.value;
+      this.note(key, { alpha: L });
+      return;
+    }
+    if (this.mode === 'error' || /^ratio|simp/.test(this.mode)) return;
+    this.snap();
+    if (this.mode === 'result') this.clear();
+    this.insItem(ch(L), { key: key, shift: false, alpha: L });
+  };
 
   C.resultKey = function (act) {
     var r = this.result;
@@ -957,6 +1319,12 @@ var CalcCore = (function () {
         break;
       case 'up': this.histMove(-1); break;
       case 'down': this.histMove(1); break;
+      case 'ENG': case 'ENGback': case 'DMS': case 'DMSback': case 'mixedToggle': case 'dc': this.convertKey(act); break;
+      case 'rem': this.useTool('rem', true); break;
+      case 'factorTool': this.useTool('factor', true); break;
+      case 'approx': // SHIFT + EXE (≈): the same answer as a decimal
+        if (this.canConvert()) { this.result.view = 'dec'; this.note('EXE', { shift: true }); }
+        break;
     }
   };
   C.histMove = function (d) {
@@ -973,7 +1341,8 @@ var CalcCore = (function () {
 
   C.insItem = function (it, spec) {
     var c = this.cur, sp = spec || this.pk;
-    var e = this.note(sp.key, { shift: !!sp.shift, auto: !!sp.auto, tool: !!sp.tool });
+    if (this.overwrite && it.t === 'c' && c.i < c.row.length && c.row[c.i].t === 'c') { this.unnote(c.row[c.i].lid); c.row.splice(c.i, 1); }
+    var e = this.note(sp.key, { shift: !!sp.shift, auto: !!sp.auto, tool: !!sp.tool, alpha: sp.alpha || null });
     it.lid = e.id;
     it.pr = c.row; c.row.splice(c.i, 0, it); c.i++;
   };
@@ -991,13 +1360,77 @@ var CalcCore = (function () {
     var f = taken.length ? cursorIfAbsorbed : cursorElse;
     if (f) this.cur = { row: n[f], i: n[f].length };
   };
+  // ENG and the degrees-minutes-seconds key change how the answer is shown; pressing one again goes back
+  C.convertKey = function (act) {
+    if (this.mode === 'edit') this.exe(true);
+    if (!this.canConvert()) return;
+    var r = this.result;
+    if (act === 'ENG') { if (r.view === 'eng') r.engOff = (r.engOff || 0) + 1; else { r.view = 'eng'; r.engOff = 0; } }
+    else if (act === 'ENGback') { if (r.view === 'eng') r.engOff = (r.engOff || 0) - 1; else { r.view = 'eng'; r.engOff = -1; } }
+    else if (act === 'DMS') r.view = r.view === 'sex' ? this.defView() : 'sex';
+    else if (act === 'DMSback') r.view = 'dec';
+    else if (act === 'mixedToggle' || act === 'dc') { if (r.view !== 'std') r.view = 'std'; else r.mixed = !r.mixed; }
+    var pk = this.pk;
+    if (pk && pk.shift) this.note(pk.key, { shift: true }); else this.note(pk && pk.key && pk.key !== '?' ? pk.key : act);
+  };
+  // the ab/c key of the fx-82MS: 3 ab/c 4 is the fraction 3/4; 1 ab/c 3 ab/c 4 is the mixed number 1 3/4
+  C.abcKey = function () {
+    var row = this.cur.row, n = row.p;
+    if (n && n.t === 'frac' && n.abc && row === n.den) {
+      var m = mkNode('mixed'), parent = n.pr, at = parent.indexOf(n);
+      pushAll(m.whole, n.num.slice()); pushAll(m.num, n.den.slice());
+      m.lid = this.note(this.pk.key, { shift: false }).id;
+      m.abc = true; m.pr = parent; parent[at] = m;
+      this.cur = { row: m.den, i: 0 };
+      return;
+    }
+    this.insStruct('frac', 'num', 'den', 'num');
+    this.cur.row.p.abc = true;
+  };
   C.insFixedPow = function (items) {
     var n = mkNode('pow'); n.fixed = true; pushAll(n.exp, items.map(ch)); this.insItem(n);
   };
 
   C.editKey = function (act) {
-    if (/^[0-9.]$/.test(act) || '+−×÷()'.indexOf(act) >= 0) { this.insChar(act); return; }
+    // fx-82MS: a sum sign after the bottom number of an ab/c fraction carries on after the fraction
+    if (this.calcMode === 'm4' && '+−×÷'.indexOf(act) >= 0) {
+      var r = this.cur.row;
+      while (r.p && r.p.abc && r.f === 'den' && r.p.pr) { var nd = r.p; this.cur = { row: nd.pr, i: nd.pr.indexOf(nd) + 1 }; r = this.cur.row; }
+    }
+    if (act !== 'rec' && !/^[0-9.]$/.test(act)) this.recPend = false;
+    if (/^[0-9.]$/.test(act) || '+−×÷()'.indexOf(act) >= 0) {
+      this.insChar(act);
+      if (this.recPend && /^[0-9]$/.test(act)) { this.cur.row[this.cur.i - 1].dot = true; this.recPend = false; }
+      return;
+    }
+    if (act.indexOf('var:') === 0) { this.insChar(act.slice(4)); return; }
     switch (act) {
+      case 'econst': this.insChar('e'); break;
+      case 'comma': this.insChar(','); break;
+      case 'colon': this.insChar(':'); break;
+      case 'semi': this.insChar(';'); break;
+      case 'pct': this.insChar('%'); break;
+      case 'fact': this.insChar('!'); break;
+      case 'nPr': case 'nCr': this.insChar(act); break;
+      case 'Pol': this.insChar('Pol('); break;
+      case 'Rec': this.insChar('Rec('); break;
+      case 'Rnd': this.insChar('Rnd('); break;
+      case 'Ran': this.insChar('Ran#'); break;
+      case 'ranint': this.insChar('RanInt('); break;
+      case 'abs': this.insChar('Abs('); break;
+      case 'ln': this.insChar('ln('); break;
+      case 'log': this.insChar('log('); break;
+      case 'sinh': case 'cosh': case 'tanh': this.insChar(act + '('); break;
+      case 'asinh': this.insChar('sinh⁻¹('); break;
+      case 'acosh': this.insChar('cosh⁻¹('); break;
+      case 'atanh': this.insChar('tanh⁻¹('); break;
+      case 'tenx': this.insStruct('tenx', null, null, 'exp'); break;
+      case 'ex': this.insStruct('ex', null, null, 'exp'); break;
+      case 'logb': this.insStruct('logb', null, null, 'base'); break;
+      case 'rec': this.recPend = !this.recPend; this.note(this.pk.key, { shift: true }); break;
+      case 'rem': this.useTool('rem', true); break;
+      case 'factorTool': this.useTool('factor', true); break;
+      case 'ENGback': case 'DMSback': case 'mixedToggle': case 'dc': this.convertKey(act); break;
       case 'Ans': this.insChar('Ans'); break;
       case 'pi': this.insChar('π'); break;
       case 'sin': case 'cos': case 'tan': this.insChar(act + '('); break;
@@ -1006,16 +1439,37 @@ var CalcCore = (function () {
       case 'atan': this.insChar('tan⁻¹('); break;
       case 'frac': this.insStruct('frac', 'num', 'den', 'num'); break;
       case 'mixed': this.insStruct('mixed', 'whole', 'num', 'whole'); break;
+      case 'abc': this.abcKey(); break;
       case 'sqrt': this.insStruct('sqrt', null, null, 'arg'); break;
       case 'root': this.insStruct('root', null, null, 'idx'); break;
       case 'pow': this.insStruct('pow', null, null, 'exp'); break;
       case 'exp10': this.insStruct('sci', null, null, 'exp'); break;
       case 'sq': this.insFixedPow(['2']); break;
       case 'inv': this.insFixedPow(['−', '1']); break;
+      case 'cube': this.insFixedPow(['3']); break;
+      case 'neg': this.insChar('−'); break;
+      case 'cbrt': this.insStruct('root', null, null, 'arg'); this.cur.row.p.idx.push(Object.assign(ch('3'), { pr: this.cur.row.p.idx })); break;
+      case 'ENG': case 'DMS': this.convertKey(act); break;
+      case 'approx': this.exe(false, true); break;
       case 'DEL': this.del(); break;
       case 'left': case 'right': case 'up': case 'down': this.nav(act); break;
       case 'EXE': this.exe(); break;
     }
+  };
+  // a tap on the screen: put the cursor in row rid at place i (the row ids come from the last view())
+  C.moveTo = function (rid, i) {
+    var row = this.reg && this.reg[rid];
+    if (!row) return;
+    if (this.mode === 'result') { this.dropLastExe(); this.mode = 'edit'; this.result = null; this.tool = null; }
+    else if (this.mode === 'error') { this.dropLastExe(); this.mode = 'edit'; this.err = null; }
+    else if (this.mode !== 'edit') return;
+    i = Math.max(0, Math.min(row.length, i));
+    var same = this.cur.row === row && this.cur.i === i;
+    this.cur = { row: row, i: i };
+    if (same) return;
+    var last = this.log[this.log.length - 1];
+    if (last && last.key === 'tap') this.log.pop();
+    this.note('tap', { nav: true });
   };
   // a cursor move goes in the log only if the cursor really moved, and a move straight back cancels it
   C.nav = function (act) {
@@ -1106,21 +1560,29 @@ var CalcCore = (function () {
     if (!isInt(a) || !isInt(b) || a.n < 0n || b.n <= 0n) throw new CalcError('Math');
     return { q: a.n / b.n, r: a.n % b.n };
   };
-  C.exe = function (silent) {
+  C.exe = function (silent, approx) {
     if (!this.root.length) return;
-    if (!silent) this.note('EXE');
+    if (!silent) this.note('EXE', approx ? { shift: true } : null);
     try {
       var k = -1;
       for (var j = 0; j < this.root.length; j++) if (this.root[j].t === 'c' && this.root[j].v === '÷R') { k = j; break; }
-      var v, qr = null;
-      if (k >= 0) { qr = this.evalRemainder(k); v = mk(qr.q, 1n); }
-      else v = checkSize(evaluate(this.root, this.ctx()));
+      var v, qr = null, cx = this.ctx(), cuts = [];
+      for (var q = 0; q < this.root.length; q++) if (this.root[q].t === 'c' && (this.root[q].v === ':' || this.root[q].v === ';')) cuts.push(q);
+      if (cuts.length) {          // several sums in one line, separated by : ; the last one is the answer
+        var from = 0;
+        cuts.concat([this.root.length]).forEach(function (to) {
+          v = checkSize(evaluate(this.root.slice(from, to), cx)); cx.ans = v; from = to + 1;
+        }, this);
+      } else if (k >= 0) { qr = this.evalRemainder(k); v = mk(qr.q, 1n); }
+      else v = checkSize(evaluate(this.root, cx));
       this.ans = v;
       this.result = this.newResult(v, qr);
+      if (cx.aux) this.result.aux = cx.aux;
       this.mode = 'result';
       this.history.push({ expr: cloneRow(this.root), value: v, qr: qr, log: this.log.slice() });
       if (this.history.length > 30) this.history.shift();
       this.histIdx = this.history.length - 1;
+      if (approx && this.canConvert()) this.result.view = 'dec';
     } catch (e) {
       this.err = (e instanceof CalcError) ? e.type : 'Math';
       this.mode = 'error';
@@ -1128,8 +1590,7 @@ var CalcCore = (function () {
   };
 
   /* ---------- TOOLS ---------- */
-  C.useTool = function (name) {
-    if (this.calcMode === 'mode2') return;
+  C.useTool = function (name, viaKey) {
     this.shift = false;
     if (name === 'undo') { this.undo(); return; }
     if (this.mode === 'simp') { this.log.length = this.simp.logLen; this.mode = 'result'; this.result = this.simp.prev; this.simp = null; }
@@ -1146,7 +1607,7 @@ var CalcCore = (function () {
     this.snap();
     if (name === 'rem') {
       if (this.mode === 'result') { this.clear(); this.insChar('Ans', { key: 'Ans', shift: false, auto: true }); }
-      this.insChar('÷R', { key: 'rem', shift: false, tool: true });
+      this.insChar('÷R', viaKey ? this.pk : { key: 'rem', shift: false, tool: true });
       return;
     }
     if (name === 'factor') {
@@ -1154,7 +1615,7 @@ var CalcCore = (function () {
       if (this.mode !== 'result') return;
       var v = this.result.value;
       if (!isInt(v) || v.n < 1n || v.n >= 10000000000n) { this.err = 'Math'; this.mode = 'error'; return; }
-      if (!this.result.factor) this.note('factor', { tool: true });
+      if (!this.result.factor) { if (viaKey) this.note(this.pk.key, { shift: this.pk.shift }); else this.note('factor', { tool: true }); }
       this.result.factor = true;
       this.tool = 'factor';
       return;
@@ -1245,6 +1706,7 @@ var CalcCore = (function () {
   // the keys pressed, in the order they were pressed; each item says which key of the keypad to draw
   C.trail = function () {
     var out = [];
+    var self = this;
     this.log.forEach(function (e) {
       if (e.tool) {
         out.push({ key: 'TOOLS', label: 'TOOLS', kind: 'tools' });
@@ -1253,9 +1715,10 @@ var CalcCore = (function () {
       }
       if (e.shift) out.push({ key: 'SHIFT', label: 'SHIFT', kind: 'shift' });
       out.push({
-        key: e.key, shift: !!e.shift, auto: !!e.auto,
-        label: e.shift ? SHIFT_LABEL[e.key] : (KEY_LABEL[e.key] || e.key),
-        kind: e.key === 'EXE' ? 'exe' : (e.nav ? 'nav' : '')
+        key: e.key, shift: !!e.shift, auto: !!e.auto, alpha: e.alpha || null,
+        label: e.alpha ? e.alpha : e.shift ? (SHIFT_LABELS[self.calcMode === 'gtcw' ? 'gtcw' : self.calcMode === 'm4' ? 'ms' : 'fx'][e.key] || e.key)
+          : ((self.calcMode === 'm4' && MS_LABEL[e.key]) || KEY_LABEL[e.key] || e.key),
+        kind: e.key === 'EXE' && !e.shift ? 'exe' : (e.nav ? 'nav' : '')
       });
     });
     if (this.shift) out.push({ key: 'SHIFT', label: 'SHIFT', kind: 'shift', pending: true });
@@ -1263,12 +1726,14 @@ var CalcCore = (function () {
   };
 
   C.view = function () {
-    var s = this.s, o = { comma: s.comma };
+    var s = this.s, o = { comma: s.comma, reg: [], ow: this.overwrite }, o2 = { comma: s.comma };
+    this.reg = o.reg;
     var v = {
       mode: this.mode, calcMode: this.calcMode, shift: this.shift, settings: this.settings(),
-      canUndo: this.undoStack.length > 0, canConvert: this.canConvert(), trail: this.trail()
+      canUndo: this.undoStack.length > 0, canConvert: this.canConvert(), trail: this.trail(),
+      off: this.off,
+      flags: { alpha: this.alpha, hyp: this.hypOn, memOp: this.memOp, rec: this.recPend, ins: this.overwrite, M: !isZero(this.mem.M) }
     };
-    if (this.calcMode === 'mode2') return v;
     var r = this.result;
     if (this.mode === 'edit' || this.mode === 'result' || this.mode === 'error' || this.mode === 'simp') {
       v.expr = renderRow(this.root, this.mode === 'edit' ? this.cur : null, o);
@@ -1282,10 +1747,11 @@ var CalcCore = (function () {
       } else if (r.factor) {
         row = factorRow(Number(r.value.n), s); v.view = 'factor';
       } else {
-        row = viewRow(r.value, r.view, s);
+        row = viewRow(r.value, r.view, s, r);
         v.exact = !!exactFormat(r.value, s);
       }
-      v.result = renderRow(row, null, o);
+      v.result = renderRow(row, null, o2);
+      if (r.aux) v.note = r.aux.name + ' = ' + rowText(viewRow(r.aux.value, 'dec', s));
     }
     if (this.mode === 'simp') {
       var sm = this.simp, sr = [];
@@ -1293,13 +1759,13 @@ var CalcCore = (function () {
       var an = bAbs(sm.n);
       if (sm.d === 1n) pushAll(sr, numRow(an.toString(), s));
       else sr.push(fracOf(numRow(an.toString(), s), numRow(sm.d.toString(), s)));
-      v.result = renderRow(sr, null, o);
+      v.result = renderRow(sr, null, o2);
       v.note = sm.note;
     }
     if (this.mode === 'ratio' || this.mode === 'ratioRes') {
       var R = this.ratio, self = this;
       var cells = R.fields.map(function (f, i) {
-        return { html: renderRow(f, (self.mode === 'ratio' && R.k === i) ? self.cur : null, o), on: self.mode === 'ratio' && R.k === i };
+        return { html: renderRow(f, (self.mode === 'ratio' && R.k === i) ? self.cur : null, o2), on: self.mode === 'ratio' && R.k === i };
       });
       v.ratio = { form: R.form, cells: cells, err: R.err };
     }
@@ -1316,117 +1782,281 @@ var CalcCore = (function () {
   var HEART = 'M50 88 C18 62 4 44 4 28 C4 14 15 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C85 4 96 14 96 28 C96 44 82 62 50 88 Z';
   // key colours; sizes are in cqw (a percentage of the keypad width)
   var P = {
-    NUM: { fill: '#FFD9E8', stroke: '#F29BBF', c: '#4A1236', size: 7.35, hl: .55 },
-    FN: { fill: '#FF9EC4', stroke: '#EE6FA3', c: '#4A1236', size: 5.31, hl: .55 },
-    OP: { fill: '#FF6FA3', stroke: '#E0457F', c: '#4A1236', size: 7.76, hl: .55 },
-    EXE: { fill: '#C2185B', stroke: '#8E0F41', c: '#FFFFFF', size: 6.12, hl: .55 },
-    DEL: { fill: '#D6336C', stroke: '#9E1C4A', c: '#FFFFFF', size: 4.9, hl: .55 },
-    AC: { fill: '#A3134F', stroke: '#6E0C35', c: '#FFFFFF', size: 5.71, hl: .55 },
-    BLANK: { fill: '#FFF0F6', stroke: '#E994B5', c: '#8C3A63', size: 4, hl: 0, dash: '7 6' },
-    ARW: { fill: '#F1E4F8', stroke: '#CFA9E6', c: '#6A3F86', size: 3.67, hl: .3 },
-    OKK: { fill: '#E3CCF2', stroke: '#B98AD6', c: '#5B2F78', size: 4.49, hl: .3 },
-    SHIFT: { fill: '#FFE08A', stroke: '#E9C44F', c: '#4A1236', size: 3.06, hl: .55 },
-    TOOLS: { fill: '#E6C9F2', stroke: '#B98AD6', c: '#4A1236', size: 3.06, hl: .55 }
+    NUM: { fill: 'var(--kn-f)', stroke: 'var(--kn-s)', c: 'var(--ink)', size: 7.35, hl: .55 },
+    FN: { fill: 'var(--kf-f)', stroke: 'var(--kf-s)', c: 'var(--kf-c, var(--ink))', size: 5.31, hl: .55 },
+    OP: { fill: 'var(--ko-f)', stroke: 'var(--ko-s)', c: 'var(--ink)', size: 7.76, hl: .55 },
+    EXE: { fill: 'var(--ke-f)', stroke: 'var(--ke-s)', c: '#FFFFFF', size: 6.12, hl: .55 },
+    DEL: { fill: 'var(--kd-f)', stroke: 'var(--kd-s)', c: '#FFFFFF', size: 4.9, hl: .55 },
+    AC: { fill: 'var(--ka-f)', stroke: 'var(--ka-s)', c: '#FFFFFF', size: 5.71, hl: .55 },
+    BLANK: { fill: 'var(--kb-f)', stroke: 'var(--kb-s)', c: 'var(--muted)', size: 4, hl: 0, dash: '7 6' },
+    ARW: { fill: 'var(--kx-f)', stroke: 'var(--kx-s)', c: 'var(--kx-c)', size: 3.67, hl: .3 },
+    OKK: { fill: 'var(--kk-f)', stroke: 'var(--kk-s)', c: 'var(--kk-c)', size: 4.49, hl: .3 },
+    SHIFT: { fill: 'var(--ks-f)', stroke: 'var(--ks-s)', c: 'var(--ks-c)', size: 3.06, hl: .55 },
+    TOOLS: { fill: 'var(--kt-f)', stroke: 'var(--kt-s)', c: 'var(--ink)', size: 3.06, hl: .55 }
   };
   var LABEL_HTML = {
     sq: '<span class="lw"><span class="bxa lil" style="width:3.67cqw;height:3.67cqw;margin-top:1.84cqw"></span><span style="font-size:3.47cqw;line-height:1">2</span></span>',
     pow: '<span class="lw" style="gap:.61cqw"><span class="bxa lil" style="width:3.67cqw;height:3.67cqw;margin-top:1.84cqw"></span><span class="bxa" style="width:2.45cqw;height:2.45cqw"></span></span>',
-    root: '<svg style="width:8.98cqw;height:6.53cqw" viewBox="0 0 44 32" aria-hidden="true"><path d="M2 19 L7 16 L14 28 L23 3 L42 3" style="fill:none;stroke:#4A1236;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"></path><rect x="25" y="9" width="13" height="13" rx="3" style="fill:#C79BE3;stroke:#4A1236;stroke-width:2"></rect></svg>',
-    fmt: '<span class="fmtk"><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M5 9 Q22 -2 39 9" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round"></path><path d="M36.7 3.5 L39 9 L33 9.2" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg><span>FORMAT</span><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M39 2 Q22 13 5 2" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round"></path><path d="M7.3 7.5 L5 2 L11 1.8" style="fill:none;stroke:#4A1236;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg></span>',
+    root: '<svg style="width:8.98cqw;height:6.53cqw" viewBox="0 0 44 32" aria-hidden="true"><path d="M2 19 L7 16 L14 28 L23 3 L42 3" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round"></path><rect x="25" y="9" width="13" height="13" rx="3" style="fill:var(--box);stroke:var(--ink);stroke-width:2"></rect></svg>',
+    fmt: '<span class="fmtk"><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M5 9 Q22 -2 39 9" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round"></path><path d="M36.7 3.5 L39 9 L33 9.2" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg><span>FORMAT</span><svg style="width:8.98cqw;height:2.24cqw" viewBox="0 0 44 11" aria-hidden="true"><path d="M39 2 Q22 13 5 2" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round"></path><path d="M7.3 7.5 L5 2 L11 1.8" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path></svg></span>',
     exp: '<span class="lw" style="gap:.41cqw"><span style="font-size:4.49cqw;line-height:1">×10</span><span class="bxa" style="width:2.45cqw;height:2.45cqw;border-radius:.41cqw"></span></span>',
     frac: '<span class="fstack"><span class="bxa"></span><span class="fbar"></span><span class="bxa lil"></span></span>',
-    gear: '<span class="fmtk" style="gap:.4cqw"><svg style="width:4.3cqw;height:4.3cqw" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" style="fill:none;stroke:#4A1236;stroke-width:3.6;stroke-dasharray:3.38 3.38"></circle><circle cx="12" cy="12" r="6.4" style="fill:none;stroke:#4A1236;stroke-width:2.6"></circle><circle cx="12" cy="12" r="2.2" style="fill:#4A1236"></circle></svg><span class="gtxt">SETTINGS</span></span>'
+    cube: '<span style="font-size:6cqw;line-height:1;font-style:italic">x<span style="font-size:.62em;vertical-align:.6em;font-style:normal">3</span></span>',
+    sqx: '<span style="font-size:6cqw;line-height:1;font-style:italic">x<span style="font-size:.62em;vertical-align:.6em;font-style:normal">2</span></span>',
+    inv: '<span style="font-size:6cqw;line-height:1;font-style:italic">x<span style="font-size:.62em;vertical-align:.6em;font-style:normal">−1</span></span>',
+    logb: '<span class="lw" style="gap:.3cqw;align-items:flex-end"><span style="font-size:4.6cqw;line-height:1">log</span><span class="bxa" style="width:1.8cqw;height:1.8cqw;margin-bottom:.5cqw"></span><span class="bxa lil" style="width:2.6cqw;height:2.6cqw"></span></span>',
+    shiftk: '<svg style="width:5.6cqw;height:5.6cqw" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 L3.6 12.4 H9 V20.4 H15 V12.4 H20.4 Z" style="fill:currentColor;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round"></path></svg>',
+    vark: '<svg style="width:8.4cqw;height:4.6cqw" viewBox="0 0 44 24" aria-hidden="true"><path d="M3 8 H17 M13 4.2 L17.2 8 L13 11.8" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path><path d="M17 16.5 H3 M7 12.7 L2.8 16.5 L7 20.3" style="fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"></path><rect x="22" y="3" width="19" height="18" rx="5" style="fill:none;stroke:var(--ink);stroke-width:2"></rect><text x="31.5" y="17" text-anchor="middle" style="font:italic 700 15px Georgia,serif;fill:var(--ink)">x</text></svg>',
+    fun: '<span style="font-size:4.6cqw;line-height:1;font-style:italic;font-family:Georgia,serif">f<span style="font-style:normal">(</span>x<span style="font-style:normal">)</span></span>',
+    cat: '<svg style="width:5.6cqw;height:5.6cqw" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5 H9.6 Q12 5.5 12 8 Q12 5.5 14.4 5.5 H21.5 V18.5 H14.4 Q12 18.5 12 21 Q12 18.5 9.6 18.5 H2.5 Z M12 8 V21" style="fill:none;stroke:var(--ink);stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round"></path></svg>',
+    tools: '<svg style="width:7.4cqw;height:3cqw" viewBox="0 0 36 12" aria-hidden="true"><circle cx="6" cy="6" r="3.6" style="fill:none;stroke:var(--ink);stroke-width:2.2"></circle><circle cx="18" cy="6" r="3.6" style="fill:none;stroke:var(--ink);stroke-width:2.2"></circle><circle cx="30" cy="6" r="3.6" style="fill:none;stroke:var(--ink);stroke-width:2.2"></circle></svg>',
+    xv: '<span style="font-size:6.4cqw;line-height:1;font-style:italic;font-family:Georgia,serif">x</span>',
+    gear: '<span class="fmtk" style="gap:.4cqw"><svg style="width:4.3cqw;height:4.3cqw" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" style="fill:none;stroke:var(--ink);stroke-width:3.6;stroke-dasharray:3.38 3.38"></circle><circle cx="12" cy="12" r="6.4" style="fill:none;stroke:var(--ink);stroke-width:2.6"></circle><circle cx="12" cy="12" r="2.2" style="fill:var(--ink)"></circle></svg><span class="gtxt">SETTINGS</span></span>'
   };
   var SHIFT_HTML = {
+    cycle: '<span class="shl shg" style="align-items:center"><svg style="width:3.3cqw;height:3.3cqw" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12 A8 8 0 0 1 6.3 17.7 M4 12 A8 8 0 0 1 17.7 6.3" style="fill:none;stroke:var(--gold-ink);stroke-width:2.3;stroke-linecap:round"></path><path d="M18.4 2.8 L18 7.4 L13.4 6.6 M5.6 21.2 L6 16.6 L10.6 17.4" style="fill:none;stroke:var(--gold-ink);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round"></path></svg></span>',
     mixed: '<span class="shl shg" style="align-items:center"><span class="mbx" style="width:2.04cqw;height:2.04cqw"></span><span class="mstack"><span class="mbx"></span><span class="mbar"></span><span class="mbx"></span></span></span>',
-    root: '<span class="shl shg"><span class="mbx" style="width:1.22cqw;height:1.22cqw;margin-top:.2cqw"></span><svg style="width:4.49cqw;height:2.65cqw" viewBox="0 0 30 18" aria-hidden="true"><path d="M1 11 L4 9.5 L8 16 L13 2 L29 2" style="fill:none;stroke:#8A5A00;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"></path><rect x="15" y="5" width="9" height="9" rx="2" style="fill:#8A5A00"></rect></svg></span>',
-    inv: '<span class="shl shg"><span class="mbx" style="width:2.04cqw;height:2.04cqw;margin-top:1.43cqw;background:#8A5A00"></span><span style="font-size:2.45cqw;line-height:1;margin-top:-.2cqw">−1</span></span>'
+    root: '<span class="shl shg"><span class="mbx" style="width:1.22cqw;height:1.22cqw;margin-top:.2cqw"></span><svg style="width:4.49cqw;height:2.65cqw" viewBox="0 0 30 18" aria-hidden="true"><path d="M1 11 L4 9.5 L8 16 L13 2 L29 2" style="fill:none;stroke:var(--gold-ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"></path><rect x="15" y="5" width="9" height="9" rx="2" style="fill:var(--gold-ink)"></rect></svg></span>',
+    inv: '<span class="shl shg"><span class="mbx" style="width:2.04cqw;height:2.04cqw;margin-top:1.43cqw;background:var(--gold-ink)"></span><span style="font-size:2.45cqw;line-height:1;margin-top:-.2cqw">−1</span></span>',
+    cbrt: '<span class="shl shg" style="align-items:center"><span style="font-size:2.3cqw;line-height:1;margin-right:-.1cqw">3</span><svg style="width:4.49cqw;height:2.65cqw" viewBox="0 0 30 18" aria-hidden="true"><path d="M1 11 L4 9.5 L8 16 L13 2 L29 2" style="fill:none;stroke:var(--gold-ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"></path><rect x="15" y="5" width="9" height="9" rx="2" style="fill:var(--gold-ink)"></rect></svg></span>',
+    rec: '<span class="shl shg" style="flex-direction:column;align-items:center;gap:.25cqw;padding-top:.35cqw"><span style="width:.8cqw;height:.8cqw;border-radius:50%;background:var(--gold-ink)"></span><span class="mbx" style="width:1.9cqw;height:1.9cqw;background:var(--gold-ink)"></span></span>',
+    ten: '<span class="shl shg"><span style="font-size:2.7cqw;line-height:1;margin-top:.4cqw">10</span><span class="mbx" style="width:1.3cqw;height:1.3cqw;margin-top:.1cqw"></span></span>',
+    expe: '<span class="shl shg"><span style="font-size:2.9cqw;line-height:1;margin-top:.3cqw;font-style:italic">e</span><span class="mbx" style="width:1.3cqw;height:1.3cqw;margin-top:.1cqw"></span></span>'
   };
-  var KEYS = [
+  // the top of the fx-83GTCW keypad (above the 7 8 9 row)
+  var TOP_GTCW = [
     { id: 'up', label: '▲', p: 'ARW', aria: 'Up', col: '16 / span 5', bw: '64%', mb: 1.2 },
     { id: 'SETTINGS', kind: 'gear', p: 'TOOLS', aria: 'Settings', col: '1 / span 5' },
     { id: 'left', label: '◀︎', p: 'ARW', aria: 'Left', col: '11 / span 5', bw: '64%', as: 'center', tx: 3.5 },
     { id: 'OK', label: 'OK', p: 'OKK', col: '16 / span 5', bw: '92%', as: 'center' },
     { id: 'right', label: '▶︎', p: 'ARW', aria: 'Right', col: '21 / span 5', bw: '64%', as: 'center', tx: -3.5 },
-    { id: 'SHIFT', label: 'SHIFT', p: 'SHIFT', col: '1 / span 5' },
-    { id: 'blank', p: 'BLANK', span: 5 },
-    { id: 'blank', p: 'BLANK', span: 5 },
-    { id: 'down', label: '▼', p: 'ARW', aria: 'Down', col: '16 / span 5', bw: '64%', as: 'start', mt: 1.2 },
-    { id: 'SD', label: 'S⇔D', p: 'FN', aria: 'S to D, switch between standard and decimal', span: 5, size: 3.06 },
-    { id: 'TOOLS', label: 'TOOLS', p: 'TOOLS', span: 5 },
-    { id: 'blank', p: 'BLANK', span: 5, strip: 1 },
+    { id: 'SHIFT', kind: 'shiftk', label: 'SHIFT', p: 'SHIFT', aria: 'SHIFT', col: '1 / span 5', strip: 1, nm: 'SHIFT', nmSh: 1 },
+    { id: 'VARIABLE', kind: 'vark', p: 'TOOLS', aria: 'Variable', span: 5, strip: 1, nm: 'VARIABLE' },
+    { id: 'FUNCTION', kind: 'fun', p: 'TOOLS', aria: 'Function', span: 5, strip: 1, nm: 'FUNCTION' },
+    { id: 'down', label: '▼', p: 'ARW', aria: 'Down', col: '16 / span 5', bw: '64%', as: 'start' },
+    { id: 'CATALOG', kind: 'cat', p: 'TOOLS', aria: 'Catalog', span: 5, strip: 1, nm: 'CATALOG' },
+    { id: 'TOOLS', kind: 'tools', p: 'TOOLS', aria: 'Tools', span: 5, strip: 1, nm: 'TOOLS' },
+    { id: 'xvar', kind: 'xv', p: 'FN', aria: 'x', span: 5, strip: 1, shText: 'QR' },
     { id: 'frac', kind: 'frac', p: 'FN', aria: 'Fraction', span: 5, strip: 1, sh: 'mixed', shAria: 'mixed number' },
     { id: 'sqrt', kind: 'root', p: 'FN', aria: 'Square root', span: 5, strip: 1, sh: 'root', shAria: 'y root x' },
     { id: 'pow', kind: 'pow', p: 'FN', aria: 'Power', span: 5, strip: 1, sh: 'inv', shAria: 'x to the minus 1' },
-    { id: 'sq', kind: 'sq', p: 'FN', aria: 'Square', span: 5, strip: 1 },
-    { id: 'blank', p: 'BLANK', span: 5, strip: 1 },
+    { id: 'sq', kind: 'sq', p: 'FN', aria: 'Square', span: 5, strip: 1, sh: 'rec', shAria: 'recurring decimal' },
+    { id: 'logb', kind: 'logb', p: 'FN', aria: 'log base', span: 5, strip: 1, shText: 'ln' },
     { id: 'Ans', label: 'Ans', p: 'FN', size: 4.49, span: 5, strip: 1 },
     { id: 'sin', label: 'sin', p: 'FN', span: 5, strip: 1, shText: 'sin⁻¹' },
     { id: 'cos', label: 'cos', p: 'FN', span: 5, strip: 1, shText: 'cos⁻¹' },
     { id: 'tan', label: 'tan', p: 'FN', span: 5, strip: 1, shText: 'tan⁻¹' },
     { id: '(', label: '(', p: 'OP', aria: 'Open bracket', span: 5, strip: 1 },
-    { id: ')', label: ')', p: 'OP', aria: 'Close bracket', span: 5, strip: 1 },
-    { id: '7', label: '7', p: 'NUM', strip: 1, shText: 'π' }, { id: '8', label: '8', p: 'NUM', strip: 1 }, { id: '9', label: '9', p: 'NUM', strip: 1 },
-    { id: 'DEL', label: 'DEL', p: 'DEL', aria: 'Delete', strip: 1 }, { id: 'AC', label: 'AC', p: 'AC', aria: 'All clear', strip: 1 },
-    { id: '4', label: '4', p: 'NUM' }, { id: '5', label: '5', p: 'NUM' }, { id: '6', label: '6', p: 'NUM' },
-    { id: '×', label: '×', p: 'OP', aria: 'Times' }, { id: '÷', label: '÷', p: 'OP', aria: 'Divide' },
-    { id: '1', label: '1', p: 'NUM' }, { id: '2', label: '2', p: 'NUM' }, { id: '3', label: '3', p: 'NUM' },
-    { id: '+', label: '+', p: 'OP', aria: 'Plus' }, { id: '−', label: '−', p: 'OP', aria: 'Subtract' },
-    { id: '0', label: '0', p: 'NUM' }, { id: '.', label: '.', p: 'NUM', aria: 'Decimal point', size: 8.98 },
-    { id: 'exp10', kind: 'exp', p: 'FN', aria: 'Times ten to the power' },
-    { id: 'FORMAT', kind: 'fmt', p: 'FN', aria: 'Format', size: 2.86 },
-    { id: 'EXE', label: 'EXE', p: 'EXE', aria: 'EXE, work it out' }
+    { id: ')', label: ')', p: 'OP', aria: 'Close bracket', span: 5, strip: 1, shText: ',' }
   ];
+  // the bottom four rows of the fx-83GTCW
+  function bottomKeys() {
+    return [
+    { id: '7', label: '7', p: 'NUM', strip: 1, shText: 'π' }, { id: '8', label: '8', p: 'NUM', strip: 1, shText: 'e', shCls: 'it' }, { id: '9', label: '9', p: 'NUM', strip: 1 },
+    { id: 'DEL', label: 'DEL', p: 'DEL', aria: 'Delete', strip: 1, shText: 'INS' }, { id: 'AC', label: 'AC', p: 'AC', aria: 'All clear', strip: 1, shText: 'OFF', shCls: 'badge' },
+    { id: '4', label: '4', p: 'NUM', strip: 1, al: 'A' }, { id: '5', label: '5', p: 'NUM', strip: 1, al: 'B' }, { id: '6', label: '6', p: 'NUM', strip: 1, al: 'C' },
+    { id: '×', label: '×', p: 'OP', aria: 'Times', strip: 1 }, { id: '÷', label: '÷', p: 'OP', aria: 'Divide', strip: 1 },
+    { id: '1', label: '1', p: 'NUM', strip: 1, al: 'D' }, { id: '2', label: '2', p: 'NUM', strip: 1, al: 'E' }, { id: '3', label: '3', p: 'NUM', strip: 1, al: 'F' },
+    { id: '+', label: '+', p: 'OP', aria: 'Plus', strip: 1, shText: '° ′ ″' }, { id: '−', label: '−', p: 'OP', aria: 'Subtract', strip: 1, shText: '(−)' },
+    { id: '0', label: '0', p: 'NUM', strip: 1, al: 'x', alI: 1 }, { id: '.', label: '.', p: 'NUM', aria: 'Decimal point', size: 8.98, strip: 1, al: 'y', alI: 1 },
+    { id: 'exp10', kind: 'exp', p: 'FN', aria: 'Times ten to the power', strip: 1, al: 'z', alI: 1 },
+    { id: 'FORMAT', kind: 'fmt', p: 'FN', aria: 'Format', size: 2.86, strip: 1, sh: 'cycle', shAria: 'switch format' },
+    { id: 'EXE', label: 'EXE', p: 'EXE', aria: 'EXE, work it out', strip: 1, shText: '≈' }
+    ];
+  }
+  // fx-83GTX (model 'gtx') and fx-85GT PLUS (model 'gt85'): laid out from the real keypads
+  function fxKeys(model) {
+    var plus = model === 'gt85', k = [];
+    var A = 'ARW';
+    // controls and the REPLAY arrows
+    k.push({ id: 'SHIFT', label: 'SHIFT', p: 'SHIFT', span: 5, strip: 1, row: '1' });
+    k.push({ id: 'ALPHA', row: '1', label: 'ALPHA', p: 'TOOLS', span: 5, strip: 1, size: 3.3 });
+    k.push({ id: 'up', row: '1', label: '▲', p: A, aria: 'Replay up', col: '14 / span 4', as: 'center' });
+    k.push({ id: 'MODE', row: '1', label: plus ? 'MODE' : 'MENU', p: 'TOOLS', span: 5, col: '21 / span 5', strip: 1, shText: 'SETUP', size: 4.2 });
+    k.push({ id: 'ON', row: '1', label: 'ON', p: 'TOOLS', span: 5, col: '26 / span 5', strip: 1, size: 5 });
+    k.push(plus ? { id: 'abs', label: 'Abs', p: 'FN', span: 5, col: '1 / span 5', row: '2', strip: 1 } : { id: 'OPTN', row: '2', label: 'OPTN', p: 'TOOLS', span: 5, col: '1 / span 5', strip: 1, size: 4.2 });
+    k.push({ id: 'cube', row: '2', kind: 'cube', p: 'FN', aria: 'x cubed', span: 5, col: '6 / span 5', strip: 1, shText: ':' });
+    k.push({ id: 'left', row: '1 / span 2', label: '◀︎', p: A, aria: 'Replay left', col: '11 / span 3', as: 'center' });
+    k.push({ id: 'down', row: '2', label: '▼', p: A, aria: 'Replay down', col: '14 / span 4', as: 'center' });
+    k.push({ id: 'right', row: '1 / span 2', label: '▶︎', p: A, aria: 'Replay right', col: '18 / span 3', as: 'center' });
+    k.push(plus ? { id: 'inv', row: '2', kind: 'inv', p: 'FN', aria: 'x to the minus 1', span: 5, col: '21 / span 5', strip: 1, shText: 'x!' } : { id: 'abs', label: 'Abs', p: 'FN', span: 5, col: '21 / span 5', row: '2', strip: 1 });
+    k.push({ id: 'logb', kind: 'logb', p: 'FN', aria: 'log base', span: 5, col: '26 / span 5', row: '2', strip: 1 });
+    // functions
+    k.push({ id: 'frac', kind: 'frac', p: 'FN', aria: 'Fraction', span: 5, strip: 1, sh: 'mixed', shAria: 'mixed number' });
+    k.push({ id: 'sqrt', kind: 'root', p: 'FN', aria: 'Square root', span: 5, strip: 1, sh: 'cbrt', shAria: 'cube root' });
+    k.push({ id: 'sq', kind: 'sq', p: 'FN', aria: 'Square', span: 5, strip: 1, sh: 'rec', shAria: 'recurring decimal' });
+    k.push({ id: 'pow', kind: 'pow', p: 'FN', aria: 'Power', span: 5, strip: 1, sh: 'root', shAria: 'y root x' });
+    k.push({ id: 'log', label: 'log', p: 'FN', span: 5, strip: 1, sh: 'ten', shAria: '10 to the power' });
+    k.push({ id: 'ln', label: 'ln', p: 'FN', span: 5, strip: 1, sh: 'expe', shAria: 'e to the power' });
+    k.push({ id: 'neg', label: '(−)', p: 'FN', aria: 'Negative', span: 5, strip: 1, al: 'A' });
+    k.push({ id: 'DMS', label: '°′″', p: 'FN', aria: 'Degrees, minutes, seconds', span: 5, strip: 1, shText: 'FACT', al: 'B', size: 4.6 });
+    k.push(plus ? { id: 'hyp', label: 'hyp', p: 'FN', span: 5, strip: 1, al: 'C' } : { id: 'inv', kind: 'inv', p: 'FN', aria: 'x to the minus 1', span: 5, strip: 1, shText: 'x!', al: 'C' });
+    k.push({ id: 'sin', label: 'sin', p: 'FN', span: 5, strip: 1, shText: 'sin⁻¹', al: 'D' });
+    k.push({ id: 'cos', label: 'cos', p: 'FN', span: 5, strip: 1, shText: 'cos⁻¹', al: 'E' });
+    k.push({ id: 'tan', label: 'tan', p: 'FN', span: 5, strip: 1, shText: 'tan⁻¹', al: 'F' });
+    k.push(plus ? { id: 'RCL', label: 'RCL', p: 'FN', span: 5, strip: 1, shText: 'STO' } : { id: 'STO', label: 'STO', p: 'FN', span: 5, strip: 1, shText: 'RECALL', shSm: 1 });
+    k.push({ id: 'ENG', label: 'ENG', p: 'FN', span: 5, strip: 1, shText: '←' });
+    k.push({ id: '(', label: '(', p: 'OP', aria: 'Open bracket', span: 5, strip: 1, shText: plus ? '%' : '' });
+    k.push({ id: ')', label: ')', p: 'OP', aria: 'Close bracket', span: 5, strip: 1, shText: ',', al: 'X' });
+    k.push({ id: 'SD', label: 'S⇔D', p: 'FN', aria: 'S to D, switch between standard and decimal', span: 5, strip: 1, size: 3.8, shText: 'a b/c⇔d/c', shSm: 1, al: 'Y' });
+    k.push({ id: 'Mplus', label: 'M+', p: 'FN', span: 5, strip: 1, shText: 'M−', al: 'M' });
+    // the bottom four rows (same keys as the fx-83GTCW, with Ans and = at the end)
+    var N = { p: 'NUM', strip: 1 };
+    function num(d, extra) { return Object.assign({ id: d, label: d }, N, extra || {}); }
+    k.push(num('7'), num('8'), num('9', { shText: plus ? 'CLR' : 'RESET' }));
+    k.push({ id: 'DEL', label: 'DEL', p: 'DEL', aria: 'Delete', strip: 1, shText: 'INS', al: plus ? '' : 'UNDO' });
+    k.push({ id: 'AC', label: 'AC', p: 'AC', aria: 'All clear', strip: 1, shText: 'OFF' });
+    k.push(num('4'), num('5'), num('6'));
+    k.push({ id: '×', label: '×', p: 'OP', aria: 'Times', strip: 1, shText: 'nPr' }, { id: '÷', label: '÷', p: 'OP', aria: 'Divide', strip: 1, shText: 'nCr' });
+    k.push(num('1', plus ? { shText: 'STAT' } : {}), num('2', plus ? { shText: 'VERIFY' } : {}), num('3'));
+    k.push({ id: '+', label: '+', p: 'OP', aria: 'Plus', strip: 1, shText: 'Pol' }, { id: '−', label: '−', p: 'OP', aria: 'Subtract', strip: 1, shText: 'Rec' });
+    k.push(num('0', { shText: 'Rnd' }), { id: '.', label: '.', p: 'NUM', aria: 'Decimal point', size: 8.98, strip: 1, shText: 'Ran#', al: 'RanInt' });
+    k.push({ id: 'exp10', kind: 'exp', p: 'FN', aria: 'Times ten to the power', strip: 1, shText: 'π', al: 'e' });
+    k.push({ id: 'Ans', label: 'Ans', p: 'FN', size: 6, strip: 1, shText: plus ? 'DRG▸' : '%' });
+    k.push({ id: 'EXE', label: '=', p: 'EXE', aria: 'Equals', size: 9, strip: 1, shText: plus ? '' : '≈' });
+    return k;
+  }
+  // Mode 4: the layout of the old-style calculator in the photo (an fx-82MS style, the Asda calculator): same rows, different keys
+  function msKeys() {
+    var k = [], A = 'ARW', N = { p: 'NUM', strip: 1 };
+    function num(d, extra) { return Object.assign({ id: d, label: d }, N, extra || {}); }
+    // controls and the REPLAY arrows
+    k.push({ id: 'SHIFT', label: 'SHIFT', p: 'SHIFT', span: 5, strip: 1, row: '1' });
+    k.push({ id: 'ALPHA', row: '1', label: 'ALPHA', p: 'TOOLS', span: 5, strip: 1, size: 3.3 });
+    k.push({ id: 'up', row: '1', label: '▲', p: A, aria: 'Replay up', col: '14 / span 4', as: 'center' });
+    k.push({ id: 'MODE', row: '1', label: 'MODE', p: 'TOOLS', span: 5, col: '21 / span 5', strip: 1, shText: 'CLR', size: 4.2 });
+    k.push({ id: 'ON', row: '1', label: 'ON', p: 'TOOLS', span: 5, col: '26 / span 5', strip: 1, size: 5 });
+    k.push({ id: 'inv', row: '2', kind: 'inv', p: 'FN', aria: 'x to the minus 1', span: 5, col: '1 / span 5', strip: 1, shText: 'x!' });
+    k.push({ id: 'nCr', row: '2', label: 'nCr', p: 'FN', span: 5, col: '6 / span 5', strip: 1, shText: 'nPr', size: 4.8 });
+    k.push({ id: 'left', row: '1 / span 2', label: '◀︎', p: A, aria: 'Replay left', col: '11 / span 3', as: 'center' });
+    k.push({ id: 'down', row: '2', label: '▼', p: A, aria: 'Replay down', col: '14 / span 4', as: 'center' });
+    k.push({ id: 'right', row: '1 / span 2', label: '▶︎', p: A, aria: 'Replay right', col: '18 / span 3', as: 'center' });
+    k.push({ id: 'Pol', row: '2', label: 'Pol(', p: 'FN', span: 5, col: '21 / span 5', strip: 1, shText: 'Rec(', size: 4.6 });
+    k.push({ id: 'cube', row: '2', kind: 'cube', p: 'FN', aria: 'x cubed', span: 5, col: '26 / span 5', strip: 1, shText: '³√' });
+    // functions
+    k.push({ id: 'frac', label: 'ab/c', p: 'FN', aria: 'a b over c', span: 5, strip: 1, shText: 'd/c', size: 4.4 });
+    k.push({ id: 'sqrt', label: '√', p: 'FN', aria: 'Square root', span: 5, strip: 1, size: 7 });
+    k.push({ id: 'sq', kind: 'sqx', p: 'FN', aria: 'x squared', span: 5, strip: 1 });
+    k.push({ id: 'pow', label: '^', p: 'FN', aria: 'Power', span: 5, strip: 1, shText: 'ˣ√', size: 7 });
+    k.push({ id: 'log', label: 'log', p: 'FN', span: 5, strip: 1, sh: 'ten', shAria: '10 to the power' });
+    k.push({ id: 'ln', label: 'ln', p: 'FN', span: 5, strip: 1, sh: 'expe', shAria: 'e to the power', al: 'e', alI: 1 });
+    k.push({ id: 'neg', label: '(−)', p: 'FN', aria: 'Negative', span: 5, strip: 1, al: 'A' });
+    k.push({ id: 'DMS', label: '°′″', p: 'FN', aria: 'Degrees, minutes, seconds', span: 5, strip: 1, shText: '←', al: 'B', size: 4.6 });
+    k.push({ id: 'hyp', label: 'hyp', p: 'FN', span: 5, strip: 1, al: 'C', size: 4.8 });
+    k.push({ id: 'sin', label: 'sin', p: 'FN', span: 5, strip: 1, shText: 'sin⁻¹', al: 'D' });
+    k.push({ id: 'cos', label: 'cos', p: 'FN', span: 5, strip: 1, shText: 'cos⁻¹', al: 'E' });
+    k.push({ id: 'tan', label: 'tan', p: 'FN', span: 5, strip: 1, shText: 'tan⁻¹', al: 'F' });
+    k.push({ id: 'RCL', label: 'RCL', p: 'FN', span: 5, strip: 1, shText: 'STO', size: 4.4 });
+    k.push({ id: 'ENG', label: 'ENG', p: 'FN', span: 5, strip: 1, shText: '←', size: 4.4 });
+    k.push({ id: '(', label: '(', p: 'FN', aria: 'Open bracket', span: 5, strip: 1 });
+    k.push({ id: ')', label: ')', p: 'FN', aria: 'Close bracket', span: 5, strip: 1, al: 'X', alI: 1 });
+    k.push({ id: 'comma', label: ',', p: 'FN', aria: 'Comma', span: 5, strip: 1, shText: ';', al: 'Y', alI: 1 });
+    k.push({ id: 'Mplus', label: 'M+', p: 'FN', span: 5, strip: 1, shText: 'M−', al: 'M' });
+    // the bottom four rows
+    k.push(num('7'), num('8'), num('9'));
+    k.push({ id: 'DEL', label: 'DEL', p: 'DEL', aria: 'Delete', strip: 1, shText: 'INS' });
+    k.push({ id: 'AC', label: 'AC', p: 'AC', aria: 'All clear', strip: 1, shText: 'OFF' });
+    k.push(num('4'), num('5'), num('6'));
+    k.push({ id: '×', label: '×', p: 'OP', aria: 'Times', strip: 1 }, { id: '÷', label: '÷', p: 'OP', aria: 'Divide', strip: 1 });
+    k.push(num('1', { shText: 'S-SUM' }), num('2', { shText: 'S-VAR' }), num('3'));
+    k.push({ id: '+', label: '+', p: 'OP', aria: 'Plus', strip: 1 }, { id: '−', label: '−', p: 'OP', aria: 'Subtract', strip: 1 });
+    k.push(num('0', { shText: 'Rnd' }), { id: '.', label: '.', p: 'NUM', aria: 'Decimal point', size: 8.98, strip: 1, shText: 'Ran#' });
+    k.push({ id: 'exp10', label: 'EXP', p: 'FN', aria: 'Times ten to the power', strip: 1, shText: 'π', size: 4.8 });
+    k.push({ id: 'Ans', label: 'Ans', p: 'FN', size: 5.4, strip: 1, shText: 'DRG▸' });
+    k.push({ id: 'EXE', label: '=', p: 'EXE', aria: 'Equals', size: 9, strip: 1, shText: '%' });
+    return k;
+  }
+  var MODE_LIST = [
+    { id: 'gtcw', name: 'fx-83GTCW', short: 'GTCW' },
+    { id: 'gtx', name: 'fx-83GTX', short: 'GTX' },
+    { id: 'gt85', name: 'fx-85GT PLUS', short: 'GT PLUS' },
+    { id: 'm4', name: 'fx-82ASDA', short: 'ASDA' }
+  ];
+  function keysFor(mode) {
+    if (mode === 'gtcw') return TOP_GTCW.concat(bottomKeys());
+    if (mode === 'gtx' || mode === 'gt85') return fxKeys(mode);
+    return msKeys();
+  }
 
   // sizes in the key markup are written in cqw (a percent of the keypad width); the keypad and the key trail
   // both read them through the --cq variable, so the trail can draw the same keys at a smaller size
   function cq(h) { return h.replace(/(-?\d*\.?\d+)cqw/g, 'calc($1 * var(--cq))'); }
   var KEYMAP = {};
-  KEYS.forEach(function (k) { if (!KEYMAP[k.id]) KEYMAP[k.id] = k; });
+  function loadKeymap(mode) {
+    KEYMAP = {};
+    keysFor(mode).forEach(function (k) { if (!KEYMAP[k.id]) KEYMAP[k.id] = k; });
+  }
   // one chip of the key trail: a pill with the writing that is on the key
+  var TAP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px"><path d="M9 11 V5.5 a1.6 1.6 0 0 1 3.2 0 V11 M12.2 10 a1.5 1.5 0 0 1 3 0 V11 M15.2 10.6 a1.5 1.5 0 0 1 3 .3 V15 c0 3.6 -2.2 6 -5.4 6 h-1.4 c-2 0 -3.3 -1 -4.5 -2.8 L4.6 14.6 a1.5 1.5 0 0 1 2.4 -1.7 L9 15 V11" style="fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"></path></svg>';
+  var NO_CHIP_ICON = { fmt: 1, gear: 1, shiftk: 1, tools: 1, vark: 1, fun: 1, cat: 1 };
   function chipHTML(t) {
     var k = t.tool ? null : KEYMAP[t.key], face;
-    if (!k) face = esc(t.tool || t.label);
+    if (t.key === 'tap') face = TAP_ICON;
+    else if (t.alpha) face = '<span class="alpl">' + esc(t.alpha === 'RanInt' ? 'RanInt(' : t.alpha) + '</span>';
+    else if (!k) face = esc(t.tool || t.label);
     else if (t.shift) face = k.sh ? '<span class="icon">' + cq(SHIFT_HTML[k.sh]) + '</span>' : esc(k.shText || t.label);
-    else if (k.kind && k.kind !== 'fmt' && k.kind !== 'gear') face = cq(LABEL_HTML[k.kind]);
-    else face = esc(t.label);
-    var cls = 'chip' + (t.kind ? ' ' + t.kind : '') + (t.shift ? ' shifted' : '') + (t.auto ? ' auto' : '') + (t.pending ? ' pending' : '');
+    else if (k.kind && !NO_CHIP_ICON[k.kind]) face = cq(LABEL_HTML[k.kind]);
+    else face = esc(t.key === 'EXE' ? k.label : t.label);
+    var cls = 'chip' + (t.kind ? ' ' + t.kind : '') + (t.shift ? ' shifted' : '') + (t.auto ? ' auto' : '') + (t.pending ? ' pending' : '') + (t.alpha ? ' alphac' : '') + (t.key === 'tap' ? ' tapc' : '');
     return '<span class="' + cls + '" role="img" aria-label="' + esc(t.label + (t.auto ? ' (added by the calculator)' : '')) + '">' + face + '</span>';
   }
 
   var pad = document.getElementById('pad');
-  var html = '';
-  KEYS.forEach(function (k) {
-    var p = P[k.p], blank = k.id === 'blank';
-    var col = k.col || ('span ' + (k.span || 6));
-    var wrap = 'grid-column:' + col + ';align-self:' + (k.as || 'stretch') + ';margin-top:' + (k.mt || 0) + 'cqw;margin-bottom:' + (k.mb || 0) + 'cqw;transform:translateX(' + (k.tx || 0) + 'cqw)';
-    var strip = '';
-    if (k.strip) {
-      var inner = '';
-      if (k.sh) inner = SHIFT_HTML[k.sh];
-      else if (k.shText) inner = '<span class="shl">' + k.shText + '</span>';
-      strip = '<div class="sh" aria-hidden="true">' + inner + '</div>';
-    }
-    var label = k.kind ? LABEL_HTML[k.kind] : '<span>' + (k.label || '') + '</span>';
-    var aria = blank ? 'Blank key' : (k.aria || k.label);
-    if (k.shText) aria += ', shift: ' + k.shText;
-    if (k.shAria) aria += ', shift: ' + k.shAria;
-    if (k.pi) aria += ', shift: pi';
-    var style = '--fill:' + p.fill + ';--stroke:' + p.stroke + ';--c:' + p.c + ';width:' + (k.bw || '100%');
-    html += '<div class="kc" style="' + wrap + '">' + strip +
-      '<button type="button" class="hk k-' + (/^[A-Za-z]+$/.test(k.id) ? k.id : 'x') + (blank ? ' blank' : '') + '" data-key="' + k.id + '" aria-label="' + aria + '" style="' + style + '"' + (blank ? ' tabindex="-1"' : '') + '>' +
-      '<svg viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true"><path class="hp" d="' + HEART + '"' + (p.dash ? ' style="stroke-dasharray:' + p.dash + '"' : '') + '></path><path class="hl" d="M14 27 C14 18 21 11 29 11" style="stroke-opacity:' + p.hl + '"></path></svg>' +
-      '<span class="l" style="font-size:' + (k.size || p.size) + 'cqw">' + label + '</span>' +
-      (k.pi ? '<span class="pi shl" aria-hidden="true">π</span>' : '') +
-      '</button></div>';
-  });
-  pad.innerHTML = cq(html);
+  function buildPad(mode) {
+    var html = '';
+    keysFor(mode).forEach(function (k) {
+      var p = P[k.p], blank = k.id === 'blank' || k.ph;
+      var col = k.col || ('span ' + (k.span || 6));
+      var wrap = (k.row ? 'grid-row:' + k.row + ';' : '') + 'grid-column:' + col + ';align-self:' + (k.as || 'stretch') + ';margin-top:' + (k.mt || 0) + 'cqw;margin-bottom:' + (k.mb || 0) + 'cqw;transform:translateX(' + (k.tx || 0) + 'cqw)';
+      var strip = '';
+      if (k.strip) {
+        var inner = '';
+        if (k.sh) inner = SHIFT_HTML[k.sh];
+        else if (k.shText) inner = '<span class="shl' + (k.shSm ? ' sm' : '') + (k.shCls ? ' ' + k.shCls : '') + '">' + k.shText + '</span>';
+        if (k.nm) inner = '<span class="nm' + (k.nmSh ? ' nms' : '') + '">' + k.nm + '</span>';
+        else if (k.shPH) inner = '<span class="shl"><span class="shph"></span></span>';
+        if (k.al) inner += '<span class="alp' + (k.alI ? ' it' : '') + '">' + k.al + '</span>';
+        strip = '<div class="sh" aria-hidden="true">' + inner + '</div>';
+      }
+      var label = k.kind ? LABEL_HTML[k.kind] : '<span>' + (k.label || '') + '</span>';
+      var aria = k.ph ? k.aria : blank ? 'Blank key' : (k.aria || k.label);
+      if (k.shText) aria += ', shift: ' + k.shText;
+      if (k.al) aria += ', alpha: ' + k.al;
+      if (k.shAria) aria += ', shift: ' + k.shAria;
+      if (k.shPH) aria += ', shift: not set up yet';
+      var style = '--fill:' + p.fill + ';--stroke:' + p.stroke + ';--c:' + p.c + ';width:' + (k.bw || '100%');
+      html += '<div class="kc" style="' + wrap + '">' + strip +
+        '<button type="button" class="hk k-' + (/^[A-Za-z]+$/.test(k.id) ? k.id : 'x') + (blank ? ' blank' : '') + (k.ph ? ' ph' : '') + '" data-key="' + k.id + '" aria-label="' + aria + '" style="' + style + '"' + (blank ? ' tabindex="-1"' : '') + '>' +
+        '<svg viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true"><path class="hp" d="' + HEART + '"' + (p.dash ? ' style="stroke-dasharray:' + p.dash + '"' : '') + '></path><path class="hl" d="M14 27 C14 18 21 11 29 11" style="stroke-opacity:' + p.hl + '"></path></svg>' +
+        '<span class="l" style="font-size:' + (k.size || p.size) + 'cqw">' + label + '</span>' +
+        '</button></div>';
+    });
+    pad.innerHTML = cq(html);
+  }
 
   /* ---------- settings kept on this device ---------- */
   var STORE = 'pinkcalc.settings.v2', saved = {};
   try { saved = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { saved = {}; }
   var calc = new CalcCore.Calc(saved);
-  function save() { try { localStorage.setItem(STORE, JSON.stringify(calc.settings())); } catch (e) { /* not available */ } }
+  var MODE_STORE = 'pinkcalc.mode.v1';
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(calc.settings())); localStorage.setItem(MODE_STORE, calc.calcMode); } catch (e) { /* not available */ }
+  }
+  var THEME_BG = { gtcw: '#FCE4EE', gtx: '#F1E8FB', gt85: '#E3F6EC', m4: '#E6F1FB' };
+  // switch calculator: colours, keypad and tab all follow
+  function applyMode(m) {
+    calc.setMode(m);
+    var mode = calc.calcMode;
+    document.documentElement.setAttribute('data-mode', mode);
+    app.setAttribute('data-pad', mode === 'gtcw' ? 'full' : 'fx');
+    loadKeymap(mode);
+    buildPad(mode);
+    var am = {};                                   // the letters printed in alpha colour above the keys
+    if (mode !== 'gtcw') keysFor(mode).forEach(function (k) { if (k.al && !am[k.id]) am[k.id] = k.al; });
+    calc.setAlphaMap(am);
+    var tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', THEME_BG[mode]);
+  }
 
   var app = document.getElementById('app');
 
@@ -1443,10 +2073,13 @@ var CalcCore = (function () {
   window.addEventListener('orientationchange', layout);
   var screen = document.getElementById('screen');
   var chips = document.getElementById('chips');
+  var tabs = document.getElementById('tabs');
+  var GEAR_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" style="fill:none;stroke:currentColor;stroke-width:3.6;stroke-dasharray:3.38 3.38"></circle><circle cx="12" cy="12" r="6.4" style="fill:none;stroke:currentColor;stroke-width:2.6"></circle><circle cx="12" cy="12" r="2.2" style="fill:currentColor"></circle></svg>';
   var angIco = document.getElementById('angIco');
   var shIco = document.getElementById('shIco');
   var normIco = document.getElementById('normIco');
   var fmtTag = document.getElementById('fmtTag');
+  var flagsEl = document.getElementById('flags');
   var modetag = document.getElementById('modetag');
   var scrim = document.getElementById('scrim');
   var sheet = document.getElementById('sheet');
@@ -1464,14 +2097,24 @@ var CalcCore = (function () {
     shIco.hidden = !v.shift;
     normIco.hidden = !(s.norm === 'fix' || s.norm === 'sci');
     normIco.textContent = s.norm === 'fix' ? 'FIX' : 'SCI';
-    var where = v.calcMode === 'mode2' ? 'Mode 2' : /^ratio/.test(v.mode) ? 'Ratio' : v.mode === 'simp' ? 'Simplify' : 'Calculate';
+    var where = /^ratio/.test(v.mode) ? 'Ratio' : v.mode === 'simp' ? 'Simplify' : 'Calculate';
     modetag.textContent = where + ' · ' + ANGLE_NAMES[s.angle];
+    tabs.innerHTML = MODE_LIST.map(function (m) {
+      return '<button type="button" class="tab" data-m="' + m.id + '" aria-label="' + m.name + (m.pending ? ', coming soon' : '') + '" aria-pressed="' + (v.calcMode === m.id) + '"><span class="tn full">' + m.name + '</span><span class="tn short">' + m.short + '</span>' + (m.pending ? '<small>coming soon</small>' : '') + '</button>';
+    }).join('') + (v.calcMode !== 'gtcw' ? '<button type="button" class="gearbtn" data-settings="1" aria-label="Settings">' + GEAR_ICON + '</button>' : '');
+    app.classList.toggle('lcd-off', !!v.off);
+    var fl = v.flags || {}, fh = '';
+    if (fl.alpha) fh += '<span class="ico al" role="img" aria-label="Alpha is on">A</span>';
+    if (fl.hyp) fh += '<span class="ico wide hy" role="img" aria-label="hyp is on">hyp</span>';
+    if (fl.memOp) fh += '<span class="ico wide hy" role="img" aria-label="' + fl.memOp + ': press a variable key">' + fl.memOp + '</span>';
+    if (fl.M) fh += '<span class="ico" role="img" aria-label="Something is stored in M">M</span>';
+    if (fl.ins) fh += '<span class="ico wide" role="img" aria-label="Overwrite is on">INS</span>';
+    flagsEl.innerHTML = v.off ? '' : fh;
     fmtTag.textContent = (v.result && (v.view !== 'std' || v.exact)) ? VIEW_NAMES[v.view] : '';
 
     var h = '';
-    if (v.calcMode === 'mode2') {
-      // Mode 2 screen: a placeholder until the second mode is built
-      h = '<div class="msg"><b>Mode 2</b><span>This space is ready for your next mode.</span><span>Go back with SETTINGS, then Modes, then Calculate.</span></div>';
+    if (v.off) {
+      h = '<div class="offmsg">Switched off. Press AC or ON to switch it back on.</div>';
     } else if (v.mode === 'ratioPick') {
       h = '<div class="msg"><b>Ratio</b><span>1: A : B = X : D</span><span>2: A : B = C : X</span><span class="hint">Press 1 or 2</span></div>';
     } else if (v.ratio) {
@@ -1516,6 +2159,8 @@ var CalcCore = (function () {
     if (openSheet === 'settings') sheet.innerHTML = settingsHTML(v);
     if (openSheet === 'tools') sheet.innerHTML = toolsHTML(v);
     if (openSheet === 'format') sheet.innerHTML = formatHTML(v);
+    if (openSheet === 'clr') sheet.innerHTML = clrHTML();
+    if (openSheet === 'optn') sheet.innerHTML = optnHTML();
     save();
   }
 
@@ -1553,9 +2198,10 @@ var CalcCore = (function () {
       tog('big', s.big, 'Big text') +
       tog('trailOn', s.trailOn, 'Key trail') +
       '</div>' +
-      '<div class="sec">Modes</div><div class="group">' +
-      '<button type="button" class="srow mrow" data-mode="calc"><span>Calculate</span><span class="tick">' + (v.calcMode === 'calc' ? '✓' : '') + '</span></button>' +
-      '<button type="button" class="srow mrow" data-mode="mode2"><span>Mode 2 <small>coming soon</small></span><span class="tick">' + (v.calcMode === 'mode2' ? '✓' : '') + '</span></button>' +
+      '<div class="sec">Calculators</div><div class="group">' +
+      MODE_LIST.map(function (m) {
+        return '<button type="button" class="srow mrow" data-mode="' + m.id + '"><span>' + m.name + (m.pending ? ' <small>coming soon</small>' : '') + '</span><span class="tick">' + (v.calcMode === m.id ? '✓' : '') + '</span></button>';
+      }).join('') +
       '</div>' +
       '<button type="button" class="reset" data-reset="1">Reset settings</button>';
   }
@@ -1570,7 +2216,7 @@ var CalcCore = (function () {
     return '<button type="button" class="toolrow" data-tool="' + name + '"' + (disabled ? ' disabled' : '') + '>' + ICONS[name] + '<span>' + title + '<small>' + desc + '</small></span></button>';
   }
   function toolsHTML(v) {
-    var off = v.calcMode === 'mode2';
+    var off = v.calcMode !== 'gtcw';
     return head('TOOLS') +
       '<div class="group">' + toolRow('undo', 'Undo', 'Takes back the last key you pressed', !v.canUndo || off) + '</div>' +
       '<div class="sec">Calculate tools</div><div class="group">' +
@@ -1591,6 +2237,29 @@ var CalcCore = (function () {
       viewRowHTML('ENG Notation', 'a × 10ⁿ where n is a multiple of 3', 'eng', v.view) +
       viewRowHTML('Sexagesimal', 'Degree, minute, second', 'sex', v.view) +
       '</div><p class="foot">EXE on the calculation screen reverts to the original result.</p>';
+  }
+  function clrHTML() {
+    function row(id, title, desc) { return '<button type="button" class="toolrow viewrow" data-clr="' + id + '"><span>' + title + '<small>' + desc + '</small></span></button>'; }
+    return '<div class="sheet-head"><h2 id="sheetTitle">CLR</h2><button type="button" class="done light" data-close="1">Cancel</button></div>' +
+      '<div class="sec">What do you want to clear?</div><div class="group">' +
+      row('setup', 'Setup', 'Puts the settings back how they started') +
+      row('mem', 'Memory', 'Empties A to F, X, Y and M, and Ans') +
+      row('all', 'All', 'Clears the settings and the memory') +
+      '</div>';
+  }
+  var CAT_ROWS = [
+    ['Hyperbolic', [['sinh', 'sinh'], ['cosh', 'cosh'], ['tanh', 'tanh'], ['asinh', 'sinh⁻¹'], ['acosh', 'cosh⁻¹'], ['atanh', 'tanh⁻¹']]],
+    ['Number', [['abs', 'Abs'], ['fact', 'x!'], ['nPr', 'nPr'], ['nCr', 'nCr'], ['Rnd', 'Rnd('], ['Ran', 'Ran#'], ['ranint', 'RanInt(']]],
+    ['Angle and polar', [['Pol', 'Pol('], ['Rec', 'Rec(']]]
+  ];
+  function optnHTML() {
+    var title = calc.calcMode === 'gtcw' ? 'CATALOG' : 'OPTN';
+    return head(title).replace('class="done"', 'class="done light"').replace('>Done<', '>Cancel<') +
+      CAT_ROWS.map(function (g) {
+        return '<div class="sec">' + g[0] + '</div><div class="group catgrid">' + g[1].map(function (f) {
+          return '<button type="button" data-cat="' + f[0] + '">' + f[1] + '</button>';
+        }).join('') + '</div>';
+      }).join('');
   }
   function showSheet(name) {
     calc.shift = false;
@@ -1615,7 +2284,14 @@ var CalcCore = (function () {
     if (b.dataset.set) { calc.set(b.dataset.set, JSON.parse(b.dataset.val)); render(); return; }
     if (b.dataset.toggle) { var k = b.dataset.toggle; calc.set(k, !calc.settings()[k]); render(); return; }
     if (b.dataset.step) { var sk = b.dataset.step; calc.set(sk, calc.settings()[sk] + (+b.dataset.d)); render(); return; }
-    if (b.dataset.mode) { calc.setMode(b.dataset.mode); closeSheet(); return; }
+    if (b.dataset.mode) { applyMode(b.dataset.mode); closeSheet(); return; }
+    if (b.dataset.clr) {
+      if (b.dataset.clr === 'setup') calc.resetSettings();
+      else if (b.dataset.clr === 'mem') calc.clearMemory();
+      else calc.resetAll();
+      closeSheet(); return;
+    }
+    if (b.dataset.cat) { closeSheet(); calc.press('cat:' + b.dataset.cat); render(); return; }
     if (b.dataset.reset) { calc.resetSettings(); render(); return; }
     if (b.dataset.tool) { calc.useTool(b.dataset.tool); closeSheet(); return; }
     if (b.dataset.view) { calc.setView(b.dataset.view); closeSheet(); return; }
@@ -1624,14 +2300,52 @@ var CalcCore = (function () {
   function press(key) {
     if (key === 'SETTINGS') { showSheet('settings'); return; }
     if (key === 'TOOLS') { showSheet('tools'); return; }
+    if ((key === 'OPTN' && calc.calcMode === 'gtx') || key === 'CATALOG') { showSheet('optn'); return; }
+    if (key === 'FORMAT' && calc.shift) { calc.press('FORMAT'); render(); return; }
     if (key === 'FORMAT') {
-      if (calc.calcMode === 'calc' && calc.mode === 'edit') { calc.autoEval(); render(); }
+      if (calc.calcMode !== 'm4' && calc.mode === 'edit') { calc.autoEval(); render(); }
       if (calc.canConvert()) showSheet('format');
       return;
     }
-    calc.press(key); render();
+    calc.press(key);
+    var rq = calc.takeReq();
+    render();
+    if (rq === 'settings') showSheet('settings');
+    else if (rq === 'clr') showSheet('clr');
   }
 
+  /* ---------- tap the screen to move the cursor ---------- */
+  screen.addEventListener('click', function (e) {
+    if (openSheet) return;
+    var ex = document.getElementById('expr');
+    if (!ex || !ex.contains(e.target) && e.target !== ex) { var r0 = ex && ex.getBoundingClientRect(); if (!r0 || e.clientY < r0.top || e.clientY > r0.bottom) return; }
+    var best = null, bd = 1e9, ba = 1e9, x = e.clientX, y = e.clientY;
+    function consider(el, rid, idx, isItem) {
+      var r = el.getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      var dx = x < r.left ? r.left - x : x > r.right ? x - r.right : 0;
+      var dy = y < r.top ? r.top - y : y > r.bottom ? y - r.bottom : 0;
+      var d = Math.sqrt(dx * dx + dy * dy * 4), a = r.width * r.height;
+      if (d < bd - 0.5 || (Math.abs(d - bd) <= 0.5 && a < ba)) {
+        bd = d; ba = a;
+        best = { rid: rid, idx: isItem ? idx + (x > (r.left + r.right) / 2 ? 1 : 0) : 0 };
+      }
+    }
+    ex.querySelectorAll('[data-i]').forEach(function (el) { consider(el, +el.dataset.r, +el.dataset.i, true); });
+    ex.querySelectorAll('[data-row]').forEach(function (el) {
+      if (!el.querySelector('[data-i][data-r="' + el.dataset.row + '"]')) consider(el, +el.dataset.row, 0, false);
+    });
+    if (!best) return;
+    calc.moveTo(best.rid, best.idx);
+    render();
+  });
+
+  tabs.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.settings) { showSheet('settings'); return; }
+    if (b.dataset.m) { applyMode(b.dataset.m); render(); }
+  });
   pad.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-key]');
     if (b) press(b.dataset.key);
@@ -1653,10 +2367,14 @@ var CalcCore = (function () {
     if (!key) return;
     e.preventDefault();
     var b = pad.querySelector('button[data-key="' + key + '"]');
-    if (b) { b.classList.add('pressed'); setTimeout(function () { b.classList.remove('pressed'); }, 140); }
+    if (!b) return;
+    b.classList.add('pressed'); setTimeout(function () { b.classList.remove('pressed'); }, 140);
     press(key);
   });
 
+  var startMode = 'gtcw';
+  try { startMode = localStorage.getItem(MODE_STORE) || 'gtcw'; } catch (e) { startMode = 'gtcw'; }
+  applyMode(startMode);
   render();
 })();
 
